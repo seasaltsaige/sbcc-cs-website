@@ -1,0 +1,1 @@
+// Used to export all of the routes from the routes folder, for cleaner imports
