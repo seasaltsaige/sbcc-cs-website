@@ -6,28 +6,76 @@ import bcrypt from "bcrypt";
 import Admin from "../database/Models/Admin";
 
 import { Router } from "express";
+import auth from "../middleware/auth";
 
-const route = Router();
+const router = Router();
 
 // Normal login route
-route.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const adminUser = await Admin.findOne({
+    username,
+  });
+  if (!adminUser)
+    return res.json({ message: `No admin by user: ${username} found` }).status(500);
+
+
+  const compareResult = bcrypt.compareSync(password, adminUser.password!);
+
+  if (!compareResult)
+    return res.json({ message: "Password is incorrect." }).status(403);
+
+  const token = jwt.sign({ username, admin: true }, process.env.JWT_SECRET!
+    // expiresIn: process.env.JWT_EXPIRES_IN,
+  );
+
+  res.json({
+    accessToken: token,
+    username,
+    expiresIn: parseInt(process.env.JWT_EXPIRES_IN!) * 1000 * 60 * 60 * 24,
+  })
+  return res.status(200);
+
 
 });
 
-// Normal logout route
-route.post("/logout", async (req, res) => {
+// // Normal logout route
+// realized jwt doesnt work like that lol forgor
+// route.post("/logout", async (req, res) => {
 
-});
+// });
 
 // Update password/username for admin account, requires being logged in already, AND
 // verification of user/password
-route.patch("/admin", async (req, res) => {
+router.patch("/admin", auth, async (req, res) => {
+  // Auth middleware handles auth status (being logged in AND providing credentials)
+
+  const { username, newUsername, newPassword }: { username: string, newUsername: string | null; newPassword: string } = req.body;
+  // const admin = await Admin.findOne({ username });
+  try {
+    const saltRounds = 10;
+    // const salt = bcrypt.genSaltSync(saltRounds);
+    const newHash = bcrypt.hashSync(newPassword, saltRounds);
+
+    if (newUsername !== null)
+      await Admin.findOneAndUpdate({ username }, { username: newUsername, password: newHash });
+    else
+      await Admin.findOneAndUpdate({ username }, { password: newHash });
+
+
+    res.status(200);
+    return res.json({ message: "OK" });
+  } catch (err) {
+    res.status(500);
+    res.json({ message: err });
+  }
 
 });
 
 // used in conjunction with registering an admin user/pass
 // if an admin already exists, a new once can't be made
-route.get("/admin", async (req, res) => {
+router.get("/admin", async (req, res) => {
 
   const admins = await Admin.find();
   if (admins.length == 0) {
@@ -41,14 +89,13 @@ route.get("/admin", async (req, res) => {
 });
 
 // Mostly for setup, registers an admin account for use
-route.post("/admin", async (req, res) => {
+router.post("/admin", async (req, res) => {
   // In the actual frontend, a request will be sent to /admin before this route is posted to
 
   const { username, password } = req.body;
   const saltRounds = 10;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(password, salt);
-
+  // const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(password, saltRounds);
   try {
     const admin = await Admin.create({
       username,
@@ -58,9 +105,9 @@ route.post("/admin", async (req, res) => {
     await admin.save();
 
 
-    const token = jwt.sign({ username, admin: true }, process.env.JWT_SECRET!, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign({ username, admin: true }, process.env.JWT_SECRET!
+      // expiresIn: parseInt(process.env.JWT_EXPIRES_IN!) * 60 * 60 * 24,
+    );
 
     res.json({
       accessToken: token,
@@ -77,5 +124,5 @@ route.post("/admin", async (req, res) => {
 });
 
 export {
-  route as Auth,
+  router as Auth,
 };
