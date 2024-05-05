@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import Admin from "../database/Models/Admin";
 // Explicitly used as a middleware for the update admin route
-export async function authChange(req: Request, res: Response, next: NextFunction) {
+export async function strictAuth(req: Request, res: Response, next: NextFunction) {
   const { username, password } = req.body;
   const auth = req.headers.authorization?.split(" ")!;
 
@@ -38,7 +38,7 @@ export async function authChange(req: Request, res: Response, next: NextFunction
   next(null);
 }
 
-
+// jwt auth without providing login credentials
 export async function minAuth(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers.authorization?.split(" ")!;
 
