@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import Admin from "../database/Models/Admin";
 
 import { Router } from "express";
-import auth from "../middleware/auth";
+import { authChange } from "../middleware/auth";
 
 const router = Router();
 
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
 
 // Update password/username for admin account, requires being logged in already, AND
 // verification of user/password
-router.patch("/admin", auth, async (req, res) => {
+router.patch("/admin", authChange, async (req, res) => {
   // Auth middleware handles auth status (being logged in AND providing credentials)
 
   const { username, newUsername, newPassword }: { username: string, newUsername: string | null; newPassword: string } = req.body;
