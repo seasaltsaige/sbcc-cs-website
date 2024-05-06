@@ -1,17 +1,18 @@
-import jwt from "jsonwebtoken";
-import passport from "passport";
 import axios from "axios";
+import multer from "multer";
 
 import { Router } from "express";
 import { minAuth } from "../middleware/auth";
+import { eventStorage } from "../../multer/diskStorage";
+
 const webhook = process.env.DISCORD_WEBHOOK;
+const eventUpload = multer({ storage: eventStorage })
 
 const router = Router();
 /** Middleware will be used for file uploading and storage on the backend */
-router.post("/post", minAuth, (req, res) => {
-  // For now, just testing the text/discord webhook
-  // const { files } = req;
-
+router.post("/post", minAuth, eventUpload.any(), (req, res) => {
+  // Files passed through form submission on frontend
+  const { files } = req;
   const { postBody } = req.body;
 
   //const post = parseMarkdownImages(postBody);
