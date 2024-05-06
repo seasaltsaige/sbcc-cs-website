@@ -12,6 +12,7 @@ import {
   UpcomingEvents,
   Vote
 } from "./routes/index";
+import { Login } from './routes/Login/Login';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path="/elections" element={<ElectionsHome />} />
         <Route path="/elections/vote" element={<Vote />} />
 
-        <Route path="/admin/login" />
+        <Route path="/admin/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
