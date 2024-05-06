@@ -17,3 +17,12 @@ export const officerStorage = multer.diskStorage({
     // Not sure yet
   }
 });
+
+export const candiateStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "../localStorage/candidates");
+  },
+  filename: (req, file, cb) => {
+
+  }
+})
