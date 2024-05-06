@@ -2,3 +2,4 @@
 export * from "./Auth";
 export * from "./Events";
 export * from "./Officers";
+export * from "./Elections";
