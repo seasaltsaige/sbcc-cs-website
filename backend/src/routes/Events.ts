@@ -1,31 +1,36 @@
-import axios from "axios";
 import multer from "multer";
 
 import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 import { eventStorage } from "../multer/diskStorage";
+import FormData from "form-data";
 import parseMarkdownImages from "../functions/parseMarkdownImages";
-
-import path from "path";
 
 const webhook = process.env.DISCORD_WEBHOOK;
 const eventUpload = multer({ storage: eventStorage })
 
 const router = Router();
+
 /** Middleware will be used for file uploading and storage on the backend */
-router.post("/post", minAuth, eventUpload.any(), async (req, res) => {
+router.post("/post", minAuth, eventUpload.array("images"), async (req, res) => {
   // Files passed through form submission on frontend
   const { files } = req;
   const { postBody } = req.body;
 
   const post = parseMarkdownImages(postBody);
   try {
-    await axios.post(webhook!, {
-      content: post,
-      username: "SBCC CS Club Announcements",
-      avatar_url: "https://cdn.discordapp.com/attachments/1207787641169514556/1225588929324122192/SBCCCS_Logo.png?ex=6638bfe3&is=66376e63&hm=6ff33472bb20e8557a78b0eadf7423773a7698c1fd78fa7363356621e92c07aa&",
-      tts: false,
-    });
+    const form = new FormData();
+
+    form.append("content", post);
+    form.append('username', "SBCC CS Club Announcements");
+    form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
+    // Seems to be a max of 3 images using this method, since making an array and parsing to a string for form-data
+    // wont work, as its a stream, not static
+    console.log(files);
+    //form.append('file', fs.createReadStream("./src/routes/test.png"));
+    //form.append('files', fs.createReadStream("./src/routes/aaa.png"));
+
+    form.submit(webhook!);
   } catch (err) {
     console.log(err);
     res.json({ message: err });
