@@ -11,6 +11,14 @@ const eventUpload = multer({ storage: eventStorage })
 
 const router = Router();
 
+router.get("/past", async (req, res) => {
+
+});
+
+router.get("/upcoming", async (req, res) => {
+
+});
+
 /** Middleware will be used for file uploading and storage on the backend */
 router.post("/post", minAuth, eventUpload.array("images"), async (req, res) => {
   // Files passed through form submission on frontend
@@ -40,6 +48,10 @@ router.post("/post", minAuth, eventUpload.array("images"), async (req, res) => {
   res.status(200);
   return res.json({ message: "OK" });
 
+
+});
+
+router.delete("/delete/:_id", minAuth, async (req, res) => {
 
 });
 
