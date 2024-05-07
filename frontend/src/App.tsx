@@ -4,6 +4,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import {
+  About,
   CurrentOfficers,
   ElectionsHome,
   Home,
@@ -19,6 +20,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/officers/present" element={<CurrentOfficers />} />
         <Route path="/officers/past" element={<PastOfficers />} />
         <Route path="/events/upcoming" element={<UpcomingEvents />} />

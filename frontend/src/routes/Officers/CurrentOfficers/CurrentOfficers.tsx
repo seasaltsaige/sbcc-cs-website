@@ -1,6 +1,14 @@
 import React from "react";
 import "./CurrentOfficers.css";
+import Navbar from "../../../components/Navbar/Navbar";
 
 export function CurrentOfficers() {
-  return <>Current Officers Page</>
+  return (
+    <div>
+      <Navbar />
+      <div>
+        Current Officers Page
+      </div>
+    </div>
+  )
 }
