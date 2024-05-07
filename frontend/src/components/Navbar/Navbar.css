@@ -7,11 +7,12 @@ a {
   width: 100%;
   height: 67px;
   border-bottom: solid 3px black;
-  background-color: #991c2d;
+  background-color: var(--sbcc-red);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: absolute;
 }
 
 .navbar > a, .navbar > div > p, .navbar > div > img {

@@ -1,3 +1,7 @@
+html {
+  --sbcc-red: #991c2d;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
