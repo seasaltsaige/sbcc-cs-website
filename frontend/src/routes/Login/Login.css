@@ -1,0 +1,74 @@
+.auth-form {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: rgba(0, 0, 0, 0.098);
+}
+
+.auth-panel {
+    display: flex;
+    flex-direction: column;
+    /* width: max(800px, min(60vw, 800px)); */
+    max-width: 800px;
+    min-width: 400px;
+    width: 75vw;
+    height: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.login-logo {
+    width: 200px;
+}
+
+.auth-panel > form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    /* padding: 15px; */
+    height: 50%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.auth-panel > form > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* padding: 15px; */
+    align-items: center;
+}
+
+.auth-panel > form > div > input {
+    border-radius: 20px;
+    width: 80%;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.153);
+    font-size: 0.95em;
+    text-align: center;
+}
+
+.auth-panel > form > div > label {
+    font-weight: bold;
+    font-size: 1.15em;
+    padding-left: 50px;
+    align-self: flex-start;
+}
+
+.submit-auth {
+    width: 80%;
+    height: 35px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.153);
+    background-color: var(--sbcc-red);
+    color: white;
+    font-weight: bold;
+
+}

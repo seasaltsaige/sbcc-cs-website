@@ -12,7 +12,7 @@ a {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  /* position: fixed; */
 }
 
 .navbar > a, .navbar > div > p, .navbar > div > img {
