@@ -17,8 +17,10 @@ router.post("/login", async (req, res) => {
   const adminUser = await Admin.findOne({
     username,
   });
-  if (!adminUser)
+  if (!adminUser) {
+    res.status(403);
     return res.json({ message: `No admin by user: ${username} found` }).status(500);
+  }
 
 
   const compareResult = bcrypt.compareSync(password, adminUser.password!);
@@ -26,9 +28,7 @@ router.post("/login", async (req, res) => {
   if (!compareResult)
     return res.json({ message: "Password is incorrect." }).status(403);
 
-  const token = jwt.sign({ username, admin: true }, process.env.JWT_SECRET!
-    // expiresIn: process.env.JWT_EXPIRES_IN,
-  );
+  const token = jwt.sign({ username, admin: true }, process.env.JWT_SECRET!);
 
   res.json({
     accessToken: token,
@@ -36,7 +36,6 @@ router.post("/login", async (req, res) => {
     expiresIn: parseInt(process.env.JWT_EXPIRES_IN!) * 1000 * 60 * 60 * 24,
   })
   return res.status(200);
-
 
 });
 
@@ -79,11 +78,11 @@ router.get("/admin", async (req, res) => {
 
   const admins = await Admin.find();
   if (admins.length == 0) {
-    res.json({ message: "OK", exists: false });
-    return res.status(200);
+    res.status(200);
+    return res.json({ message: "OK", exists: false });
   } else {
-    res.json({ message: "Admin already exists", exists: true });
-    return res.status(403);
+    res.status(403);
+    return res.json({ message: "Admin already exists", exists: true });
   }
 
 });
