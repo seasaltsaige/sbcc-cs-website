@@ -1,16 +1,22 @@
 import React, { useState } from "react";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
+import { useIsAuthenticated, useSignIn } from "react-auth-kit";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import checkAdmin from "../../api/checkAdmin";
+import loginAdmin from "../../api/loginAdmin";
+import registerAdmin from "../../api/registerAdmin";
 
 
 export function Login() {
 
   const signIn = useSignIn();
+  const isAuthenticated = useIsAuthenticated();
 
   // true: login, false: register, null: update
+  const navigate = useNavigate();
   const [login_register_update, setLogin_Register_Update] = useState<"login" | "register" | "update">("login");
-
+  const [info, setInfo] = useState<string>("");
+  const [infoType, setInfoType] = useState<string | null>(null);
   const [loginObject, setLoginObject] = useState<{
     username?: string;
     password?: string;
@@ -18,40 +24,133 @@ export function Login() {
     newPassword?: string;
     confirmPassword?: string;
   }>({});
-  
+
+  const createAlert = (text: string, type: "info" | "error" | "success", ms: number) => {
+    setInfo(text);
+    setInfoType(type);
+    setTimeout(() => {
+      setInfo("");
+      setInfoType(null);
+    }, ms);
+  }
+
   const clearForm = () => {
     document.forms[0].reset();
   }
 
-  const login = (ev: React.FormEvent<HTMLButtonElement>) => {
-    // ev.preventDefault();
-    console.log(loginObject);
-  }
+  const login = async () => {
+    try {
+      const loginRes = await loginAdmin(loginObject.username!, loginObject.password!);
 
-  const update = (ev: React.FormEvent<HTMLButtonElement>) => {
-    console.log(loginObject);
-  }
+      const response = loginRes.data;
 
+      if (signIn({
+        expiresIn: response.expiresIn,
+        token: response.accessToken,
+        tokenType: "Bearer",
+        authState: {
+          username: response.username
+        },
+      })) {
+        createAlert("Logging into account...", "success", 3000);
+        setTimeout(() => navigate("/"), 3000);
+      }
 
-  
-  const register = async (ev: React.FormEvent<HTMLButtonElement>) => {
-    const exists = await checkAdmin();
-    if (exists.status === 200) {
-      console.log("Good to go");
-    } else {
-      console.log("account exists");
+    } catch (err) {
+      const errMsg = (err as any).response.data.message;
+      if (errMsg) createAlert(errMsg, "error", 5000);
     }
-    console.log(loginObject);
   }
-  // signIn({
-  //   auth: {
-  //     token: "", // Token recieved from api
-  //     type: "Bearer"
-  //   },
-  //   userState: {
-  //     username: "admin", // will be returned or whatever, formdata
-  //   }
-  // })
+
+  const update = () => {
+    //TODO
+  }
+
+  const validatePassword = () => {
+
+    const password = loginObject.password;
+    const confirmPassword = loginObject.confirmPassword;
+    if (!password) {
+      createAlert("Enter a password", "info", 5000);
+      return false;
+    }
+    if (confirmPassword === undefined) {
+      createAlert("Confirm your password", "info", 5000);
+      return false;
+    }
+    if (password !== confirmPassword) {
+      createAlert("Passwords do not match", "error", 5000);
+      return false;
+    }
+
+    // Minimum length of 8 characters
+    if (password.length < 8) {
+      createAlert("Password must be at least 8 characters", "error", 5000);
+      return false;
+    }
+
+    // At least one uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      createAlert("Password must contain at least one uppercase character", "error", 5000);
+      return false;
+    }
+
+    // At least one lowercase letter
+    if (!/[a-z]/.test(password)) {
+      createAlert("Password must contain at least one lowercase character", "error", 5000);
+      return false;
+    }
+
+    // At least one digit
+    if (!/\d/.test(password)) {
+      createAlert("Password must contain at least one digit", "error", 5000);
+      return false;
+    }
+
+    // At least one special character
+    if (!/[^a-zA-Z0-9]/.test(password)) {
+      createAlert("Password must contain at least one special character", "error", 5000);
+      return false;
+    }
+
+    // All conditions passed, so it's a secure password
+    return true;
+  }
+
+  const register = async () => {
+    if (!loginObject.username) return createAlert("Username can not be empty", "error", 5000);
+    try {
+      const exists = await checkAdmin();
+      // Admin account does not exist, so status is OK to make account
+      if (exists.status === 200) {
+        const validationResult = validatePassword();
+        if (validationResult) {
+          try {
+            const registerRes = await registerAdmin(loginObject.username!, loginObject.password!) as any;
+            const response = registerRes.data;
+
+            if (signIn({
+              expiresIn: response.expiresIn,
+              token: response.accessToken,
+              tokenType: "Bearer",
+              authState: {
+                username: response.username
+              },
+            })) {
+              createAlert("Creating account...", "success", 3000);
+              setTimeout(() => navigate("/"), 3000);
+            }
+
+          } catch (err) {
+            return createAlert(err as any, "error", 7500);
+          }
+        }
+      }
+    } catch (err) {
+      // Otherwise, account already exists
+      createAlert("Admin account has already been created. Contact the Club President for more info", "info", 7500);
+    }
+  }
 
   return (
 
@@ -70,6 +169,9 @@ export function Login() {
         }
       </div>
       <div className="auth-panel">
+        <div className={`alert-panel ${infoType}`}>
+          <p className="alert-text">{info}</p>
+        </div>
         <img className="login-logo" src="/loginlogo.png" alt="Login Logo" />
         {
           login_register_update === "login" ?
@@ -86,13 +188,13 @@ export function Login() {
                   <input type="password" placeholder="Enter Password" name="password" required onChange={(ev) => setLoginObject((old) => ({ ...old, password: ev.target.value }))} />
                 </div>
 
-                <button onClick={(ev) => { ev.preventDefault(); login(ev) }} className="submit-auth" type="submit">Login</button>
+                <button onClick={(ev) => { ev.preventDefault(); login(); }} className="submit-auth" type="submit">Login</button>
               </form>
             ) :
             (
               login_register_update === "update" ?
                 (
-                  <form id="update">
+                  <form>
                     <div>
                       <label htmlFor="username">Username</label>
                       <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
@@ -112,14 +214,14 @@ export function Login() {
                     </div>
 
 
-                    <button onClick={(ev) => {ev.preventDefault(); update(ev); }} className="submit-auth" type="submit">Update Admin</button>
+                    <button onClick={(ev) => { ev.preventDefault(); update(); }} className="submit-auth" type="submit">Update Admin</button>
                   </form>
                 ) :
                 (
                   <form id="register">
                     <div>
                       <label htmlFor="username">Username</label>
-                      <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))}/>
+                      <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
                     </div>
                     <div>
                       <label htmlFor="password">Password</label>
@@ -128,10 +230,10 @@ export function Login() {
 
                     <div>
                       <label htmlFor="confirm">Confirm Password</label>
-                      <input type="password" placeholder="Confirm Password" name="confirm" required onChange={(ev) => setLoginObject((old) => ({ ...old, confirmPassword: ev.target.value }))}/>
+                      <input type="password" placeholder="Confirm Password" name="confirm" required onChange={(ev) => setLoginObject((old) => ({ ...old, confirmPassword: ev.target.value }))} />
                     </div>
 
-                    <button onClick={(ev) => {ev.preventDefault(); register(ev); }} className="submit-auth" type="submit">Create Admin</button>
+                    <button onClick={(ev) => { ev.preventDefault(); register(); }} className="submit-auth" type="submit">Create Admin</button>
                   </form>
                 )
 
