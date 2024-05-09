@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { useIsAuthenticated, useSignIn } from "react-auth-kit";
+import { useIsAuthenticated, useSignIn, useSignOut, useAuthHeader } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import checkAdmin from "../../api/checkAdmin";
 import loginAdmin from "../../api/loginAdmin";
 import registerAdmin from "../../api/registerAdmin";
+import updateAdmin from "../../api/updateAdmin";
 
 
 export function Login() {
 
   const signIn = useSignIn();
+  const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
-
+  const authHeader = useAuthHeader();
   // true: login, false: register, null: update
   const navigate = useNavigate();
   const [login_register_update, setLogin_Register_Update] = useState<"login" | "register" | "update">("login");
@@ -35,7 +37,8 @@ export function Login() {
   }
 
   const clearForm = () => {
-    document.forms[0].reset();
+    if (document.forms[0])
+      document.forms[0].reset();
   }
 
   const login = async () => {
@@ -62,23 +65,19 @@ export function Login() {
     }
   }
 
-  const update = () => {
-    //TODO
-  }
+  const validatePassword = (single?: boolean) => {
 
-  const validatePassword = () => {
-
-    const password = loginObject.password;
+    const password = single ? loginObject.newPassword : loginObject.password;
     const confirmPassword = loginObject.confirmPassword;
     if (!password) {
       createAlert("Enter a password", "info", 5000);
       return false;
     }
-    if (confirmPassword === undefined) {
+    if (!single && confirmPassword === undefined) {
       createAlert("Confirm your password", "info", 5000);
       return false;
     }
-    if (password !== confirmPassword) {
+    if (!single && password !== confirmPassword) {
       createAlert("Passwords do not match", "error", 5000);
       return false;
     }
@@ -115,6 +114,31 @@ export function Login() {
 
     // All conditions passed, so it's a secure password
     return true;
+  }
+
+  const update = async () => {
+    const authHead = authHeader();
+    if (!loginObject.username) return createAlert("Please provide your current username", "info", 3000);
+    const validNewPass = validatePassword(true);
+    if (!validNewPass) return;
+
+    try {
+      const updateRes = await updateAdmin(
+        loginObject.username!,
+        loginObject.password!,
+        {
+          newPassword: loginObject.newPassword,
+          newUsername: loginObject.newUsername
+        },
+        authHead,
+      );
+      if (updateRes.status === 200) {
+        clearForm();
+        return createAlert("Successfully changed password/username of admin account", "success", 5000);
+      }
+    } catch (err) {
+      return createAlert(err as any, "error", 7500);
+    }
   }
 
   const register = async () => {
@@ -177,19 +201,24 @@ export function Login() {
           login_register_update === "login" ?
             (
               // Login state
+              isAuthenticated() ?
+                (<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <h1>You are already signed in...</h1>
+                  <button className="submit-auth" onClick={(ev) => { ev.preventDefault(); signOut(); }}>Sign Out</button>
+                </div>) :
+                <form>
+                  <div>
+                    <label htmlFor="username">Username</label>
+                    <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
+                  </div>
+                  <div>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" placeholder="Enter Password" name="password" required onChange={(ev) => setLoginObject((old) => ({ ...old, password: ev.target.value }))} />
+                  </div>
 
-              <form>
-                <div>
-                  <label htmlFor="username">Username</label>
-                  <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
-                </div>
-                <div>
-                  <label htmlFor="password">Password</label>
-                  <input type="password" placeholder="Enter Password" name="password" required onChange={(ev) => setLoginObject((old) => ({ ...old, password: ev.target.value }))} />
-                </div>
+                  <button onClick={(ev) => { ev.preventDefault(); login(); }} className="submit-auth" type="submit">Login</button>
+                </form>
 
-                <button onClick={(ev) => { ev.preventDefault(); login(); }} className="submit-auth" type="submit">Login</button>
-              </form>
             ) :
             (
               login_register_update === "update" ?
@@ -218,23 +247,27 @@ export function Login() {
                   </form>
                 ) :
                 (
-                  <form id="register">
-                    <div>
-                      <label htmlFor="username">Username</label>
-                      <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
-                    </div>
-                    <div>
-                      <label htmlFor="password">Password</label>
-                      <input type="password" placeholder="Enter Password" name="password" required onChange={(ev) => setLoginObject((old) => ({ ...old, password: ev.target.value }))} />
-                    </div>
+                  isAuthenticated() ?
+                    (<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <h1>You are already signed in...</h1>
+                      <button className="submit-auth" onClick={(ev) => { ev.preventDefault(); signOut(); }}>Sign Out</button>
+                    </div>) : <form id="register">
+                      <div>
+                        <label htmlFor="username">Username</label>
+                        <input type="text" placeholder="Enter Username" name="username" required onChange={(ev) => setLoginObject((old) => ({ ...old, username: ev.target.value }))} />
+                      </div>
+                      <div>
+                        <label htmlFor="password">Password</label>
+                        <input type="password" placeholder="Enter Password" name="password" required onChange={(ev) => setLoginObject((old) => ({ ...old, password: ev.target.value }))} />
+                      </div>
 
-                    <div>
-                      <label htmlFor="confirm">Confirm Password</label>
-                      <input type="password" placeholder="Confirm Password" name="confirm" required onChange={(ev) => setLoginObject((old) => ({ ...old, confirmPassword: ev.target.value }))} />
-                    </div>
+                      <div>
+                        <label htmlFor="confirm">Confirm Password</label>
+                        <input type="password" placeholder="Confirm Password" name="confirm" required onChange={(ev) => setLoginObject((old) => ({ ...old, confirmPassword: ev.target.value }))} />
+                      </div>
 
-                    <button onClick={(ev) => { ev.preventDefault(); register(); }} className="submit-auth" type="submit">Create Admin</button>
-                  </form>
+                      <button onClick={(ev) => { ev.preventDefault(); register(); }} className="submit-auth" type="submit">Create Admin</button>
+                    </form>
                 )
 
             )

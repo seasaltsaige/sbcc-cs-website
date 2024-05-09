@@ -50,18 +50,17 @@ router.post("/login", async (req, res) => {
 router.patch("/admin", strictAuth, async (req, res) => {
   // Auth middleware handles auth status (being logged in AND providing credentials)
 
-  const { username, newUsername, newPassword }: { username: string, newUsername: string | null; newPassword: string } = req.body;
+  const { username, newUsername, newPassword }: { username: string, newUsername: string | undefined; newPassword: string } = req.body;
   // const admin = await Admin.findOne({ username });
   try {
     const saltRounds = 10;
     // const salt = bcrypt.genSaltSync(saltRounds);
     const newHash = bcrypt.hashSync(newPassword, saltRounds);
 
-    if (newUsername !== null)
+    if (newUsername !== undefined)
       await Admin.findOneAndUpdate({ username }, { username: newUsername, password: newHash });
     else
       await Admin.findOneAndUpdate({ username }, { password: newHash });
-
 
     res.status(200);
     return res.json({ message: "OK" });
