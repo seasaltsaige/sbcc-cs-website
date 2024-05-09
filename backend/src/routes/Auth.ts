@@ -79,10 +79,10 @@ router.get("/admin", async (req, res) => {
 
   const admins = await Admin.find();
   if (admins.length == 0) {
-    res.json({ message: "OK" });
+    res.json({ message: "OK", exists: false });
     return res.status(200);
   } else {
-    res.json({ message: "Admin already exists" });
+    res.json({ message: "Admin already exists", exists: true });
     return res.status(403);
   }
 
