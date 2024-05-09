@@ -12,10 +12,17 @@ a {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* position: fixed; */
+  position: fixed;
 }
 
-.navbar > a, .navbar > div > p, .navbar > div > img {
+.nav-spacer {
+  width: 100%;
+  height: 67px;
+}
+
+.navbar>a,
+.navbar>div>p,
+.navbar>div>img {
   user-select: none;
 }
 
@@ -44,6 +51,6 @@ a {
   padding-right: 20px;
 }
 
-.navbar-links > a {
-  padding: 5px;  
+.navbar-links>a {
+  padding: 5px;
 }

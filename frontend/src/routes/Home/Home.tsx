@@ -8,6 +8,7 @@ export function Home() {
   return (
     <>
       <Navbar />
+      {/* <NavSpacer /> */}
       <div className="home-container">
         <div className="scroll-panel">
           <div className="relation">

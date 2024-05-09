@@ -3,7 +3,7 @@
   flex-direction: row;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 
@@ -13,14 +13,13 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  align-items: center; 
-  justify-content:space-evenly;
+  align-items: center;
 }
 
 .relation {
   background-color: white;
   width: 100%;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   height: 60px;
   text-align: center;
   color: var(--sbcc-red);
@@ -28,6 +27,7 @@
   font-size: 18px;
   border-bottom: 3px solid black;
   border-right: 3px solid black;
+  margin-bottom: 50px;
 }
 
 .scroll-item-container {
@@ -60,17 +60,24 @@
   /* font-size: 35px; */
 }
 
-.background-image {
+/* .background-image {
   width: 50%;
   height: 100%;
   border: 3px solid black;
-}
+} */
 
-.background-image > img {
-  width: 50vw;
-  height: 100vh;
+.background-image>img {
+  max-width: 50vw;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
+  border: 3px solid black;
+  display: block;
+
 }
 
 .arrow {
-  fill: black;
+  fill: var(--sbcc-red);
+  stroke: black;
+  stroke-width: 2px;
 }
