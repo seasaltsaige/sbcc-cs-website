@@ -25,3 +25,10 @@ I'm using the **MERN stack**, so if you're familiar, that would be ideal.
 
 
 - /admin/login -> Officer only page, that allows initial creation of an admin account, loging in, and updating the account info. Logging in as an officer will allow you to **post**, **delete**, and **update events**; **post**, **delete**, and **update officers**; **post**, **delete**, and **update election polls**; **post**, **delete**, and **update election candidates**; and potentially more as ideas are brought up. ***THIS IS A POWERFUL ACCOUNT >> ONLY GIVE PASSWORDS/USERNAMES TO OFFICERS YOU TRUST!!!!***
+
+
+### Additional Plans
+I also plan to integrate the website with both discord and the mailing list that the CS LTA's have access to, allowing a post to be made one time, while being sent to all locations. Discord interactions are more or less done, but will need to test once the website is fleshed out more.
+
+
+***If you have any ideas that could be useful for this, contact me! I'd love to hear them!***
