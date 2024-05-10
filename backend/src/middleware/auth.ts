@@ -41,7 +41,10 @@ export async function strictAuth(req: Request, res: Response, next: NextFunction
 // jwt auth without providing login credentials
 export async function minAuth(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers.authorization?.split(" ")!;
-
+  if (!auth) {
+    res.status(401);
+    return res.json({ message: "No auth header" });
+  }
   const bearer = auth[0];
   const token = auth[1];
 

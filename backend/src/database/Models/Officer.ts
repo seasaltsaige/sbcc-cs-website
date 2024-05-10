@@ -2,9 +2,15 @@ import { Schema, model } from "mongoose";
 
 const Officer = new Schema({
   name: String,
-  startDate: Number,
-  endDate: Number!,
-  bio: String,
+  position: {
+    type: String,
+    enum: [
+      "Club President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"
+    ] as const,
+  },
+  startDate: Date,
+  endDate: Date!,
+  statement: String,
   image: String!
 });
 
