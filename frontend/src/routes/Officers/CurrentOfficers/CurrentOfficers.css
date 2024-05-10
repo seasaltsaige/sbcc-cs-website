@@ -1,0 +1,65 @@
+.officers {
+  width: 100vw;
+  height: calc(100vh - 67px);
+
+  background-color: #E1E1E1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.club-officers-text {
+  font-size: 38px;
+  font-weight: bolder;
+  color: var(--sbcc-red);
+}
+
+.horizontal-flow-container {
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-start; */
+  align-items: center;
+  justify-content: flex-start;
+  background-color: white;
+  border: 2px solid black;
+  width: 80%;
+  height: 60vh;
+  border-radius: 20px;
+  overflow-x: scroll;
+}
+
+.horizontal-flow-container.empty {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+.create-officer {
+  background-color: var(--sbcc-red);
+  border: 1px solid black;
+  color: white;
+  font-size: 20px;
+  font-weight: normal;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-radius: 100px;
+  margin-top: 35px;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.453);
+  cursor: pointer;
+}
+
+.create-officer:hover {
+  background-color: #bb2a3d;
+}
+
+.create-officer:active {
+  background-color: var(--sbcc-red);
+  transform: translateX(-1px) translateY(1px);
+}
