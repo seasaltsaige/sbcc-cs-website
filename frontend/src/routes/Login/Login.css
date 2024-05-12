@@ -156,7 +156,7 @@
 }
 
 .submit-auth:active {
-  background-color: #bb2a3d;
+  background-color: var(--sbcc-red);
   border: 2px solid black;
   transform: translateX(1px) translateY(-1px);
 }
