@@ -3,15 +3,8 @@ import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import "./OfficerPopup.css";
 import { useIsAuthenticated } from "react-auth-kit";
-type OfficersData = {
-  name?: string | null | undefined;
-  position?: "Club President" | "Vice President" | "Project Manager" | "Secretary" | "Tresurer" | "Promoter" | null | undefined;
-  startDate?: Date;
-  endDate?: Date;
-  statement?: string;
-  image?: Blob | null, // tbd;
-  _id?: string;
-}
+import { OfficerData } from "../../types/OfficerData.type";
+
 
 export default function OfficerPopup({
   isOpen,
@@ -23,12 +16,12 @@ export default function OfficerPopup({
   type: "edit" | "new",
   isOpen: boolean,
   close: (clearOfficer?: boolean) => void,
-  officerData: OfficersData | null,
-  updateOfficer: (officer: OfficersData) => void
+  officerData: OfficerData | null,
+  updateOfficer: (officer: OfficerData) => void
 }) {
   const isAuth = useIsAuthenticated();
 
-  const [officer, setOfficer] = useState<OfficersData>();
+  const [officer, setOfficer] = useState<OfficerData>();
   const [fileName, setFileName] = useState<string>("");
   const [error, setError] = useState<string>("");
 
@@ -39,7 +32,7 @@ export default function OfficerPopup({
     }, ms);
   }
 
-  const localEdit = (officer: OfficersData) => {
+  const localEdit = (officer: OfficerData) => {
     setOfficer((old) => ({ ...old, ...officer }))
   }
 

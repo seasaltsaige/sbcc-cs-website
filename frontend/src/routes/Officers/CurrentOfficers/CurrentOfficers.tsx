@@ -1,26 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./CurrentOfficers.css";
 import Navbar from "../../../components/Navbar/Navbar";
-import { useIsAuthenticated } from "react-auth-kit";
+import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
+import { OfficerData } from "../../../types/OfficerData.type";
+import createOfficer from "../../../api/createOfficer";
 
-type OfficersData = {
-  name?: string | null | undefined;
-  position?: "Club President" | "Vice President" | "Project Manager" | "Secretary" | "Tresurer" | "Promoter" | null | undefined;
-  startDate?: Date;
-  endDate?: Date;
-  statement?: string;
-  image?: Blob | null, // tbd;
-  _id?: string;
-}
+
 
 
 export function CurrentOfficers() {
 
-  const [officersData, setOfficersData] = useState<OfficersData[]>([]);
+  const [officersData, setOfficersData] = useState<OfficerData[]>([]);
   const isAuth = useIsAuthenticated();
+  const authHeader = useAuthHeader();
 
-  const [openOfficer, setOpenOfficer] = useState<OfficersData | null>(null);
+  const [openOfficer, setOpenOfficer] = useState<OfficerData | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [type, setType] = useState<"edit" | "new">("new");
 
@@ -29,14 +24,25 @@ export function CurrentOfficers() {
     setOpenOfficer(null);
   }
 
-  const postUpdate = (officer: OfficersData) => {
+  const postUpdate = (officer: OfficerData) => {
 
   }
 
-  const updateOfficer = (officer: OfficersData) => {
+  const updateOfficer = async (officer: OfficerData) => {
+    const auth = authHeader();
+    console.log(auth);
     // Post
     if (type === "new") {
       console.log("new officer", officer);
+      try {
+        console.log("in try");
+        const createRes = await createOfficer(officer, auth);
+        console.log(createRes);
+      } catch (err) {
+        console.log("in err");
+        console.log(err);
+      }
+      console.log("after try");
     }
     // Patch
     else {
