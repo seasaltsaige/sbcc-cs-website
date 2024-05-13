@@ -50,7 +50,8 @@ router.get("/all", async (req, res) => {
 
 
 // Will also want file handling middleware to handle image upload
-router.post("/create", minAuth, officerUpload.single("officerImage"), async (req, res) => {
+router.post("/create", minAuth, officerUpload.single("image"), async (req, res) => {
+  console.log(req.body);
   const { name, startDate, endDate, statement, position } = req.body;
   if (!name || !startDate || !endDate || !statement || !position) {
     res.status(400);
@@ -72,7 +73,10 @@ router.post("/create", minAuth, officerUpload.single("officerImage"), async (req
 
   try {
     await officer.save();
+    res.status(200);
+    return res.json({ message: `Successfully created officer: ${name}` });
   } catch (err) {
+    console.log(err);
     res.status(500);
     return res.json({ message: "Internal server error" });
   }

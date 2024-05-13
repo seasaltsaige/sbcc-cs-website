@@ -5,13 +5,13 @@ const Officer = new Schema({
   position: {
     type: String,
     enum: [
-      "Club President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"
+      "President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"
     ] as const,
   },
-  startDate: Date,
-  endDate: Date!,
+  startDate: Number,
+  endDate: Number,
   statement: String,
-  image: String!
+  image: String,
 });
 
 export default model("officer", Officer);
