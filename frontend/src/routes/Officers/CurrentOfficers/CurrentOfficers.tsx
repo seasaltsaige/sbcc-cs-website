@@ -10,7 +10,7 @@ type OfficersData = {
   startDate?: Date;
   endDate?: Date;
   statement?: string;
-  image?: string, // tbd;
+  image?: Blob | null, // tbd;
   _id?: string;
 }
 

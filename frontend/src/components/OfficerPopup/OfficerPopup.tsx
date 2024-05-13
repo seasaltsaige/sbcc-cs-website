@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import "./OfficerPopup.css";
+import { useIsAuthenticated } from "react-auth-kit";
 type OfficersData = {
   name?: string | null | undefined;
   position?: "Club President" | "Vice President" | "Project Manager" | "Secretary" | "Tresurer" | "Promoter" | null | undefined;
   startDate?: Date;
   endDate?: Date;
   statement?: string;
-  image?: string, // tbd;
+  image?: Blob | null, // tbd;
   _id?: string;
 }
 
@@ -25,8 +26,19 @@ export default function OfficerPopup({
   officerData: OfficersData | null,
   updateOfficer: (officer: OfficersData) => void
 }) {
+  const isAuth = useIsAuthenticated();
+
   const [officer, setOfficer] = useState<OfficersData>();
   const [fileName, setFileName] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const createAlert = (text: string, ms: number) => {
+    setError(text);
+    setTimeout(() => {
+      setError("");
+    }, ms);
+  }
+
   const localEdit = (officer: OfficersData) => {
     setOfficer((old) => ({ ...old, ...officer }))
   }
@@ -37,12 +49,23 @@ export default function OfficerPopup({
   }
 
   const saveChanges = () => {
+    if (!officer) return createAlert("No Officer information provided", 5000);
+    else if (!officer.name) return createAlert("No Officer name provided", 5000);
+    else if (!officer.startDate) return createAlert("No Officer start date provided", 5000);
+    else if (!officer.endDate) return createAlert("No Officer end date provided", 5000);
+    else if (!officer.position) return createAlert("No Officer position provided", 5000);
+    else if (!officer.statement) return createAlert("No Officer statement provided", 5000);
+
+    if (officer.statement.length > 300) return createAlert("Officer statement must be shorter than 300 characters", 5500);
+
     updateOfficer({ ...officer });
+    clear();
+    close();
   }
 
 
   return (
-    isOpen ?
+    isOpen && isAuth() ?
       <div className="officer-popup-container">
         <div className="officer-modal">
           <div className="modal-header">
@@ -50,10 +73,19 @@ export default function OfficerPopup({
               {type === "edit" ? "Edit Officer" : "Create Officer"}
             </p>
           </div>
+
           <div className="modal-content">
+            {
+              error !== "" ?
+                <div className="error-container">
+                  {error}
+                </div>
+                : <></>
+            }
+
             <div className="image-preview-container">
               <img
-                src={officer?.image || "/default.png"}
+                src={officer?.image ? URL.createObjectURL(officer?.image!) : "/default.png"}
                 alt="Officer Image"
                 className="image-preview"
               />
@@ -70,7 +102,7 @@ export default function OfficerPopup({
                     type="file"
                     accept="image/png, image/jpg, image/jpeg"
                     name="profileImage"
-                    onChange={(ev) => { localEdit({ ...officer, image: URL.createObjectURL(ev.target.files![0]) }); setFileName(ev.target.files![0].name) }}
+                    onChange={(ev) => { localEdit({ ...officer, image: ev.target.files![0] }); setFileName(ev.target.files![0].name) }}
                   />
                 </button>
                 <p className="image-name">{fileName === "" ? "No image selected" : fileName}</p>
@@ -129,7 +161,7 @@ export default function OfficerPopup({
 
 
             <div className="buttons-container">
-              <button className="save modal-button" onClick={() => { saveChanges(); clear(); close(); }}>Save</button>
+              <button className="save modal-button" onClick={() => { saveChanges(); }}>Save</button>
               <button className="close modal-button" onClick={() => { clear(); close(false); }}>Cancel</button>
             </div>
           </div>
