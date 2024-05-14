@@ -4,8 +4,9 @@ import Navbar from "../../../components/Navbar/Navbar";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
-import createOfficer from "../../../api/createOfficer";
-import getAllOfficers from "../../../api/getAllOfficers";
+import { createOfficer, getCurrentOfficers } from "../../../api/index";
+// import createOfficer from "../../../api/createOfficer";
+// import getAllOfficers from "../../../api/getCurrentOfficers";
 
 
 
@@ -40,7 +41,7 @@ export function CurrentOfficers() {
   const fetchOfficers = async () => {
     const header = authHeader();
     try {
-      const fetchRes = await getAllOfficers(header);
+      const fetchRes = await getCurrentOfficers(header);
       const data = fetchRes.data.officers as OfficerData[];
       setOfficersData(data);
     } catch (err) {
@@ -48,7 +49,6 @@ export function CurrentOfficers() {
         createAlert(err, 7500);
       else if (typeof err === "object")
         createAlert((err as any).response.data.message, 6000);
-
     }
   }
 
@@ -95,7 +95,10 @@ export function CurrentOfficers() {
           {
             // Will have logic for display all current officers
             officersData.length > 0 ?
-              <h1>{officersData.length}</h1>
+              officersData.map((officer, i) => (
+                <div key={i}></div>
+              ))
+
               : <h1>No officers to display</h1>
           }
         </div>

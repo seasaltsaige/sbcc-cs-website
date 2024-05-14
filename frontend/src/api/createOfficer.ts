@@ -2,7 +2,7 @@ import axios from "axios";
 import { OfficerData } from "../types/OfficerData.type";
 const URL = "http://localhost:3002";
 
-export default async function createOfficer(officer: OfficerData, auth: string) {
+export async function createOfficer(officer: OfficerData, auth: string) {
   // const form = new FormData();
 
   const { endDate, image, name, position, startDate, statement } = officer;

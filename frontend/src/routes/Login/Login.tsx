@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { useIsAuthenticated, useSignIn, useSignOut, useAuthHeader } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import checkAdmin from "../../api/checkAdmin";
-import loginAdmin from "../../api/loginAdmin";
-import registerAdmin from "../../api/registerAdmin";
-import updateAdmin from "../../api/updateAdmin";
+import { checkAdmin, loginAdmin, registerAdmin, updateAdmin } from "../../api/index";
 
 
 export function Login() {
