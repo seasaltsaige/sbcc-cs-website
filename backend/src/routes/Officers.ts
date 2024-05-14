@@ -5,6 +5,7 @@ import { minAuth } from "../middleware/auth";
 import Officer from "../database/Models/Officer";
 import multer from "multer";
 import { officerStorage } from "../multer/diskStorage";
+import sortOfficers, { TOfficer } from "../functions/sortOfficers";
 
 const officerUpload = multer({ storage: officerStorage });
 
@@ -66,11 +67,13 @@ router.get("/current", async (req, res) => {
         _id: auth ? v._id : null,
       }
     )
-  }).filter((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate);
+  }).filter((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate) as TOfficer[];
+  // TODO: sort officers in correct orders
+  // President, Vice President, Project Manager, Secretary, Tresurer, Promoter
 
   res.status(200);
   return res.json({
-    officers,
+    officers: sortOfficers(officers),
   });
 
 
