@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-
+import fs from "fs";
+import path from "path";
 import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 import Officer from "../database/Models/Officer";
@@ -68,8 +69,6 @@ router.get("/current", async (req, res) => {
       }
     )
   }).filter((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate) as TOfficer[];
-  // TODO: sort officers in correct orders
-  // President, Vice President, Project Manager, Secretary, Tresurer, Promoter
 
   res.status(200);
   return res.json({
@@ -123,7 +122,13 @@ router.delete("/:_id", minAuth, async (req, res) => {
     return res.json({ message: "Malformed parameter, no _id provided" });
   }
   try {
+    const officer = await Officer.findOne({ _id });
+    const pathToImage = path.join(__dirname, "../public/officers", officer?.image!);
+
     await Officer.findOneAndDelete({ _id });
+    if (fs.existsSync(pathToImage)) {
+      fs.rmSync(pathToImage);
+    }
 
     res.status(200);
     return res.json({ message: "Successfully deleted officer" });
