@@ -5,4 +5,5 @@ export * from "./getPastOfficers";
 export * from "./loginAdmin";
 export * from "./registerAdmin";
 export * from "./updateAdmin";
+export * from "./deleteOfficer";
 // Add as needed

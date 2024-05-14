@@ -4,7 +4,7 @@ import Navbar from "../../../components/Navbar/Navbar";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
-import { createOfficer, getCurrentOfficers } from "../../../api/index";
+import { createOfficer, getCurrentOfficers, deleteOfficer } from "../../../api/index";
 
 const URL = "http://localhost:3002";
 
@@ -67,6 +67,17 @@ export function CurrentOfficers() {
     }
   }
 
+  const deleteOff = async (_id: string) => {
+    const header = authHeader();
+    try {
+      const deleteRes = await deleteOfficer(_id, header);
+      if (deleteRes.status === 200)
+        await fetchOfficers();
+    } catch (err) {
+
+    }
+  }
+
   useEffect(() => {
     (async () => {
       await fetchOfficers();
@@ -123,15 +134,21 @@ export function CurrentOfficers() {
                             onClick={
                               () => {
                                 setType("edit");
-                                setOpenOfficer(
-                                  {
-                                    ...officer,
-                                    // endDate: officer.endDate,
-                                    // startDate: new Date(officer.startDate as unknown as number),
-                                    // image: officer.image ? officer.image : null,
-                                  }); setIsOpen(true)
-                              }} className="edit officer-admin-button">Edit</button>
-                          <button className="delete officer-admin-button">Delete</button>
+                                setOpenOfficer(officer);
+                                setIsOpen(true);
+                              }}
+                            className="edit officer-admin-button"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={
+                              () => deleteOff(officer._id!)
+                            }
+                            className="delete officer-admin-button"
+                          >
+                            Delete
+                          </button>
                         </div>
                       )
                       : <></>
