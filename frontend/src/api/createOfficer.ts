@@ -9,8 +9,8 @@ export async function createOfficer(officer: OfficerData, auth: string) {
     return await axios.post(`${URL}/officers/create`, {
       name,
       statement,
-      startDate: startDate?.getTime(),
-      endDate: endDate?.getTime(),
+      startDate: startDate,
+      endDate: endDate,
       position,
       image,
     }, { headers: { Authorization: auth, "Content-Type": "multipart/form-data" } });
@@ -18,8 +18,8 @@ export async function createOfficer(officer: OfficerData, auth: string) {
     return await axios.post(`${URL}/officers/create`, {
       name,
       statement,
-      startDate: startDate?.getTime(),
-      endDate: endDate?.getTime(),
+      startDate: startDate,
+      endDate: endDate,
       position,
     }, { headers: { Authorization: auth, "Content-Type": "multipart/form-data" } });
   }

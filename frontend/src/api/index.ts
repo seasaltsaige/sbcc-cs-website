@@ -6,4 +6,5 @@ export * from "./loginAdmin";
 export * from "./registerAdmin";
 export * from "./updateAdmin";
 export * from "./deleteOfficer";
+export * from "./updateOfficer";
 // Add as needed

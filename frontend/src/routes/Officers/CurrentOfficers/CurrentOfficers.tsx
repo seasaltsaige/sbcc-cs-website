@@ -4,7 +4,7 @@ import Navbar from "../../../components/Navbar/Navbar";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
-import { createOfficer, getCurrentOfficers, deleteOfficer } from "../../../api/index";
+import { createOfficer, getCurrentOfficers, deleteOfficer, updateOfficer as updateOff } from "../../../api/index";
 
 const URL = "http://localhost:3002";
 
@@ -63,7 +63,13 @@ export function CurrentOfficers() {
     // Patch
     // TODO
     else {
+      try {
+        const updateRes = await updateOff(officer, auth);
+        if (updateRes.status === 200)
+          await fetchOfficers();
+      } catch (err) {
 
+      }
     }
   }
 
@@ -74,7 +80,8 @@ export function CurrentOfficers() {
       if (deleteRes.status === 200)
         await fetchOfficers();
     } catch (err) {
-
+      // i gues i just dont handle this lmao
+      // TODO
     }
   }
 

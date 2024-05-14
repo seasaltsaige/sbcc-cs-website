@@ -139,6 +139,53 @@ router.delete("/:_id", minAuth, async (req, res) => {
 
 });
 
+
+router.patch("/:_id", minAuth, officerUpload.single("image"), async (req, res) => {
+  const _id = req.params["_id"];
+
+  if (!_id) {
+    res.status(400);
+    return res.json({ message: "Malformed parameter, no _id provided" });
+  }
+  const { name, startDate, endDate, statement, position } = req.body;
+  if (!name || !startDate || !endDate || !statement || !position) {
+    res.status(400);
+    return res.json({
+      message: "Malformed request body, did you provide 'name', 'startDate', 'endDate', 'statement', and 'position'?",
+    });
+  }
+  const image = req.file;
+
+  try {
+    const oldOfficer = await Officer.findOne({ _id });
+    if (image !== undefined) {
+      // New image was provided
+      const pathToOldImage = path.join(__dirname, "../public/officers", oldOfficer?.image!);
+      fs.rmSync(pathToOldImage);
+    }
+    const update: any = {
+      name,
+      startDate: startDate,
+      endDate: endDate,
+      statement,
+      position,
+    };
+    if (image !== undefined)
+      update.image = image.filename;
+
+    await Officer.findOneAndUpdate({ _id }, { ...update });
+
+    res.status(200);
+    return res.json({ message: "Successfully updated officer" });
+    // Need to remove old image if a new image was provided.
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return res.json({ message: "Internal server error" });
+  }
+
+});
+
 export {
   router as Officers,
 };

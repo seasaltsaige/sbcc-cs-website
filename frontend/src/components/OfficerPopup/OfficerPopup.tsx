@@ -114,7 +114,7 @@ export default function OfficerPopup({
                     onChange={(ev) => { localEdit({ ...officer, image: ev.target.files![0] }); setFileName(ev.target.files![0].name) }}
                   />
                 </button>
-                <p className="image-name">{fileName === "" ? "No image selected" : fileName}</p>
+                <p className="image-name">{fileName === "" ? "No image selected" : (fileName.length > 21 ? `${fileName.slice(0, 21)}.${fileName.split(".")[fileName.split(".").length - 1]}` : fileName)}</p>
               </div>
             </div>
 
@@ -143,7 +143,7 @@ export default function OfficerPopup({
                     className="start-date"
                     type="date"
                     value={officer && officer.startDate ? parseLocaleDateToRFC3339(new Date(officer.startDate)) : ""}
-                    onChange={(ev) => { localEdit({ ...officer, startDate: new Date(ev.target.valueAsNumber) }) }}
+                    onChange={(ev) => { localEdit({ ...officer, startDate: ev.target.valueAsNumber }) }}
                   />
                 </div>
                 <div className="date-container">
@@ -152,7 +152,7 @@ export default function OfficerPopup({
                     className="end-date"
                     type="date"
                     value={officer && officer.endDate ? parseLocaleDateToRFC3339(new Date(officer.endDate)) : ""}
-                    onChange={(ev) => { localEdit({ ...officer, endDate: new Date(ev.target.valueAsNumber) }) }}
+                    onChange={(ev) => { localEdit({ ...officer, endDate: ev.target.valueAsNumber }) }}
                   />
                 </div>
               </div>
