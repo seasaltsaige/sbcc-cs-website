@@ -4,6 +4,6 @@ export type OfficerData = {
   startDate?: Date;
   endDate?: Date;
   statement?: string;
-  image?: Blob | null,
+  image?: string | Blob | null,
   _id?: string | null;
 }

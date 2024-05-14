@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import "./OfficerPopup.css";
 import { useIsAuthenticated } from "react-auth-kit";
 import { OfficerData } from "../../types/OfficerData.type";
+const url = "http://localhost:3002";
 
 
 export default function OfficerPopup({
@@ -33,7 +34,7 @@ export default function OfficerPopup({
   }
 
   const localEdit = (officer: OfficerData) => {
-    setOfficer((old) => ({ ...old, ...officer }))
+    setOfficer((old) => ({ ...old, ...officer }));
   }
 
   const clear = () => {
@@ -55,6 +56,15 @@ export default function OfficerPopup({
     clear();
     close();
   }
+  const parseLocaleDateToRFC3339 = (date: Date) => {
+    const ddmmyyyy = date.toLocaleDateString().split("/");
+    const val = `${ddmmyyyy[2]}-${ddmmyyyy[0].length === 1 ? `0${ddmmyyyy[0]}` : ddmmyyyy[0]}-${ddmmyyyy[1].length === 1 ? `0${ddmmyyyy[1]}` : ddmmyyyy[1]}`;
+    return val;
+  }
+  useEffect(() => {
+    setOfficer(officerData === null ? undefined : officerData)
+  }, [officerData]);
+
 
 
   return (
@@ -78,7 +88,13 @@ export default function OfficerPopup({
 
             <div className="image-preview-container">
               <img
-                src={officer?.image ? URL.createObjectURL(officer?.image!) : "/default.png"}
+                src={
+                  officer?.image
+                    ? (
+                      typeof officer.image === "string" ? `${url}/uploads/officers/${officer.image}`
+                        : URL.createObjectURL(officer?.image!)
+                    )
+                    : "/default.png"}
                 alt="Officer Image"
                 className="image-preview"
               />
@@ -105,7 +121,17 @@ export default function OfficerPopup({
 
             <div className="officer-name">
               <p>Officer Name</p>
-              <input defaultValue={officerData?.name || ""} className="name-input" placeholder="Officer name" type="text" onChange={(ev) => { localEdit({ ...officer, name: ev.target.value }) }} />
+              <input
+                value={officer && officer.name ? officer.name : ""}
+                className="name-input"
+                placeholder="Officer name"
+                type="text"
+                onChange={
+                  (ev) => {
+                    localEdit({ ...officer, name: ev.target.value })
+                  }
+                }
+              />
             </div>
 
             <div className="officer-tenure">
@@ -116,7 +142,7 @@ export default function OfficerPopup({
                   <input
                     className="start-date"
                     type="date"
-                    defaultValue={officerData?.endDate?.toDateString() || new Date().toDateString()}
+                    value={officer && officer.startDate ? parseLocaleDateToRFC3339(new Date(officer.startDate)) : ""}
                     onChange={(ev) => { localEdit({ ...officer, startDate: new Date(ev.target.valueAsNumber) }) }}
                   />
                 </div>
@@ -125,6 +151,7 @@ export default function OfficerPopup({
                   <input
                     className="end-date"
                     type="date"
+                    value={officer && officer.endDate ? parseLocaleDateToRFC3339(new Date(officer.endDate)) : ""}
                     onChange={(ev) => { localEdit({ ...officer, endDate: new Date(ev.target.valueAsNumber) }) }}
                   />
                 </div>
@@ -147,6 +174,7 @@ export default function OfficerPopup({
                 placeholder="Select a position"
                 className="officer-type-dropdown"
                 controlClassName="officer-type-dropdown"
+                value={officer?.position!}
                 options={["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"]}
                 onChange={(arg) => localEdit({ ...officer, position: arg.value as any })}
               />

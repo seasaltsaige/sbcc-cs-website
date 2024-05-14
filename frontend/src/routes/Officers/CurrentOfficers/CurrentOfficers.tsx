@@ -5,14 +5,10 @@ import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
 import { createOfficer, getCurrentOfficers } from "../../../api/index";
-// import createOfficer from "../../../api/createOfficer";
-// import getAllOfficers from "../../../api/getCurrentOfficers";
 
-
-
+const URL = "http://localhost:3002";
 
 export function CurrentOfficers() {
-
 
   const [officersData, setOfficersData] = useState<OfficerData[]>([]);
   const [error, setError] = useState("");
@@ -77,8 +73,15 @@ export function CurrentOfficers() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (isOpen)
+      document.getElementsByTagName("body").item(0)!.style.overflowY = "hidden";
+    else
+      document.getElementsByTagName("body").item(0)!.style.overflowY = "";
+  }, [isOpen]);
+
   return (
-    <div>
+    <>
       <Navbar />
       <div className="officers">
         {
@@ -96,7 +99,44 @@ export function CurrentOfficers() {
             // Will have logic for display all current officers
             officersData.length > 0 ?
               officersData.map((officer, i) => (
-                <div key={i}></div>
+                <div key={i} className="officer-panel">
+                  <p className="officer-position">{officer.position}</p>
+                  <img
+                    className="officer-image"
+                    src={
+                      officer.image !== null
+                        ? `${URL}/uploads/officers/${officer.image}`
+                        : "/default.png"
+                    }
+                    alt="Officer Image"
+                  />
+                  <p className="officer-name">{officer.name}</p>
+                  <p className="officer-tenure">{`${new Date(officer.startDate as unknown as number).toLocaleDateString()} to ${new Date(officer.endDate as unknown as number).toLocaleDateString()}`}</p>
+                  <div className="officer-statement-paragraph">
+                    <p>{officer.statement}</p>
+                  </div>
+                  {
+                    isAuth()
+                      ? (
+                        <div className="admin-buttons">
+                          <button
+                            onClick={
+                              () => {
+                                setType("edit");
+                                setOpenOfficer(
+                                  {
+                                    ...officer,
+                                    // endDate: officer.endDate,
+                                    // startDate: new Date(officer.startDate as unknown as number),
+                                    // image: officer.image ? officer.image : null,
+                                  }); setIsOpen(true)
+                              }} className="edit officer-admin-button">Edit</button>
+                          <button className="delete officer-admin-button">Delete</button>
+                        </div>
+                      )
+                      : <></>
+                  }
+                </div>
               ))
 
               : <h1>No officers to display</h1>
@@ -106,7 +146,7 @@ export function CurrentOfficers() {
           isAuth() ?
             <button
               className="create-officer"
-              onClick={() => { setType("new"); setIsOpen(true); console.log("HELp") }}
+              onClick={() => { setType("new"); setIsOpen(true); }}
             >
               Create new Officer
             </button>
@@ -121,6 +161,6 @@ export function CurrentOfficers() {
         updateOfficer={updateOfficer}
         type={type}
       />
-    </div>
+    </>
   )
 }
