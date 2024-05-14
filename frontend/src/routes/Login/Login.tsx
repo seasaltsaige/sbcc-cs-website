@@ -60,6 +60,7 @@ export function Login() {
       }
 
     } catch (err) {
+      console.log(err);
       const errMsg = (err as any).response.data.message;
       if (errMsg) createAlert(errMsg, "error", 5000);
     }

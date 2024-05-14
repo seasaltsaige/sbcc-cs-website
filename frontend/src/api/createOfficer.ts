@@ -26,7 +26,7 @@ export default async function createOfficer(officer: OfficerData, auth: string) 
       endDate: endDate?.getTime(),
       position,
       image,
-    }, { headers: { Authorization: auth } });
+    }, { headers: { Authorization: auth, "Content-Type": "multipart/form-data" } });
   } else {
     return await axios.post(`${URL}/officers/create`, {
       name,
@@ -34,7 +34,7 @@ export default async function createOfficer(officer: OfficerData, auth: string) 
       startDate: startDate?.getTime(),
       endDate: endDate?.getTime(),
       position,
-    }, { headers: { Authorization: auth } });
+    }, { headers: { Authorization: auth, "Content-Type": "multipart/form-data" } });
   }
 
 }
