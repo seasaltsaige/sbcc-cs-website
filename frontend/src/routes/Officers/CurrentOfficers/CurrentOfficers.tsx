@@ -5,13 +5,16 @@ import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
 import createOfficer from "../../../api/createOfficer";
+import getAllOfficers from "../../../api/getAllOfficers";
 
 
 
 
 export function CurrentOfficers() {
 
+
   const [officersData, setOfficersData] = useState<OfficerData[]>([]);
+  const [error, setError] = useState("");
   const isAuth = useIsAuthenticated();
   const authHeader = useAuthHeader();
 
@@ -19,30 +22,47 @@ export function CurrentOfficers() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [type, setType] = useState<"edit" | "new">("new");
 
-  const close = (clearOfficer?: boolean) => {
+
+  const createAlert = (text: string, ms: number) => {
+    setError(text);
+    setTimeout(() => {
+      setError("");
+    }, ms);
+  }
+
+
+  const close = () => {
     setIsOpen(false);
     setOpenOfficer(null);
   }
 
-  const postUpdate = (officer: OfficerData) => {
 
+  const fetchOfficers = async () => {
+    const header = authHeader();
+    try {
+      const fetchRes = await getAllOfficers(header);
+      const data = fetchRes.data.officers as OfficerData[];
+      setOfficersData(data);
+    } catch (err) {
+      if (typeof err === "string")
+        createAlert(err, 7500);
+      else if (typeof err === "object")
+        createAlert((err as any).response.data.message, 6000);
+
+    }
   }
 
   const updateOfficer = async (officer: OfficerData) => {
     const auth = authHeader();
-    console.log(auth);
     // Post
     if (type === "new") {
-      console.log("new officer", officer);
       try {
-        console.log("in try");
         const createRes = await createOfficer(officer, auth);
-        console.log(createRes);
+        if (createRes.status === 200)
+          await fetchOfficers();
       } catch (err) {
-        console.log("in err");
         console.log(err);
       }
-      console.log("after try");
     }
     // Patch
     // TODO
@@ -51,10 +71,9 @@ export function CurrentOfficers() {
     }
   }
 
-
   useEffect(() => {
     (async () => {
-
+      await fetchOfficers();
     })();
   }, []);
 
@@ -62,11 +81,21 @@ export function CurrentOfficers() {
     <div>
       <Navbar />
       <div className="officers">
+        {
+          error !== "" ?
+            (
+              <div className="error-bar">
+                <p className="error-text">{error}</p>
+              </div>
+            )
+            : <></>
+        }
         <p className="club-officers-text">Current Club Officers</p>
         <div className={`horizontal-flow-container ${officersData.length < 1 ? "empty" : ""}`}>
           {
             // Will have logic for display all current officers
-            officersData.length > 0 ? <></>
+            officersData.length > 0 ?
+              <h1>{officersData.length}</h1>
               : <h1>No officers to display</h1>
           }
         </div>

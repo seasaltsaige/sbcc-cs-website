@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-// import fs from "fs";
-// import path from "path";
+
 import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 import Officer from "../database/Models/Officer";
@@ -14,7 +13,7 @@ const router = Router();
 router.get("/all", async (req, res) => {
   let auth = false;
   if (req.headers["authorization"] && req.headers["authorization"].includes("Bearer")) {
-    const token = jwt.verify(req.headers["authorization"].split(" ")[1], process.env.JWT_SECRET!)
+    const token = jwt.verify(req.headers["authorization"].split(" ")[1], process.env.JWT_SECRET!);
     if (!token) auth = false;
     else auth = true;
   }
@@ -29,17 +28,7 @@ router.get("/all", async (req, res) => {
         startDate: v.startDate,
         endDate: v.endDate,
         statement: v.statement,
-        image: v.image === null,// ?
-        // null
-        // :
-
-        // image: v.image === null ?
-        //   null :
-        //   (
-        //     fs.existsSync(path.join(__dirname, "../../", v.image!))
-        //       ? fs.readFileSync(path.join(__dirname, "../../", v.image!)).toString("base64")
-        //       : null
-        //   ), // will need to send image data, maybe base64? will need to look into it
+        image: v.image,
         _id: auth ? v._id : null,
       }
     )

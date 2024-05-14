@@ -9,6 +9,25 @@
   /* justify-content: center; */
 }
 
+.error-bar {
+  margin-top: 25px;
+  margin-bottom: -25px;
+  background-color: rgb(245, 142, 129);
+  border: 2px solid #f00;
+  border-radius: 10px;
+  max-width: 90vw;
+}
+
+.error-text {
+  padding: 5px;
+  margin: 0;
+  font-size: 1.2em;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
 .club-officers-text {
   font-size: 38px;
   font-weight: bolder;
