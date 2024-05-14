@@ -41,19 +41,40 @@ router.get("/all", async (req, res) => {
 
 });
 
-
 router.get("/current", async (req, res) => {
 
+  let auth = false;
+  if (req.headers["authorization"] && req.headers["authorization"].includes("Bearer")) {
+    const token = jwt.verify(req.headers["authorization"].split(" ")[1], process.env.JWT_SECRET!);
+    if (!token) auth = false;
+    else auth = true;
+  }
+
+
+  const currentDate = Date.now();
+
+  const officerModels = await Officer.find();
+  const officers = officerModels.map((v) => {
+    return (
+      {
+        name: v.name,
+        position: v.position,
+        startDate: v.startDate,
+        endDate: v.endDate,
+        statement: v.statement,
+        image: v.image,
+        _id: auth ? v._id : null,
+      }
+    )
+  }).map((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate);
+
+  res.status(200);
+  return res.json({
+    officers,
+  });
+
+
 });
-
-// Might not be needed
-// router.get("/:name", (req, res) => {
-//   const name = req.params.name;
-
-//   res.status(200);
-//   res.json({
-//     message: name,
-//   });
 
 
 
