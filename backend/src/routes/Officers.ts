@@ -66,7 +66,7 @@ router.get("/current", async (req, res) => {
         _id: auth ? v._id : null,
       }
     )
-  }).map((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate);
+  }).filter((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate);
 
   res.status(200);
   return res.json({
