@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import passport from "passport";
-
+// import fs from "fs";
+// import path from "path";
 import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 import Officer from "../database/Models/Officer";
@@ -13,22 +13,37 @@ const router = Router();
 
 router.get("/all", async (req, res) => {
   let auth = false;
-  if (req.headers["authorization"] && req.headers["authorization"].includes("Bearer"))
-    auth = true;
+  if (req.headers["authorization"] && req.headers["authorization"].includes("Bearer")) {
+    const token = jwt.verify(req.headers["authorization"].split(" ")[1], process.env.JWT_SECRET!)
+    if (!token) auth = false;
+    else auth = true;
+  }
 
 
   const officerModels = await Officer.find();
-  const officers = officerModels.map((v) => (
-    {
-      name: v.name,
-      position: v.position,
-      startDate: v.startDate,
-      endDate: v.endDate,
-      statement: v.statement,
-      image: "", // will need to send image data, maybe base64? will need to look into it
-      _id: auth ? v._id : null,
-    }
-  ));
+  const officers = officerModels.map((v) => {
+    return (
+      {
+        name: v.name,
+        position: v.position,
+        startDate: v.startDate,
+        endDate: v.endDate,
+        statement: v.statement,
+        image: v.image === null,// ?
+        // null
+        // :
+
+        // image: v.image === null ?
+        //   null :
+        //   (
+        //     fs.existsSync(path.join(__dirname, "../../", v.image!))
+        //       ? fs.readFileSync(path.join(__dirname, "../../", v.image!)).toString("base64")
+        //       : null
+        //   ), // will need to send image data, maybe base64? will need to look into it
+        _id: auth ? v._id : null,
+      }
+    )
+  });
 
   res.status(200);
   return res.json({
@@ -37,6 +52,10 @@ router.get("/all", async (req, res) => {
 
 });
 
+
+router.get("/current", async (req, res) => {
+
+});
 
 // Might not be needed
 // router.get("/:name", (req, res) => {
@@ -51,7 +70,6 @@ router.get("/all", async (req, res) => {
 
 // Will also want file handling middleware to handle image upload
 router.post("/create", minAuth, officerUpload.single("image"), async (req, res) => {
-  console.log(req.body);
   const { name, startDate, endDate, statement, position } = req.body;
   if (!name || !startDate || !endDate || !statement || !position) {
     res.status(400);
@@ -61,6 +79,7 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
   }
 
   const image = req.file;
+  console.log(image);
 
   const officer = new Officer({
     name,
@@ -68,7 +87,7 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
     statement,
     endDate: endDate,
     position: position,
-    image: image !== undefined ? image.path : null,
+    image: image !== undefined ? image.filename : null,
   });
 
   try {
