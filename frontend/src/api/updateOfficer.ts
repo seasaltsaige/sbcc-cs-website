@@ -1,7 +1,7 @@
 import axios from "axios";
 import { OfficerData } from "../types/OfficerData.type";
 
-const URL = "http://localhost:3002";
+const URL = process.env.REACT_APP_URL;
 export async function updateOfficer(officer: OfficerData, auth: string) {
 
   const data = {

@@ -41,8 +41,7 @@
 
 
 .modal-header-text {
-  margin: 7px;
-  font-size: 25px;
+  font-size: x-large;
   font-weight: bolder;
   color: var(--sbcc-red);
 }

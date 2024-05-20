@@ -6,7 +6,7 @@ import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
 import { OfficerData } from "../../../types/OfficerData.type";
 import { createOfficer, getCurrentOfficers, deleteOfficer, updateOfficer as updateOff } from "../../../api/index";
 
-const URL = "http://localhost:3002";
+const URL = process.env.REACT_APP_URL;
 
 export function CurrentOfficers() {
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3002";
+const URL = process.env.REACT_APP_URL;
 
 export async function updateAdmin(username: string, password: string, update: { newUsername?: string, newPassword?: string }, auth: string) {
   return await axios.patch(`${URL}/auth/admin`, {

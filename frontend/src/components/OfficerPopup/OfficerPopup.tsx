@@ -4,7 +4,7 @@ import 'react-dropdown/style.css';
 import "./OfficerPopup.css";
 import { useIsAuthenticated } from "react-auth-kit";
 import { OfficerData } from "../../types/OfficerData.type";
-const url = "http://localhost:3002";
+const url = process.env.REACT_APP_URL;
 
 
 export default function OfficerPopup({
