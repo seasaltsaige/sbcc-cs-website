@@ -58,6 +58,7 @@
 }
 
 .error-container {
+  position: fixed;
   padding: 3px;
   background-color: rgb(245, 142, 129);
   border: 2px solid #f00;
@@ -86,12 +87,33 @@
 }
 
 @media only screen and (max-width: 950px) {
+  /* 
+  .officer-modal {
+    min-height: fit-content;
+  } */
+
+  .image-preview-container {
+    margin-top: 10px;
+  }
+
+  .modal-content {
+    align-items: center;
+    /* background-color: orange; */
+    justify-content: flex-start !important;
+    min-height: 650px;
+    row-gap: 5px;
+    /* height: ; */
+    /* justify-items: flex-start; */
+  }
+
   .image-upload {
+    /* margin-top: 5px; */
     flex-direction: column;
   }
 
   .image-upload>button {
     margin-bottom: 5px;
+    margin-right: 0;
   }
 }
 

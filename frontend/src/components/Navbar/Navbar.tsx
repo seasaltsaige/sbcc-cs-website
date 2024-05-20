@@ -34,28 +34,28 @@ export default function () {
           {
             width > 950 ?
               <>
-                <Link to="/about">About Us</Link>
+                <Link draggable="false" to="/about">About Us</Link>
                 {/* Drop Down link with officers, Present Past */}
-                <Link to="/officers/present">Present Officers</Link>
-                <Link to="/officers/past">Past Officers</Link>
+                <Link draggable="false" to="/officers/present">Present Officers</Link>
+                <Link draggable="false" to="/officers/past">Past Officers</Link>
                 {/* Drop Down link with events, Upcoming, Past */}
-                <Link to="/events/upcoming">Upcoming Events</Link>
-                <Link to="/events/past">Past Events</Link>
-                <Link to="/elections">Elections</Link>
+                <Link draggable="false" to="/events/upcoming">Upcoming Events</Link>
+                <Link draggable="false" to="/events/past">Past Events</Link>
+                <Link draggable="false" to="/elections">Elections</Link>
                 {/* <Link to="/about">About Us</Link> */}
                 {/* <Link to="/about">About Us</Link> */}
               </>
               : <>
                 <Menu color="white" toggle={setIsOpen} toggled={isOpen} rounded />
                 <div className={`menu-panel ${isOpen ? "open" : "closed"}`}>
-                  <Link to="/about">About Us</Link>
+                  <Link draggable="false" to="/about">About Us</Link>
                   {/* Drop Down link with officers, Present Past */}
-                  <Link to="/officers/present">Present Officers</Link>
-                  <Link to="/officers/past">Past Officers</Link>
+                  <Link draggable="false" to="/officers/present">Present Officers</Link>
+                  <Link draggable="false" to="/officers/past">Past Officers</Link>
                   {/* Drop Down link with events, Upcoming, Past */}
-                  <Link to="/events/upcoming">Upcoming Events</Link>
-                  <Link to="/events/past">Past Events</Link>
-                  <Link to="/elections">Elections</Link>
+                  <Link draggable="false" to="/events/upcoming">Upcoming Events</Link>
+                  <Link draggable="false" to="/events/past">Past Events</Link>
+                  <Link draggable="false" to="/elections">Elections</Link>
                 </div>
               </>
             // : (<Hamburger></Hamburger>)
