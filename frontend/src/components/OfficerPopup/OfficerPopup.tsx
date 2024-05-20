@@ -72,11 +72,9 @@ export default function OfficerPopup({
     isOpen && isAuth() ?
       <div className="officer-popup-container">
         <div className="officer-modal">
-          <div className="modal-header">
-            <p className="modal-header-text">
-              {type === "edit" ? "Edit Officer" : "Create Officer"}
-            </p>
-          </div>
+          <p className="modal-header-text">
+            {type === "edit" ? "Edit Officer" : "Create Officer"}
+          </p>
 
           <div className="modal-content">
             {

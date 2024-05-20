@@ -51,12 +51,12 @@ export default function () {
                       <InstagramLogo className="instagram-logo" />
                     </a>
                   </div> */}
-                  <Link draggable="false" to="/about">About Us</Link>
-                  <Link draggable="false" to="/officers/present">Present Officers</Link>
-                  <Link draggable="false" to="/officers/past">Past Officers</Link>
-                  <Link draggable="false" to="/events/upcoming">Upcoming Events</Link>
-                  <Link draggable="false" to="/events/past">Past Events</Link>
-                  <Link draggable="false" to="/elections">Elections</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/about">About Us</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/officers/present">Present Officers</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/officers/past">Past Officers</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/events/upcoming">Upcoming Events</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/events/past">Past Events</Link>
+                  <Link onClick={() => setIsOpen(false)} draggable="false" to="/elections">Elections</Link>
                 </li>
               </>
           }
