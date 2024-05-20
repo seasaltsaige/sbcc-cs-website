@@ -1,17 +1,17 @@
 export type FutureEvent = {
   // backend image name
-  image: string;
+  image?: any;
   // address
-  location: string;
+  location?: string | undefined;
   // Text for post
-  postBody: String;
+  postBody?: string | undefined;
   // Time posted at
-  postedTime: Number;
+  postedTime?: number | undefined;
   // Time event is at
-  eventTime: Number;
+  eventTime?: number | undefined;
   // List of names rsvp'd
-  rsvp: Array<string>;
+  rsvp?: Array<string>;
   // Title of event
-  title: string;
-  _id: string | null;
+  title?: string;
+  _id?: string | null;
 }
