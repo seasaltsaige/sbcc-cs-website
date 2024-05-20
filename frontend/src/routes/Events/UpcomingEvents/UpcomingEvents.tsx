@@ -13,6 +13,15 @@ export function UpcomingEvents() {
   const isAuth = useIsAuthenticated();
 
   const [popupOpen, setPopupOpen] = useState(false);
+  // const [set]
+  const open = () => {
+    setPopupOpen(true);
+  }
+
+  const close = () => {
+
+    setPopupOpen(false);
+  }
 
   function saveEvent() {
 
@@ -26,7 +35,9 @@ export function UpcomingEvents() {
         {
           isAuth() ?
             <button
-              className="admin-create-event">
+              className="admin-create-event"
+              onClick={() => open()}
+            >
               Create Event
             </button>
             : <></>
@@ -38,9 +49,11 @@ export function UpcomingEvents() {
       </div>
 
       <FutureEventPopup
+        type="new"
         open={popupOpen}
+        close={close}
         saveEvent={saveEvent}
-        event={null}
+        eventObject={null}
       />
 
     </>

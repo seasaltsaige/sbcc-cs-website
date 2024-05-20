@@ -41,7 +41,6 @@ export function CurrentOfficers() {
       const data = fetchRes.data.officers as OfficerData[];
       setOfficersData(data);
     } catch (err) {
-      console.log(URL);
       if (typeof err === "string")
         createAlert(err, 7500);
       else if (typeof err === "object")
