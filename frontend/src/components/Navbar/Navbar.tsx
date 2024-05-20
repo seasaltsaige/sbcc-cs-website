@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Squash as Menu } from "hamburger-react";
-// import ClubLogo from "/SBCC_CSCLUB_LOGO_TRANSPARENT.png";
 import { Link, useNavigate } from "react-router-dom";
-
 import "./Navbar.css";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
+
+import { ReactComponent as InstagramLogo } from "../../svgs/instagram.svg";
+
 function NavSpacer() {
   return (
     <div className="nav-spacer"></div>
@@ -35,30 +36,29 @@ export default function () {
             width > 950 ?
               <>
                 <Link draggable="false" to="/about">About Us</Link>
-                {/* Drop Down link with officers, Present Past */}
                 <Link draggable="false" to="/officers/present">Present Officers</Link>
                 <Link draggable="false" to="/officers/past">Past Officers</Link>
-                {/* Drop Down link with events, Upcoming, Past */}
                 <Link draggable="false" to="/events/upcoming">Upcoming Events</Link>
                 <Link draggable="false" to="/events/past">Past Events</Link>
                 <Link draggable="false" to="/elections">Elections</Link>
-                {/* <Link to="/about">About Us</Link> */}
-                {/* <Link to="/about">About Us</Link> */}
               </>
+              // https://www.instagram.com/sbcccsclub/
               : <>
                 <Menu color="white" toggle={setIsOpen} toggled={isOpen} rounded />
-                <div className={`menu-panel ${isOpen ? "open" : "closed"}`}>
+                <li className={`menu-panel ${isOpen ? "open" : "closed"}`}>
+                  {/* <div className="socials">
+                    <a href="https://www.instagram.com/sbcccsclub/">
+                      <InstagramLogo className="instagram-logo" />
+                    </a>
+                  </div> */}
                   <Link draggable="false" to="/about">About Us</Link>
-                  {/* Drop Down link with officers, Present Past */}
                   <Link draggable="false" to="/officers/present">Present Officers</Link>
                   <Link draggable="false" to="/officers/past">Past Officers</Link>
-                  {/* Drop Down link with events, Upcoming, Past */}
                   <Link draggable="false" to="/events/upcoming">Upcoming Events</Link>
                   <Link draggable="false" to="/events/past">Past Events</Link>
                   <Link draggable="false" to="/elections">Elections</Link>
-                </div>
+                </li>
               </>
-            // : (<Hamburger></Hamburger>)
           }
         </div>
       </nav>
