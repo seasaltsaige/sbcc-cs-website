@@ -1,5 +1,5 @@
 import axios from "axios";
-import { OfficerData } from "../types/OfficerData.type";
+import { OfficerData } from "../../types/OfficerData.type";
 
 const URL = process.env.REACT_APP_URL;
 export async function updateOfficer(officer: OfficerData, auth: string) {
