@@ -57,6 +57,7 @@ export default function OfficerPopup({
     close();
   }
   const parseLocaleDateToRFC3339 = (date: Date) => {
+    // date.to
     const ddmmyyyy = date.toLocaleDateString().split("/");
     const val = `${ddmmyyyy[2]}-${ddmmyyyy[0].length === 1 ? `0${ddmmyyyy[0]}` : ddmmyyyy[0]}-${ddmmyyyy[1].length === 1 ? `0${ddmmyyyy[1]}` : ddmmyyyy[1]}`;
     return val;
@@ -143,7 +144,7 @@ export default function OfficerPopup({
                     className="start-date"
                     type="date"
                     value={officer && officer.startDate ? parseLocaleDateToRFC3339(new Date(officer.startDate)) : ""}
-                    onChange={(ev) => { localEdit({ ...officer, startDate: ev.target.valueAsNumber }) }}
+                    onChange={(ev) => { localEdit({ ...officer, startDate: ev.target.valueAsNumber + (1000 * 60 * 60 * 24) }) }}
                   />
                 </div>
                 <div className="date-container">
@@ -152,7 +153,7 @@ export default function OfficerPopup({
                     className="end-date"
                     type="date"
                     value={officer && officer.endDate ? parseLocaleDateToRFC3339(new Date(officer.endDate)) : ""}
-                    onChange={(ev) => { localEdit({ ...officer, endDate: ev.target.valueAsNumber }) }}
+                    onChange={(ev) => { localEdit({ ...officer, endDate: ev.target.valueAsNumber + (1000 * 60 * 60 * 24) }) }}
                   />
                 </div>
               </div>

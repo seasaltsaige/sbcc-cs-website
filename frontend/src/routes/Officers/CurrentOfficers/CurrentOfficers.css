@@ -50,8 +50,11 @@ p {
   align-items: center;
   justify-content: flex-start;
   background-color: white;
-  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.35);
-  width: 80%;
+  padding-left: -10px;
+  padding-right: -10px;
+  border: 1px solid white;
+  /* box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.35); */
+  width: 90%;
   min-width: 300px;
   height: 60vh;
   min-height: 600px;
@@ -78,8 +81,7 @@ p {
   max-height: 575px;
   background-color: white;
   border-radius: 20px;
-  border: 1px solid black;
-  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.4);
 
 }
 
@@ -133,7 +135,7 @@ p {
 
 .officer-admin-button {
   background-color: var(--sbcc-red);
-  border: 1px solid black;
+  border: 1px solid var(--sbcc-red);
   color: white;
   width: 80px;
   height: 30px;
@@ -154,7 +156,7 @@ p {
 
 .create-officer {
   background-color: var(--sbcc-red);
-  border: 1px solid black;
+  border: 1px solid var(--sbcc-red);
   color: white;
   font-size: 20px;
   font-weight: normal;
