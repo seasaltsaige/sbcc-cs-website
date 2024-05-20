@@ -8,6 +8,8 @@ import multer from "multer";
 import { officerStorage } from "../multer/diskStorage";
 import sortOfficers, { TOfficer } from "../functions/sortOfficers";
 
+import FormData from "form-data";
+
 const officerUpload = multer({ storage: officerStorage });
 
 const router = Router();
@@ -91,7 +93,6 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
   }
 
   const image = req.file;
-  console.log(image);
 
   const officer = new Officer({
     name,
@@ -104,6 +105,18 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
 
   try {
     await officer.save();
+
+    // Send webhook
+    const form = new FormData();
+
+    form.append('username', "SBCC CS Club Announcements");
+    form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
+    if (image)
+      form.append('file', fs.createReadStream(image.path));
+    form.append('content', `# New Officer Was Created\n\n**Name**: ${name}\n**Term Start**: ${new Date(startDate).toLocaleDateString()}\n**Term End**: ${new Date(endDate).toLocaleDateString()}\n**Officer Statement**: ${statement}\n**Position**: ${position}`);
+
+    form.submit(process.env.DISCORD_WEBHOOK!);
+
     res.status(200);
     return res.json({ message: `Successfully created officer: ${name}` });
   } catch (err) {
