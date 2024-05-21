@@ -2,15 +2,16 @@ import { Schema, model } from "mongoose";
 
 const Event = new Schema({
   // Array of image names in post
-  images: String,
+  image: String,
+  location: String,
   // Markdown post body, up to 2000 characters
   postBody: String,
   // Date timestamp for post time
-  postedDate: Number,
+  postedTime: Number,
   // Event timestamp for when event will take place
-  eventDate: Number,
-  // Array of rsvp'd ips. Potentially dangerous, but also not really sure how else to handle this. Preventing spam and such, maybe client side, but yeah
-  rsvp: [String],
+  eventTime: Number,
+  // Array of peoples names that rsvp'd
+  rsvp: Array<String>,
   title: String,
 });
 

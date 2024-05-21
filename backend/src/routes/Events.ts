@@ -20,25 +20,27 @@ router.get("/upcoming", async (req, res) => {
 });
 
 /** Middleware will be used for file uploading and storage on the backend */
-router.post("/post", minAuth, eventUpload.array("images"), async (req, res) => {
+router.post("/post", minAuth, eventUpload.single("image"), async (req, res) => {
   // Files passed through form submission on frontend
-  const { files } = req;
-  const { postBody } = req.body;
+  const image = req.file;
+  const { postBody, eventTime, title, location } = req.body;
+  const postedTime = Date.now();
 
-  const post = parseMarkdownImages(postBody);
+  console.log(postBody, eventTime, title, location, postedTime, image);
+  // const post = parseMarkdownImages(postBody);
   try {
-    const form = new FormData();
+    // const form = new FormData();
 
-    form.append("content", post);
-    form.append('username', "SBCC CS Club Announcements");
-    form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
+    // form.append("content", post);
+    // form.append('username', "SBCC CS Club Announcements");
+    // form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
     // Seems to be a max of 3 images using this method, since making an array and parsing to a string for form-data
     // wont work, as its a stream, not static
-    console.log(files);
+    // console.log(files);
     //form.append('file', fs.createReadStream("./src/routes/test.png"));
     //form.append('files', fs.createReadStream("./src/routes/aaa.png"));
 
-    form.submit(webhook!);
+    // form.submit(webhook!);
   } catch (err) {
     console.log(err);
     res.json({ message: err });

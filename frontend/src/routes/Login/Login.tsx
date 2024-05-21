@@ -3,6 +3,8 @@ import { useIsAuthenticated, useSignIn, useSignOut, useAuthHeader } from "react-
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { checkAdmin, loginAdmin, registerAdmin, updateAdmin } from "../../api/index";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import useUserAgent from "../../hooks/useUserAgent";
 
 
 export function Login() {
@@ -11,8 +13,9 @@ export function Login() {
   const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
   const authHeader = useAuthHeader();
-  // true: login, false: register, null: update
   const navigate = useNavigate();
+  const { height, width } = useWindowDimensions();
+
   const [login_register_update, setLogin_Register_Update] = useState<"login" | "register" | "update">("login");
   const [info, setInfo] = useState<string>("");
   const [infoType, setInfoType] = useState<string | null>(null);
@@ -173,10 +176,25 @@ export function Login() {
       createAlert("Admin account has already been created. Contact the Club President for more info", "info", 7500);
     }
   }
+  const { isMobile } = useUserAgent();
 
   return (
 
     <div className="auth-form">
+
+      {
+        isMobile || width <= 600 || height < 600
+          ? (
+            <div className="mobile-alert">
+              <p className="mobile-alert-text">
+                Hey officer! It looks like you could be on mobile! <br />(Or just a small screen)<br /> If you're wanting to update something, your experience will be much nicer on desktop!
+              </p>
+            </div>
+          )
+          : (
+            <></>
+          )
+      }
 
       <div className="auth-type-list">
         {
@@ -200,8 +218,8 @@ export function Login() {
             (
               // Login state
               isAuthenticated() ?
-                (<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                  <h1>You are already signed in...</h1>
+                (<div className="signed-in-container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                  <p className="signed-in">You are already signed in...</p>
                   <button className="submit-auth" onClick={(ev) => { ev.preventDefault(); signOut(); }}>Sign Out</button>
                 </div>) :
                 <form>
@@ -246,8 +264,8 @@ export function Login() {
                 ) :
                 (
                   isAuthenticated() ?
-                    (<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <h1>You are already signed in...</h1>
+                    (<div className="signed-in-container" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <p className="signed-in">You are already signed in...</p>
                       <button className="submit-auth" onClick={(ev) => { ev.preventDefault(); signOut(); }}>Sign Out</button>
                     </div>) : <form id="register">
                       <div>
