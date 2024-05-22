@@ -154,14 +154,18 @@
 }
 
 
+.event-title>input,
+.event-location>input,
+.event-date-time>input {
+  text-align: center;
+}
 
 .event-title>p,
-.event-location>p,
 .event-location>p,
 .event-date-time>p,
 .event-body>p {
   text-align: center;
-  font-size: max(min(2vw, 20px), 15px);
+  font-size: max(min(2vw, 23px), 15px);
   font-weight: bold;
   color: var(--sbcc-red);
 }

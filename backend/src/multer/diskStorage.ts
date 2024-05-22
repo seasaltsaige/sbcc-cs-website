@@ -1,15 +1,25 @@
 import multer from "multer";
 
-export const eventStorage = multer.diskStorage({
+export const pastEventStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "src/public/events");
+    cb(null, "src/public/events/past");
   },
   filename: (req, file, cb) => {
-    // Not sure yet
-    // NOT finalized as i dont think event will have "name", but maybe rather, "title"
-    cb(null, `event-${req.body.name.toLowerCase().split(" ").join("")}-${Date.now()}-${Math.round(Math.random() * 1E9)}.${file.mimetype.split("/")[1]}`);
+    cb(null, `past-event-${req.body.name.toLowerCase().split(" ").join("")}-${Date.now()}-${Math.round(Math.random() * 1E9)}.${file.mimetype.split("/")[1]}`);
   }
 });
+
+
+export const upcomingEventStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "src/public/events/upcoming");
+  },
+  filename: (req, file, cb) => {
+    console.log(req.body);
+    cb(null, `upcoming-event-${Date.now()}-${Math.round(Math.random() * 1E9)}.${file.mimetype.split("/")[1]}`);
+  }
+})
+
 
 export const officerStorage = multer.diskStorage({
   destination: (req, file, cb) => {

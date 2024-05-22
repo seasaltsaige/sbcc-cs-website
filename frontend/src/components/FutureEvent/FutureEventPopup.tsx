@@ -12,7 +12,7 @@ export default function FutureEventPopup({ eventObject, open, saveEvent, close, 
   const [event, setEvent] = useState(eventObject);
 
   const localEdit = (ev: FutureEvent) => {
-    setEvent(ev);
+    setEvent(ev);;
   }
 
   const { isMobile } = useUserAgent();
@@ -21,6 +21,9 @@ export default function FutureEventPopup({ eventObject, open, saveEvent, close, 
   const closeModal = (updateObject: boolean) => {
     if (updateObject)
       saveEvent(event, type);
+
+
+
     setEvent(null);
     setFileName("");
     close();
@@ -72,24 +75,35 @@ export default function FutureEventPopup({ eventObject, open, saveEvent, close, 
             <div className="input-container">
               <div className="event-title">
                 <p>Event Title</p>
-                <input type="text" />
+                <input
+                  onChange={(ev) => localEdit({ ...event, title: ev.target.value })}
+                  type="text"
+                />
               </div>
 
               <div className="event-date-time">
-                <p>Event Date and Time</p>
-                <input type="datetime-local" />
+                <p>Event Date/Time</p>
+                <input
+                  onChange={(ev) => localEdit({ ...event, eventTime: ev.target.valueAsNumber })}
+                  type="datetime-local"
+                />
               </div>
 
               <div className="event-location">
                 <p>Event Location</p>
-                <input type="text" />
+                <input
+                  onChange={(ev) => localEdit({ ...event, location: ev.target.value })}
+                  type="text"
+                />
               </div>
 
 
             </div>
             <div className="event-body">
               <p>Event Body</p>
-              <textarea />
+              <textarea
+                onChange={(ev) => localEdit({ ...event, postBody: ev.target.value })}
+              />
             </div>
             <div className="buttons">
               <button
