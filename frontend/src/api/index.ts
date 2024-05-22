@@ -7,4 +7,6 @@ export * from "./auth/registerAdmin";
 export * from "./auth/updateAdmin";
 export * from "./officers/deleteOfficer";
 export * from "./officers/updateOfficer";
+export * from "./events/createEvent";
+export * from "./events/getUpcomingEvents";
 // Add as needed

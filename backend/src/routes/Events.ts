@@ -17,6 +17,35 @@ router.get("/past", async (req, res) => {
 });
 
 router.get("/upcoming", async (req, res) => {
+  try {
+    const allEvents = await Event.find();
+    const now = Date.now();
+    res.status(200);
+    res.json({
+      events: allEvents.map(ev => ({
+        // backend image name
+        image: ev.image,
+        // address
+        location: ev.location,
+        // Text for post
+        postBody: ev.postBody,
+        // Time posted at
+        postedTime: ev.postedTime,
+        // Time event is at
+        eventTime: ev.eventTime,
+        // List of names rsvp'd
+        rsvp: ev.rsvp,
+        // Title of event
+        title: ev.title,
+        _id: ev._id,
+      })).filter((ev) => ev.eventTime! > now).sort((a, b) => a.eventTime! - b.eventTime!),
+    });
+
+
+  } catch (err) {
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
 
 });
 
