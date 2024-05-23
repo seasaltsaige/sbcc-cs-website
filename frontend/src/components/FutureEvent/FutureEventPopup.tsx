@@ -24,7 +24,8 @@ export function FutureEventPopup({
   const [event, setEvent] = useState(eventObject);
 
   const localEdit = (ev: FutureEvent) => {
-    setEvent(ev);;
+    console.log(ev);
+    setEvent(ev);
   }
 
   const { isMobile } = useUserAgent();
@@ -33,8 +34,6 @@ export function FutureEventPopup({
   const closeModal = (updateObject: boolean) => {
     if (updateObject)
       saveEvent(event, type);
-
-
 
     setEvent(null);
     setFileName("");
@@ -53,34 +52,42 @@ export function FutureEventPopup({
             </p>
 
             <div className="event-image-preview-container">
-              <img
-                src={
-                  event?.image
-                    ? (
-                      typeof event.image === "string" ? `${url}/uploads/officers/${event.image}`
-                        : URL.createObjectURL(event?.image!)
-                    ) :
-                    "https://placehold.co/400"}
-                alt="Officer Image"
-                className="event-image-preview"
-              />
-
+              <div className="event-images-scroll">
+                {
+                  event?.images && event.images.length > 1 ?
+                    event?.images?.map((image: any) => {
+                      return <img
+                        src={
+                          image !== null && image !== undefined
+                            ? (
+                              typeof image === "string" ? `${url}/uploads/officers/${image}`
+                                : URL.createObjectURL(image)
+                            ) :
+                            "https://placehold.co/400"}
+                        alt="Officer Image"
+                        className="event-image-preview"
+                      />
+                    })
+                    : <img src="https://placehold.co/400" className="event-image-preview" />
+                }
+              </div>
               <div className="event-image-upload">
                 <button
                   className="event-image-upload-input modal-button"
                   onClick={() => document.getElementById("profile-upload")?.click()}
                 >
-                  Upload Image
+                  Upload Images
                   <input
                     id="profile-upload"
                     hidden
                     type="file"
+                    multiple
                     accept="image/png, image/jpg, image/jpeg"
                     name="profileImage"
-                    onChange={(ev) => { localEdit({ ...event, image: ev.target.files![0] }); setFileName(ev.target.files![0].name) }}
+                    onChange={(ev) => { localEdit({ ...event, images: Array.from(ev.target.files!) }); setFileName(`${ev.target.files?.length} file(s) selected`) }}
                   />
                 </button>
-                <p className="event-image-name">{fileName === "" ? "No image selected" : (fileName.length > 21 ? `${fileName.slice(0, 21)}.${fileName.split(".")[fileName.split(".").length - 1]}` : fileName)}</p>
+                {/* <p className="event-image-name">{fileName === "" ? "No image selected" : (fileName.length > 21 ? `${fileName.slice(0, 21)}.${fileName.split(".")[fileName.split(".").length - 1]}` : fileName)}</p> */}
               </div>
             </div>
 

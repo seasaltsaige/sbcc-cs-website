@@ -114,7 +114,8 @@ export function CurrentOfficers() {
         <p className="club-officers-text">Current Club Officers</p>
         <div className={`horizontal-flow-container ${officersData.length < 1 ? "empty" : ""}`}>
           {
-            // Will have logic for display all current officers
+
+            // TODO: refactor into component to use for past officers as well
             officersData.length > 0 ?
               officersData.map((officer, i) => (
                 <div key={i} className="officer-panel">

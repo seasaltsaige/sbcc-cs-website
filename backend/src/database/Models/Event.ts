@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const Event = new Schema({
   // Array of image names in post
-  image: String,
+  images: [{ type: String }],
   location: String,
   // Markdown post body, up to 2000 characters
   postBody: String,

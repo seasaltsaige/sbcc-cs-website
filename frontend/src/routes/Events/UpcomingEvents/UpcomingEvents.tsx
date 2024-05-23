@@ -4,14 +4,11 @@ import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 
 import "./UpcomingEvents.css";
 
-import { Navbar, FutureEventPopup } from "../../../components";
+import { Navbar, FutureEventPopup, EventContainer } from "../../../components";
 
 import { FutureEvent } from "../../../types/FutureEvent.type";
 
 import { createEvent, getUpcomingEvents } from "../../../api/index";
-
-// import { createEvent } from "../../../api/events/createEvent";
-// import { getUpcomingEvents } from "../../../api/events/getUpcomingEvents";
 
 export function UpcomingEvents() {
   // TODO: use cookies to check if user has rsvp'd for an event
@@ -22,7 +19,7 @@ export function UpcomingEvents() {
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [editNew, setEditNew] = useState("new" as "edit" | "new");
-  const [nextEvent, setNextEvent] = useState({} as FutureEvent | null);
+  const [nextEvent, setNextEvent] = useState(null as FutureEvent | null);
   const [futureEvents, setFutureEvents] = useState([] as Array<FutureEvent>);
 
   // const [set]
@@ -38,6 +35,7 @@ export function UpcomingEvents() {
   async function fetchAllFutureEvents() {
     try {
       const res = await getUpcomingEvents();
+      console.log(res);
       if (res.status === 200) {
         const next = (res.data.events as FutureEvent[]).splice(0, 1)[0];
         setNextEvent(next);
@@ -57,6 +55,7 @@ export function UpcomingEvents() {
         if (res.status === 200) {
           await fetchAllFutureEvents();
         }
+        // TODO: handle errors (in most of these try cases lol)
       } else {
 
       }
@@ -68,6 +67,7 @@ export function UpcomingEvents() {
   useEffect(() => {
     (async () => {
       await fetchAllFutureEvents();
+      console.log(nextEvent);
     })();
   }, []);
 
@@ -89,38 +89,40 @@ export function UpcomingEvents() {
 
 
 
-        <h1>Next Event</h1>
+        <p className="next-event-text">Next Event</p>
         {
           nextEvent ?
-            <div>
-              <p>{nextEvent.title}</p>
-              <img src={`${process.env.REACT_APP_URL}/uploads/events/upcoming/${nextEvent.image}` || "https://placehold.co/400"} />
-              <p>{nextEvent.postBody}</p>
-              <a href={`https://www.google.com/maps/place/${nextEvent.location?.replaceAll(/\s+/g, "+")}`}>{nextEvent.location}</a>
-              <p>{new Date(nextEvent.eventTime!).toString()}</p>
-              <p>{new Date(nextEvent.postedTime!).toString()}</p>
+            <div className="next-event-container">
+              <EventContainer
+                title={nextEvent.title!}
+                images={nextEvent.images}
+                body={nextEvent.postBody!}
+                location={nextEvent.location!}
+                eventTime={nextEvent.eventTime!}
+                posted={nextEvent.postedTime!}
+              />
             </div>
-            : <p>No next event</p>
+            : <p className="no-event-upcoming">No upcoming events!</p>
         }
 
-        <h1>Future Events</h1>
+        <p className="future-events-text">Future Events</p>
         {
           futureEvents.length > 0 ?
-            <div>
+            <div className="future-events-scroll">
               {
                 futureEvents.map((ev) => (
-                  <div>
-                    <p>{ev.title}</p>
-                    <img src={`${process.env.REACT_APP_URL}/uploads/events/upcoming/${ev.image}` || "https://placehold.co/400"} />
-                    <p>{ev.postBody}</p>
-                    <a href={`https://www.google.com/maps/place/${ev.location?.replaceAll(/\s+/g, "+")}`}>{ev.location}</a>
-                    <p>{new Date(ev.eventTime!).toString()}</p>
-                    <p>{new Date(ev.postedTime!).toString()}</p>
-                  </div>
+                  <EventContainer
+                    title={ev.title!}
+                    images={ev.images}
+                    body={ev.postBody!}
+                    location={ev.location!}
+                    eventTime={ev.eventTime!}
+                    posted={ev.postedTime!}
+                  />
                 ))
               }
             </div>
-            : <p>No more events to display</p>
+            : <p className="no-future-events">No more events to show</p>
         }
       </div>
 

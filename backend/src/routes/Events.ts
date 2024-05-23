@@ -1,6 +1,5 @@
 import multer from "multer";
-
-import { Router } from "express";
+import { Router, Express } from "express";
 import { minAuth } from "../middleware/auth";
 import { pastEventStorage, upcomingEventStorage } from "../multer/diskStorage";
 import FormData from "form-data";
@@ -24,7 +23,7 @@ router.get("/upcoming", async (req, res) => {
     res.json({
       events: allEvents.map(ev => ({
         // backend image name
-        image: ev.image,
+        images: ev.images,
         // address
         location: ev.location,
         // Text for post
@@ -49,21 +48,21 @@ router.get("/upcoming", async (req, res) => {
 
 });
 
+
+
 /** Middleware will be used for file uploading and storage on the backend */
-router.post("/post", minAuth, upcomingEventUpload.single("image"), async (req, res) => {
+router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
   // Files passed through form submission on frontend
-  const image = req.file;
+  const images = (req.files as Express.Multer.File[]);
+
   const { eventTime, location, postBody, title } = req.body;
   const postedTime = Date.now();
 
-  console.log(req.body);
-  // console.log(postBody, eventTime, title, location, postedTime, image);
-  // const post = parseMarkdownImages(postBody);
   try {
 
     const event = new Event({
       eventTime: eventTime,
-      image: image?.filename,
+      images: images.map(i => i.filename),
       location,
       postBody,
       postedTime,
@@ -88,18 +87,13 @@ router.post("/post", minAuth, upcomingEventUpload.single("image"), async (req, r
     } else eventDate = new Date(parseInt(eventTime) - offset * 1000 * 60 * 60);
 
 
-    console.log(eventDate);
-
     form.append("content", `### New Event Posted\n# ${title}\n### [${location}](https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")})\n${eventDate.toLocaleString()}\n${postBody}`);
     form.append("username", "SBCC CS Club Announcements");
     form.append("avatar_url", process.env.WEBHOOK_PROFILE!);
-    // Seems to be a max of 3 images using this method, since making an array and parsing to a string for form-data
-    // wont work, as its a stream, not static
-    // console.log(files); 
-    if (image)
-      form.append("file", fs.createReadStream(image?.path!));
-
-    console.log(form);
+    for (let i = 0; i < images.length; i++) {
+      const file = images[i];
+      form.append(`file-${i}`, fs.createReadStream(file.path));
+    }
 
     form.submit(webhook!);
   } catch (err) {

@@ -4,6 +4,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  row-gap: 20px;
+  overflow-y: scroll;
+  /* background-color: black; */
 }
 
 
@@ -31,4 +34,37 @@
 .admin-create-event:active {
   background-color: var(--sbcc-red);
   transform: translateX(-1px) translateY(1px);
+}
+
+.future-events-text {
+  width: 90%;
+  font-size: max(min(4vw, 32px), 26px);
+  margin: 0;
+  font-weight: bold;
+}
+
+.next-event-text {
+  font-size: max(min(4vw, 32px), 26px);
+  margin: 0;
+  font-weight: bold;
+}
+
+.next-event-container {
+  width: max(min(90%, 900px), 400px);
+  height: 550px;
+  background-color: var(--sbcc-red);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+
+.future-events-scroll {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 90%;
 }

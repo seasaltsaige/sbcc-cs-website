@@ -1,0 +1,35 @@
+.event-container {
+  background-color: white;
+  width: 90%;
+  height: 91%;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-title {
+  font-size: max(min(4vw, 27px), 24px);
+  font-weight: bold;
+  color: var(--sbcc-red);
+}
+
+.event-time {
+  font-weight: bold;
+}
+
+.event-location {
+  /* text-decoration: none; */
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* color: black; */
+}
+
+.event-image {
+  object-fit: cover;
+  width: min(230px, max(21vh, 115px));
+  height: min(230px, max(21vh, 115px));
+}

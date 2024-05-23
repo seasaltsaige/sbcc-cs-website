@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { About, CurrentOfficers, ElectionsHome, Home, PastEvents, PastOfficers, UpcomingEvents, Vote, Login } from "./routes/index";
+import { About, CurrentOfficers, ElectionsHome, Home, PastEvents, PastOfficers, UpcomingEvents, Vote, Login } from "./routes";
 
 
 function App() {

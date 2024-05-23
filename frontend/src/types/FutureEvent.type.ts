@@ -1,6 +1,6 @@
 export type FutureEvent = {
   // backend image name
-  image?: any;
+  images?: any;
   // address
   location?: string | undefined;
   // Text for post
