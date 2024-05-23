@@ -1,6 +1,6 @@
 import React from "react";
 import "./PastOfficers.css";
-import Navbar from "../../../components/Navbar/Navbar";
+import { Navbar } from "../../../components";
 
 export function PastOfficers() {
   return (

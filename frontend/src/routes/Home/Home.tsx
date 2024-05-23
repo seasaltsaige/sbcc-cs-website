@@ -1,6 +1,6 @@
 import React from "react";
 import "./Home.css";
-import Navbar from "../../components/Navbar/Navbar";
+import { Navbar } from "../../components";
 import { ReactComponent as LeftArrow } from "../../svgs/LeftArrow.svg";
 import { ReactComponent as RightArrow } from "../../svgs/RightArrow.svg";
 export function Home() {

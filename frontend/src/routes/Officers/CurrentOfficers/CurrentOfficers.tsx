@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./CurrentOfficers.css";
-import Navbar from "../../../components/Navbar/Navbar";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
-import OfficerPopup from "../../../components/OfficerPopup/OfficerPopup";
+import "./CurrentOfficers.css";
+
+import { Navbar, OfficerPopup } from "../../../components";
 import { OfficerData } from "../../../types/OfficerData.type";
 import { createOfficer, getCurrentOfficers, deleteOfficer, updateOfficer as updateOff } from "../../../api/index";
 

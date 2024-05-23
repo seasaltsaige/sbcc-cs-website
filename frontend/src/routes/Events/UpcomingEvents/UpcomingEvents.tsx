@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
+import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 
 import "./UpcomingEvents.css";
-import Navbar from "../../../components/Navbar/Navbar";
-import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
-import FutureEventPopup from "../../../components/FutureEvent/FutureEventPopup";
+
+import { Navbar, FutureEventPopup } from "../../../components";
+
 import { FutureEvent } from "../../../types/FutureEvent.type";
 
 import { createEvent, getUpcomingEvents } from "../../../api/index";
@@ -13,7 +14,7 @@ import { createEvent, getUpcomingEvents } from "../../../api/index";
 // import { getUpcomingEvents } from "../../../api/events/getUpcomingEvents";
 
 export function UpcomingEvents() {
-
+  // TODO: use cookies to check if user has rsvp'd for an event
   const cookies = new Cookies(null, { path: "/events/upcoming" });
 
   const isAuth = useIsAuthenticated();

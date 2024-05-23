@@ -1,6 +1,7 @@
 import React from "react";
 import "./PastEvents.css";
-import Navbar from "../../../components/Navbar/Navbar";
+
+import { Navbar } from "../../../components";
 
 export function PastEvents() {
   return (

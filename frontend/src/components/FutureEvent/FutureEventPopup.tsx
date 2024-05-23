@@ -6,7 +6,19 @@ import { FutureEvent } from "../../types/FutureEvent.type";
 import useUserAgent from "../../hooks/useUserAgent";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 const url = process.env.REACT_APP_URL;
-export default function FutureEventPopup({ eventObject, open, saveEvent, close, type }: { type: "edit" | "new", eventObject: FutureEvent | null, open: boolean, saveEvent: (...params: any) => any, close: () => void }) {
+export function FutureEventPopup({
+  eventObject,
+  open,
+  saveEvent,
+  close,
+  type
+}: {
+  type: "edit" | "new",
+  eventObject: FutureEvent | null,
+  open: boolean,
+  saveEvent: (...params: any) => any,
+  close: () => void
+}) {
   const isAuth = useIsAuthenticated();
   const [fileName, setFileName] = useState("");
   const [event, setEvent] = useState(eventObject);

@@ -7,7 +7,7 @@ import { OfficerData } from "../../types/OfficerData.type";
 const url = process.env.REACT_APP_URL;
 
 
-export default function OfficerPopup({
+export function OfficerPopup({
   isOpen,
   close,
   officerData,

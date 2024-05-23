@@ -12,7 +12,7 @@ function NavSpacer() {
   )
 }
 
-export default function () {
+export function Navbar() {
 
   const navigate = useNavigate();
   const { height, width } = useWindowDimensions();

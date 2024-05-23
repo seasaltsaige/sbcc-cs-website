@@ -1,6 +1,6 @@
 import React from "react";
 import "./Vote.css";
-import Navbar from "../../../components/Navbar/Navbar";
+import { Navbar } from "../../../components";
 
 export function Vote() {
   return (
