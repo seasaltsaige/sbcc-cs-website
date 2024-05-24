@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const Event = new Schema({
+const UpcomingEvent = new Schema({
   // Array of image names in post
   images: [{ type: String }],
   location: String,
@@ -11,8 +11,8 @@ const Event = new Schema({
   // Event timestamp for when event will take place
   eventTime: Number,
   // Array of peoples names that rsvp'd
-  rsvp: Array<String>,
+  rsvp: [{ type: String }],
   title: String,
 });
 
-export default model("event", Event);
+export default model("upcomingevent", UpcomingEvent);

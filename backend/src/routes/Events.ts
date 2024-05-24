@@ -3,9 +3,9 @@ import { Router, Express } from "express";
 import { minAuth } from "../middleware/auth";
 import { pastEventStorage, upcomingEventStorage } from "../multer/diskStorage";
 import FormData from "form-data";
-import parseMarkdownImages from "../functions/parseMarkdownImages";
 import fs from "fs";
-import Event from "../database/Models/Event";
+import path from "path";
+import UpcomingEvent from "../database/Models/UpcomingEvent";
 const webhook = process.env.DISCORD_WEBHOOK;
 const upcomingEventUpload = multer({ storage: upcomingEventStorage })
 
@@ -17,7 +17,7 @@ router.get("/past", async (req, res) => {
 
 router.get("/upcoming", async (req, res) => {
   try {
-    const allEvents = await Event.find();
+    const allEvents = await UpcomingEvent.find();
     const now = Date.now();
     res.status(200);
     res.json({
@@ -60,7 +60,7 @@ router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
 
   try {
 
-    const event = new Event({
+    const event = new UpcomingEvent({
       eventTime: eventTime,
       images: images.map(i => i.filename),
       location,
@@ -78,9 +78,9 @@ router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
     let eventDate = new Date(parseInt(eventTime));;
 
     const offSetRegex = /(-|\+)(\d{0,4})\s/g;
-    const res = eventDate.toString().matchAll(offSetRegex).next().value;
-    const type = res[1];
-    const offset = parseInt(res[2]) / 100;
+    const result = eventDate.toString().matchAll(offSetRegex).next().value;
+    const type = result[1];
+    const offset = parseInt(result[2]) / 100;
 
     if (type === "-") {
       eventDate = new Date(parseInt(eventTime) + offset * 1000 * 60 * 60);
@@ -97,18 +97,86 @@ router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
 
     form.submit(webhook!);
   } catch (err) {
-    console.log(err);
     res.json({ message: err });
     return res.status(400);
   }
 
   res.status(200);
   return res.json({ message: "OK" });
-
-
 });
 
-router.delete("/delete/:_id", minAuth, async (req, res) => {
+router.delete("/upcoming/:_id", minAuth, async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const form = new FormData();
+
+    const event = await UpcomingEvent.findOne({ _id })!;
+    const images = event?.images!;
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i]!;
+      const pathToImage = path.join(__dirname, "../public/events/upcoming", image!);
+      console.log(pathToImage);
+      if (fs.existsSync(pathToImage)) {
+        fs.rmSync(pathToImage);
+      }
+    }
+    let eventDate = new Date(event?.eventTime!);
+
+    const offSetRegex = /(-|\+)(\d{0,4})\s/g;
+    const result = eventDate.toString().matchAll(offSetRegex).next().value;
+    const type = result[1];
+    const offset = parseInt(result[2]) / 100;
+
+    if (type === "-") {
+      eventDate = new Date(event?.eventTime! + offset * 1000 * 60 * 60);
+    } else eventDate = new Date(event?.eventTime! - offset * 1000 * 60 * 60);
+
+    form.append("content", `### Event Deleted\n# ${event?.title}\n### [${event?.location}](https://www.google.com/maps/place/${event?.location?.replaceAll(/\s+/g, "+")})\n${eventDate.toLocaleString()}\n${event?.postBody}`);
+    form.append("username", "SBCC CS Club Announcements");
+    form.append("avatar_url", process.env.WEBHOOK_PROFILE!);
+
+
+
+    await UpcomingEvent.findOneAndDelete({ _id });
+    res.status(200);
+    res.json({ message: "Event deleted" });
+    form.submit(webhook!);
+  } catch (err) {
+    res.status(500);
+    console.log(err);
+    res.json({ message: err });
+  }
+});
+
+
+router.post("/rsvp/:_id", async (req, res) => {
+
+  const { _id } = req.params;
+  const { name } = req.body;
+  if (!name) {
+    res.status(400);
+    return res.json({
+      message: "Malformed request body",
+    });
+  }
+
+  try {
+    const old = await UpcomingEvent.findById(_id);
+    await UpcomingEvent.findOneAndUpdate({ _id }, { rsvp: [...old?.rsvp!, name] });
+
+    const form = new FormData();
+    form.append("content", `${name} just RSVP'd to ${old?.title}!`);
+    form.append("username", "SBCC CS Club Announcements");
+    form.append("avatar_url", process.env.WEBHOOK_PROFILE!);
+
+    form.submit(webhook!);
+
+    res.status(200);
+    return res.json({ message: "OK" });
+  } catch (err) {
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
 
 });
 
