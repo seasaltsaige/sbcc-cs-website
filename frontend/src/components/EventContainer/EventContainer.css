@@ -19,15 +19,25 @@
   font-weight: bold;
 }
 
-.event-location {
+.event-location-container {
   /* text-decoration: none; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   font-weight: bold;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   /* color: black; */
+  column-gap: 20px;
 }
 
+.event-location-container>a {
+  font-size: 13px;
+}
 
 .event-images-container {
   /* width: 90%; */
@@ -72,6 +82,7 @@
 @media only screen and (max-width: 500px) {
   .event-posted-time {
     width: auto;
+    text-align: center;
   }
 }
 

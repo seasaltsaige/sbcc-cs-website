@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EventContainer.css";
 import { useIsAuthenticated } from "react-auth-kit";
-
+import { ReactComponent as NewTabIcon } from "../../svgs/newtab.svg";
 import { RSVPPopup } from "../";
 import { rsvpToEvent } from "../../api";
 
@@ -73,8 +73,10 @@ export function EventContainer({
     <div className="event-container">
       <p className="event-title">{title}</p>
       <p className="event-time">{`${new Date(eventTime).toDateString()} @ ${new Date(eventTime + 7000 * 60 * 60).toLocaleTimeString()}`}</p>
-      <a target="_blank" className="event-location" href={`https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")}`}>{`${location}`} &#x1F5D7;</a>
-
+      <div className="event-location-container">
+        <p>{location}</p>
+        <a target="_blank" href={`https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")}`}>Get Directions ↗</a>
+      </div>
       <div className="event-images-container">
         {
           images.length > 0 ?
@@ -87,11 +89,11 @@ export function EventContainer({
       <div className="event-body-text">
         <p>{body}</p>
       </div>
-      <p className="event-posted-time">Posted on {`${new Date(posted).toDateString()} at ${new Date(posted).toLocaleTimeString()}`} - <i>{rsvpCount} {rsvpCount > 1 ? "people are" : "person is"} going!</i></p>
+      <p className="event-posted-time">Posted on {`${new Date(posted).toDateString()} at ${new Date(posted).toLocaleTimeString()}`}<br /><i>{rsvpCount} {rsvpCount > 1 ? "people are" : "person is"} going!</i></p>
 
       <div className="event-buttons">
         {/* For right now, just rsvp's, but will want to add name input beforehand */}
-        <button disabled={alreadyRsvp} onClick={() => { setRsvpVisible(true); }} className="rsvp-button">RSVP</button>
+        <button disabled={alreadyRsvp} onClick={() => { setRsvpVisible(!rsvpPopupVisible); }} className="rsvp-button">RSVP</button>
         <RSVPPopup
           setRSVPName={setRSVPName}
           visible={rsvpPopupVisible}
