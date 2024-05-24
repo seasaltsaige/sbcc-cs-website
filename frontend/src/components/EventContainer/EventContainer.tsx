@@ -1,6 +1,9 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import "./EventContainer.css";
+import { useIsAuthenticated } from "react-auth-kit";
+
+import { RSVPPopup } from "../";
+import { rsvpToEvent } from "../../api";
 
 const url = process.env.REACT_APP_URL!;
 
@@ -11,20 +14,59 @@ export function EventContainer({
   location,
   eventTime,
   posted,
-  // rsvp,
-  // edit - only for officers
-  // delete - only for officers
+  rsvpCount,
+  _id,
+  rsvp,
+  hasRSVP,
+  edit,
+  deleteEv
 }: {
   title: string;
   images: string[];
   body: string;
   location: string;
   eventTime: number;
-  posted: number
+  posted: number;
+  rsvpCount: number;
+  _id: string;
+  rsvp: (_id: string) => Promise<void>;
+  hasRSVP: (_id: string) => boolean;
+  edit: () => void;
+  deleteEv: (_id: string) => Promise<void>;
 }) {
 
 
+  const isAuth = useIsAuthenticated();
+  const [alreadyRsvp, setAlreadyRsvp] = useState(false);
+  const [rsvpName, setRSVPName] = useState("");
 
+  const [rsvpPopupVisible, setRsvpVisible] = useState(false);
+
+  const rsvpd = () => {
+    const val = hasRSVP(_id);
+    setAlreadyRsvp(val);
+  }
+
+  const rsvpEvent = async (_id: string) => {
+    if (rsvpName === "") return;
+    try {
+      await rsvpToEvent(_id, rsvpName);
+      rsvp(_id);
+      rsvpd();
+      closePopup();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const closePopup = () => {
+    setRSVPName("");
+    setRsvpVisible(false);
+  }
+
+  useEffect(() => {
+    rsvpd();
+  }, []);
 
 
   return (
@@ -35,14 +77,37 @@ export function EventContainer({
 
       <div className="event-images-container">
         {
-          images.map(image =>
-            <img className="event-image" src={`${url}/uploads/events/upcoming/${image}`} alt={`${title.toLowerCase().replaceAll(/\s+/g, "_")}_image`} />
-          )
+          images.length > 0 ?
+            images.map(image =>
+              <img className="event-image" src={`${url}/uploads/events/upcoming/${image}`} alt={`${title.toLowerCase().replaceAll(/\s+/g, "_")}_image`} />
+            )
+            : "https://placehold.co/400"
         }
       </div>
-      <p className="event-body">{body}</p>
+      <div className="event-body-text">
+        <p>{body}</p>
+      </div>
+      <p className="event-posted-time">Posted on {`${new Date(posted).toDateString()} at ${new Date(posted).toLocaleTimeString()}`} - <i>{rsvpCount} {rsvpCount > 1 ? "people are" : "person is"} going!</i></p>
 
-      <p className="event-posted-time">{`${new Date(posted).toDateString()} at ${new Date(posted + 7000 * 60 * 60).toLocaleTimeString()}`}</p>
+      <div className="event-buttons">
+        {/* For right now, just rsvp's, but will want to add name input beforehand */}
+        <button disabled={alreadyRsvp} onClick={() => { setRsvpVisible(true); }} className="rsvp-button">RSVP</button>
+        <RSVPPopup
+          setRSVPName={setRSVPName}
+          visible={rsvpPopupVisible}
+          close={() => closePopup()}
+          submit={() => rsvpEvent(_id)}
+        />
+
+        {
+          isAuth()
+            ? <>
+              <button onClick={() => edit()} className="event-admin-button">Edit</button>
+              <button onClick={() => deleteEv(_id)} className="event-admin-button">Delete</button>
+            </>
+            : <></>
+        }
+      </div>
     </div>
   )
 }

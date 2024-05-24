@@ -8,21 +8,22 @@ import { Navbar, FutureEventPopup, EventContainer } from "../../../components";
 
 import { FutureEvent } from "../../../types/FutureEvent.type";
 
-import { createEvent, getUpcomingEvents } from "../../../api/index";
+import { createEvent, deleteEvent, getUpcomingEvents } from "../../../api/index";
 
 export function UpcomingEvents() {
   // TODO: use cookies to check if user has rsvp'd for an event
-  const cookies = new Cookies(null, { path: "/events/upcoming" });
+  const cookies = new Cookies(null);
 
   const isAuth = useIsAuthenticated();
   const authHeader = useAuthHeader();
 
   const [popupOpen, setPopupOpen] = useState(false);
   const [editNew, setEditNew] = useState("new" as "edit" | "new");
+  const [eventObject, setEventObject] = useState(null as FutureEvent | null);
+
   const [nextEvent, setNextEvent] = useState(null as FutureEvent | null);
   const [futureEvents, setFutureEvents] = useState([] as Array<FutureEvent>);
 
-  // const [set]
   const open = () => {
     setPopupOpen(true);
   }
@@ -57,11 +58,41 @@ export function UpcomingEvents() {
         }
         // TODO: handle errors (in most of these try cases lol)
       } else {
-
+        // TODO: Handle edit case for popup
       }
     } catch (err) {
 
     }
+  }
+
+
+  const rsvp = async (_id: string) => {
+    cookies.set(`rsvp_${_id}`, true);
+    await fetchAllFutureEvents();
+  }
+  const checkRsvp = (_id: string) => {
+    const found = cookies.get(`rsvp_${_id}`);
+    if (found) return true;
+    else return false;
+  }
+
+  const delEvent = async (_id: string) => {
+    const auth = authHeader();
+    if (isAuth()) {
+      try {
+        console.log(auth, _id);
+        await deleteEvent(_id, auth);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    await fetchAllFutureEvents();
+  }
+
+  const editEvent = (event: FutureEvent) => {
+    setEditNew("edit");
+    setEventObject(event);
+    setPopupOpen(true);
   }
 
   useEffect(() => {
@@ -100,6 +131,12 @@ export function UpcomingEvents() {
                 location={nextEvent.location!}
                 eventTime={nextEvent.eventTime!}
                 posted={nextEvent.postedTime!}
+                rsvpCount={nextEvent.rsvp?.length!}
+                _id={nextEvent._id!}
+                rsvp={rsvp}
+                hasRSVP={checkRsvp}
+                deleteEv={delEvent}
+                edit={() => editEvent(nextEvent)}
               />
             </div>
             : <p className="no-event-upcoming">No upcoming events!</p>
@@ -118,6 +155,12 @@ export function UpcomingEvents() {
                     location={ev.location!}
                     eventTime={ev.eventTime!}
                     posted={ev.postedTime!}
+                    rsvpCount={ev.rsvp?.length!}
+                    _id={ev._id!}
+                    rsvp={rsvp}
+                    hasRSVP={checkRsvp}
+                    deleteEv={delEvent}
+                    edit={() => editEvent(ev)}
                   />
                 ))
               }
@@ -131,7 +174,7 @@ export function UpcomingEvents() {
         open={popupOpen}
         close={close}
         saveEvent={saveEvent}
-        eventObject={null}
+        eventObject={eventObject}
       />
 
     </>

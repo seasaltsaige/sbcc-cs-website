@@ -1,0 +1,54 @@
+.popup-rsvp-input {
+  background-color: white;
+  position: absolute;
+  top: 35px;
+  /* left: 50%; */
+  padding: 5px 10px;
+  border: 1px solid var(--sbcc-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 5px;
+  border-radius: 5px;
+  width: 25%;
+  min-width: 200px;
+  max-width: 300px;
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.219);
+}
+
+.rsvp-name-text {
+  padding: 0;
+  margin: 0;
+}
+
+
+.rsvp-name-input {
+  border-radius: 4px !important;
+  width: 75%;
+}
+
+.rsvp-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+}
+
+.rsvp-popup-button {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.rsvp-popup-button:hover {
+  background-color: #bb2a3d;
+  border: 1px solid #bb2a3d;
+}
+
+.rsvp-popup-button:active {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+}

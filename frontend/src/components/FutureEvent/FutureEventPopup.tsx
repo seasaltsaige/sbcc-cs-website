@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./FutureEventPopup.css";
 import { useIsAuthenticated } from "react-auth-kit";
@@ -21,6 +21,7 @@ export function FutureEventPopup({
 }) {
   const isAuth = useIsAuthenticated();
   const [fileName, setFileName] = useState("");
+  const [minDate, __] = useState(null as null | string);
   const [event, setEvent] = useState(eventObject);
 
   const localEdit = (ev: FutureEvent) => {
@@ -40,6 +41,29 @@ export function FutureEventPopup({
     close();
   }
 
+  const parseDate = (d?: number) => {
+    const date = d ? new Date(d) : new Date();
+    const offSetDate = new Date((d ? new Date(d).getTime() : Date.now()) + 7000 * 60 * 60);
+    const dateString = date.toLocaleDateString();
+    const timeString = offSetDate.toTimeString();
+    // console.log(timeString);
+
+    const [month, day, year] = dateString.split("/");
+    const [hours, minutes] = timeString.split(" ")[0].split(":");
+    // console.log(hours, minutes, seconds);
+    // console.log(month, day, year);
+    const dateS = `${year}-${month.length === 1 ? `0${month}` : month}-${day.length === 1 ? `0${day}` : day}T${hours}:${minutes}`;
+    console.log(dateS);
+    return dateS;
+  }
+
+  useEffect(() => {
+    __(parseDate());
+    setEvent(eventObject);
+  });
+
+  // TODO: error handling like in the officer popup
+  // handling blank inputs
   return (
     open && isAuth()
       ? (
@@ -54,13 +78,13 @@ export function FutureEventPopup({
             <div className="event-image-preview-container">
               <div className="event-images-scroll">
                 {
-                  event?.images && event.images.length > 1 ?
+                  event?.images && event.images.length > 0 ?
                     event?.images?.map((image: any) => {
                       return <img
                         src={
                           image !== null && image !== undefined
                             ? (
-                              typeof image === "string" ? `${url}/uploads/officers/${image}`
+                              typeof image === "string" ? `${url}/uploads/events/upcoming/${image}`
                                 : URL.createObjectURL(image)
                             ) :
                             "https://placehold.co/400"}
@@ -84,7 +108,7 @@ export function FutureEventPopup({
                     multiple
                     accept="image/png, image/jpg, image/jpeg"
                     name="profileImage"
-                    onChange={(ev) => { localEdit({ ...event, images: Array.from(ev.target.files!) }); setFileName(`${ev.target.files?.length} file(s) selected`) }}
+                    onChange={(ev) => { localEdit({ ...event, images: Array.from(ev.target.files!) }); }}
                   />
                 </button>
                 {/* <p className="event-image-name">{fileName === "" ? "No image selected" : (fileName.length > 21 ? `${fileName.slice(0, 21)}.${fileName.split(".")[fileName.split(".").length - 1]}` : fileName)}</p> */}
@@ -95,6 +119,7 @@ export function FutureEventPopup({
               <div className="event-title">
                 <p>Event Title</p>
                 <input
+                  defaultValue={event?.title}
                   onChange={(ev) => localEdit({ ...event, title: ev.target.value })}
                   type="text"
                 />
@@ -103,6 +128,9 @@ export function FutureEventPopup({
               <div className="event-date-time">
                 <p>Event Date/Time</p>
                 <input
+                  min={minDate!}
+                  // min="2024-05-24"
+                  defaultValue={parseDate(event?.eventTime)}
                   onChange={(ev) => localEdit({ ...event, eventTime: ev.target.valueAsNumber })}
                   type="datetime-local"
                 />
@@ -111,6 +139,7 @@ export function FutureEventPopup({
               <div className="event-location">
                 <p>Event Location</p>
                 <input
+                  defaultValue={event?.location}
                   onChange={(ev) => localEdit({ ...event, location: ev.target.value })}
                   type="text"
                 />
@@ -121,6 +150,7 @@ export function FutureEventPopup({
             <div className="event-body">
               <p>Event Body</p>
               <textarea
+                defaultValue={event?.postBody}
                 onChange={(ev) => localEdit({ ...event, postBody: ev.target.value })}
               />
             </div>

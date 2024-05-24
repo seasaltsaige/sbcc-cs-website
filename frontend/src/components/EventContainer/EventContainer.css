@@ -1,12 +1,12 @@
 .event-container {
   background-color: white;
-  width: 90%;
-  height: 91%;
+  width: 95%;
+  height: 95%;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .event-title {
@@ -28,8 +28,89 @@
   /* color: black; */
 }
 
+
+.event-images-container {
+  /* width: 90%; */
+  max-width: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 10px;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  overflow-x: scroll;
+  flex-shrink: 0;
+  border-radius: 5px;
+}
+
 .event-image {
   object-fit: cover;
-  width: min(230px, max(21vh, 115px));
-  height: min(230px, max(21vh, 115px));
+  width: min(180px, max(21vh, 115px));
+  height: min(180px, max(21vh, 115px));
+  border-radius: 5px;
+}
+
+.event-body-text {
+  padding: 2px;
+  margin: 5px;
+  height: 100%;
+  width: inherit;
+  display: flex;
+  text-align: left;
+  overflow-y: scroll;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+.event-posted-time {
+  width: 95%;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 500px) {
+  .event-posted-time {
+    width: auto;
+  }
+}
+
+.event-buttons {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: inherit;
+  margin-bottom: 10px;
+  column-gap: 15px;
+}
+
+
+.rsvp-button,
+.event-admin-button {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  color: white;
+  font-size: 14px;
+  border-radius: 100px;
+  padding: 2px 10px 2px 10px;
+  cursor: pointer;
+}
+
+.rsvp-button:hover,
+.event-admin-button:hover {
+  background-color: #bb2a3d;
+  border: 1px solid #bb2a3d;
+}
+
+.rsvp-button:active,
+.event-admin-button:active {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+}
+
+.rsvp-button:disabled {
+  background-color: rgb(170, 170, 170);
+  border: 1px solid rgb(170, 170, 170);
+  cursor: default;
 }
