@@ -66,5 +66,25 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  background-color: var(--sbcc-red);
+
   width: 90%;
+  column-gap: 20px;
+  padding: 13px;
+  border-radius: 20px;
+  overflow-x: scroll;
+  margin-bottom: 50px;
+}
+
+.future-events-scroll>.event-container {
+  height: 95%;
+  width: 855px;
+}
+
+@media only screen and (max-width: 960px) {
+  .future-events-scroll>.event-container {
+    width: 95%;
+    height: 522.5px;
+    min-width: 385px;
+  }
 }

@@ -3,6 +3,7 @@
   width: 95%;
   height: 95%;
   border-radius: 10px;
+  max-width: 855px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,6 +12,7 @@
 
 .event-title {
   font-size: max(min(4vw, 27px), 24px);
+  text-align: center;
   font-weight: bold;
   color: var(--sbcc-red);
 }
@@ -62,10 +64,11 @@
 }
 
 .event-body-text {
-  padding: 2px;
+  padding: 3px;
   margin: 5px;
   height: 100%;
-  width: inherit;
+  /* width: inherit; */
+  width: 90%;
   display: flex;
   text-align: left;
   overflow-y: scroll;

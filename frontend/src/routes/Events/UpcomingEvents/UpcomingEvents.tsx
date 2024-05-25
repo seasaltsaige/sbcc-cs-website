@@ -137,25 +137,34 @@ export function UpcomingEvents() {
             : <p className="no-event-upcoming">No upcoming events!</p>
         }
 
-        <p className="future-events-text">Future Events</p>
+
         {
-          futureEvents.length > 0 ?
-            <div className="future-events-scroll">
-              {
-                futureEvents.map((ev, i) => (
-                  <EventContainer
-                    key={i}
-                    event={ev}
-                    rsvp={rsvp}
-                    hasRSVP={checkRsvp}
-                    deleteEv={delEvent}
-                    edit={() => editEvent(ev)}
-                  />
-                ))
+          nextEvent ? (
+            <>
+              <p className="future-events-text">Future Events</p>
+
+              {futureEvents.length > 0 ?
+                <div className="future-events-scroll">
+                  {
+                    futureEvents.map((ev, i) => (
+                      <EventContainer
+                        key={i}
+                        event={ev}
+                        rsvp={rsvp}
+                        hasRSVP={checkRsvp}
+                        deleteEv={delEvent}
+                        edit={() => editEvent(ev)}
+                      />
+                    ))
+                  }
+                </div>
+                : <p className="no-future-events">No more events to show</p>
               }
-            </div>
-            : <p className="no-future-events">No more events to show</p>
+
+            </>
+          ) : <></>
         }
+
       </div>
 
       <FutureEventPopup

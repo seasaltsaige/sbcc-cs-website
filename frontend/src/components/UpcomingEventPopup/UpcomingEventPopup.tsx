@@ -20,6 +20,7 @@ export function FutureEventPopup({
   close: () => void
 }) {
   const isAuth = useIsAuthenticated();
+  const { width } = useWindowDimensions();
   const [fileName, setFileName] = useState("");
   const [minDate, __] = useState(null as null | string);
   const [event, setEvent] = useState(eventObject);
@@ -45,7 +46,6 @@ export function FutureEventPopup({
     const [month, day, year] = dateString.split("/");
     const [hours, minutes] = timeString.split(" ")[0].split(":");
     const dateS = `${year}-${month.length === 1 ? `0${month}` : month}-${day.length === 1 ? `0${day}` : day}T${hours}:${minutes}`;
-    console.log(dateS);
     return dateS;
   }
 
@@ -68,7 +68,7 @@ export function FutureEventPopup({
             </p>
 
             <div className="event-image-preview-container">
-              <div className="event-images-scroll">
+              <div className="event-images-scroll" style={event?.images.length < 2 || !event || !event.images ? { width: "auto" } : {}}>
                 {
                   event?.images && event.images.length > 0 ?
                     event?.images?.map((image: any) => {
