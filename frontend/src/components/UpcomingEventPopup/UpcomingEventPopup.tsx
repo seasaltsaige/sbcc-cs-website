@@ -50,7 +50,7 @@ export function FutureEventPopup({
   }
 
   useEffect(() => {
-    __(parseDate(eventObject?.eventTime));
+    __(parseDate());
     setEvent(eventObject);
   }, [eventObject]);
 

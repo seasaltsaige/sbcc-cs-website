@@ -109,7 +109,10 @@ router.patch("/upcoming/:_id", minAuth, upcomingEventUpload.any(), async (req, r
   const { newEventParts } = req.body;
 
   if (!newEventParts) {
-    // malformed
+    res.status(400);
+    return res.json({
+      message: "Malformed request body",
+    });
   }
 
   const images = (req.files as Express.Multer.File[]);
@@ -120,22 +123,67 @@ router.patch("/upcoming/:_id", minAuth, upcomingEventUpload.any(), async (req, r
       res.status(404);
       return res.json({ message: "Model with id not found" });
     }
-
-    await UpcomingEvent.findByIdAndUpdate(_id, { ...newEventParts, images: images.map(i => i.filename) });
-
-    // After successful update, delete old event images
-    for (let i = 0; i < old.images.length; i++) {
-      const image = old.images[i];
-      const pathToImage = path.join(__dirname, "../public/events/upcoming", image);
-      if (fs.existsSync(pathToImage)) {
-        fs.rmSync(pathToImage);
+    if (images.length > 0) {
+      await UpcomingEvent.findByIdAndUpdate(_id, { ...newEventParts, images: images.map(i => i.filename) });
+      // After successful update, delete old event images
+      for (let i = 0; i < old.images.length; i++) {
+        const image = old.images[i];
+        const pathToImage = path.join(__dirname, "../public/events/upcoming", image);
+        if (fs.existsSync(pathToImage)) {
+          fs.rmSync(pathToImage);
+        }
       }
+    } else {
+      await UpcomingEvent.findByIdAndUpdate(_id, { ...newEventParts, images: old.images });
     }
+
+
+    const newEventData = {
+      images: old.images,
+      location: old.location,
+      postBody: old.postBody,
+      postedTime: old.postedTime,
+      eventTime: old.eventTime,
+      rsvp: old.rsvp,
+      title: old.title,
+      ...newEventParts,
+    }
+    if (images.length > 0) {
+      newEventData.images = images.map(i => i.filename);
+    }
+
+    let eventDate = new Date(parseInt(newEventData.eventTime!));
+
+    const offSetRegex = /(-|\+)(\d{0,4})\s/g;
+    const result = eventDate.toString().matchAll(offSetRegex).next().value;
+    const type = result[1];
+    const offset = parseInt(result[2]) / 100;
+
+    if (type === "-") {
+      eventDate = new Date(parseInt(newEventData.eventTime!) + offset * 1000 * 60 * 60);
+    } else eventDate = new Date(parseInt(newEventData.eventTime!) - offset * 1000 * 60 * 60);
+
+
+    const form = new FormData();
+
+    form.append("username", "SBCC CS Club Announcements");
+    form.append("avatar_url", process.env.WEBHOOK_PROFILE!);
+    form.append("content", `### Event Updated\n# ${newEventData?.title}\n### [${newEventData?.location}](https://www.google.com/maps/place/${newEventData?.location?.replaceAll(/\s+/g, "+")})\n${eventDate.toLocaleString()}\n${newEventData?.postBody}`)
+
+    for (let i = 0; i < newEventData.images.length; i++) {
+      const file = newEventData.images[i];
+      const pathToFile = path.join(__dirname, "../public/events/upcoming", file);
+      if (fs.existsSync(pathToFile))
+        form.append(`file-${i}`, fs.createReadStream(pathToFile));
+    }
+
+    form.submit(webhook!);
 
     res.status(200);
     return res.json({ message: "Successfully updated document" });
 
   } catch (err) {
+    console.log(err);
     res.status(500);
     return res.json({ message: "Internal Server Error" });
   }
