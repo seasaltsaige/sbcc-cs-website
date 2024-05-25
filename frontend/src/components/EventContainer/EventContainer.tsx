@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./EventContainer.css";
 import { useIsAuthenticated } from "react-auth-kit";
-import { ReactComponent as NewTabIcon } from "../../svgs/newtab.svg";
 import { RSVPPopup } from "../";
 import { rsvpToEvent } from "../../api";
 
@@ -66,7 +65,7 @@ export function EventContainer({
 
   useEffect(() => {
     rsvpd();
-  }, []);
+  });
 
 
   return (
@@ -75,7 +74,7 @@ export function EventContainer({
       <p className="event-time">{`${new Date(eventTime).toDateString()} @ ${new Date(eventTime + 7000 * 60 * 60).toLocaleTimeString()}`}</p>
       <div className="event-location-container">
         <p>{location}</p>
-        <a target="_blank" href={`https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")}`}>Get Directions ↗</a>
+        <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")}`}>Get Directions ↗</a>
       </div>
       <div className="event-images-container">
         {

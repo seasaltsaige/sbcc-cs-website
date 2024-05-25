@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import "./FutureEventPopup.css";
+import "./UpcomingEventPopup.css";
 import { useIsAuthenticated } from "react-auth-kit";
 import { FutureEvent } from "../../types/FutureEvent.type";
 import useUserAgent from "../../hooks/useUserAgent";
