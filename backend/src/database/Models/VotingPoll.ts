@@ -4,12 +4,42 @@ import { Schema, model } from "mongoose";
 // will contain references to all the candidates associated with the poll
 const VotingPoll = new Schema({
 
-  presidents: [Schema.Types.ObjectId],
-  vicepresidents: [Schema.Types.ObjectId],
-  projectmanager: [Schema.Types.ObjectId],
-  secretarys: [Schema.Types.ObjectId],
-  tresurers: [Schema.Types.ObjectId],
-  promoters: [Schema.Types.ObjectId],
+  presidents: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
+  vicepresidents: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
+  projectmanager: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
+  secretarys: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
+  tresurers: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
+  promoters: [
+    {
+      votes: { type: Number },
+      candidate: { type: Schema.Types.ObjectId }
+    }
+  ],
 
   // Range of times to vote for polling
   voteTime: {
