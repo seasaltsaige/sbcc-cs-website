@@ -3,36 +3,27 @@ import "./EventContainer.css";
 import { useIsAuthenticated } from "react-auth-kit";
 import { RSVPPopup } from "../";
 import { rsvpToEvent } from "../../api";
+import { FutureEvent } from "../../types/FutureEvent.type";
 
 const url = process.env.REACT_APP_URL!;
 
 export function EventContainer({
-  title,
-  images,
-  body,
-  location,
-  eventTime,
-  posted,
-  rsvpCount,
-  _id,
+  event,
   rsvp,
   hasRSVP,
   edit,
   deleteEv
 }: {
-  title: string;
-  images: string[];
-  body: string;
-  location: string;
-  eventTime: number;
-  posted: number;
-  rsvpCount: number;
-  _id: string;
+  event: FutureEvent;
   rsvp: (_id: string) => Promise<void>;
   hasRSVP: (_id: string) => boolean;
   edit: () => void;
   deleteEv: (_id: string) => Promise<void>;
 }) {
+
+  const [eventObject, setEventObject] = useState({} as FutureEvent);
+
+  // const { _id, eventTime, images, location, postBody: body, postedTime: posted, rsvp: rsvpArr, title } = event;
 
 
   const isAuth = useIsAuthenticated();
@@ -42,7 +33,7 @@ export function EventContainer({
   const [rsvpPopupVisible, setRsvpVisible] = useState(false);
 
   const rsvpd = () => {
-    const val = hasRSVP(_id);
+    const val = hasRSVP(eventObject?._id!);
     setAlreadyRsvp(val);
   }
 
@@ -65,46 +56,49 @@ export function EventContainer({
 
   useEffect(() => {
     rsvpd();
-  });
+  }, []);
+
+  useEffect(() => {
+    setEventObject(event);
+  }, [event]);
 
 
   return (
     <div className="event-container">
-      <p className="event-title">{title}</p>
-      <p className="event-time">{`${new Date(eventTime).toDateString()} @ ${new Date(eventTime + 7000 * 60 * 60).toLocaleTimeString()}`}</p>
+      <p className="event-title">{eventObject.title}</p>
+      <p className="event-time">{`${new Date(eventObject.eventTime!).toDateString()} @ ${new Date(eventObject.eventTime! + 7000 * 60 * 60).toLocaleTimeString()}`}</p>
       <div className="event-location-container">
-        <p>{location}</p>
-        <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/place/${location.replaceAll(/\s+/g, "+")}`}>Get Directions ↗</a>
+        <p>{eventObject.location}</p>
+        <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/place/${eventObject.location?.replaceAll(/\s+/g, "+")}`}>Get Directions ↗</a>
       </div>
       <div className="event-images-container">
         {
-          images.length > 0 ?
-            images.map(image =>
-              <img className="event-image" src={`${url}/uploads/events/upcoming/${image}`} alt={`${title.toLowerCase().replaceAll(/\s+/g, "_")}_image`} />
+          eventObject && eventObject.images && eventObject.images.length > 0 ?
+            eventObject.images.map((evImage: any) =>
+              <img className="event-image" src={`${url}/uploads/events/upcoming/${evImage}`} alt={`${eventObject.title?.toLowerCase().replaceAll(/\s+/g, "_")}_image`} />
             )
             : "https://placehold.co/400"
         }
       </div>
       <div className="event-body-text">
-        <p>{body}</p>
+        <p>{eventObject.postBody!}</p>
       </div>
-      <p className="event-posted-time">Posted on {`${new Date(posted).toDateString()} at ${new Date(posted).toLocaleTimeString()}`}<br /><i>{rsvpCount} {rsvpCount > 1 ? "people are" : "person is"} going!</i></p>
+      <p className="event-posted-time">Posted on {`${new Date(eventObject.postedTime!).toDateString()} at ${new Date(eventObject.postedTime!).toLocaleTimeString()}`}<br /><i>{eventObject.rsvp?.length} {eventObject.rsvp?.length! > 1 || eventObject.rsvp?.length === 0 ? "people are" : "person is"} going!</i></p>
 
       <div className="event-buttons">
-        {/* For right now, just rsvp's, but will want to add name input beforehand */}
         <button disabled={alreadyRsvp} onClick={() => { setRsvpVisible(!rsvpPopupVisible); }} className="rsvp-button">RSVP</button>
         <RSVPPopup
           setRSVPName={setRSVPName}
           visible={rsvpPopupVisible}
           close={() => closePopup()}
-          submit={() => rsvpEvent(_id)}
+          submit={() => rsvpEvent(eventObject._id!)}
         />
 
         {
           isAuth()
             ? <>
               <button onClick={() => edit()} className="event-admin-button">Edit</button>
-              <button onClick={() => deleteEv(_id)} className="event-admin-button">Delete</button>
+              <button onClick={() => deleteEv(eventObject._id!)} className="event-admin-button">Delete</button>
             </>
             : <></>
         }

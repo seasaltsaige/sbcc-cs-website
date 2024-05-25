@@ -25,12 +25,8 @@ export function FutureEventPopup({
   const [event, setEvent] = useState(eventObject);
 
   const localEdit = (ev: FutureEvent) => {
-    console.log(ev);
     setEvent(ev);
   }
-
-  const { isMobile } = useUserAgent();
-  const { width, height } = useWindowDimensions();
 
   const closeModal = (updateObject: boolean) => {
     if (updateObject)
@@ -43,24 +39,20 @@ export function FutureEventPopup({
 
   const parseDate = (d?: number) => {
     const date = d ? new Date(d) : new Date();
-    const offSetDate = new Date((d ? new Date(d).getTime() : Date.now()) + 7000 * 60 * 60);
+    const offSetDate = new Date((d ? new Date(d).getTime() : Date.now()));
     const dateString = date.toLocaleDateString();
     const timeString = offSetDate.toTimeString();
-    // console.log(timeString);
-
     const [month, day, year] = dateString.split("/");
     const [hours, minutes] = timeString.split(" ")[0].split(":");
-    // console.log(hours, minutes, seconds);
-    // console.log(month, day, year);
     const dateS = `${year}-${month.length === 1 ? `0${month}` : month}-${day.length === 1 ? `0${day}` : day}T${hours}:${minutes}`;
     console.log(dateS);
     return dateS;
   }
 
   useEffect(() => {
-    __(parseDate());
+    __(parseDate(eventObject?.eventTime));
     setEvent(eventObject);
-  });
+  }, [eventObject]);
 
   // TODO: error handling like in the officer popup
   // handling blank inputs
@@ -111,7 +103,6 @@ export function FutureEventPopup({
                     onChange={(ev) => { localEdit({ ...event, images: Array.from(ev.target.files!) }); }}
                   />
                 </button>
-                {/* <p className="event-image-name">{fileName === "" ? "No image selected" : (fileName.length > 21 ? `${fileName.slice(0, 21)}.${fileName.split(".")[fileName.split(".").length - 1]}` : fileName)}</p> */}
               </div>
             </div>
 
@@ -128,9 +119,10 @@ export function FutureEventPopup({
               <div className="event-date-time">
                 <p>Event Date/Time</p>
                 <input
+                  className="event-date-time-selector"
                   min={minDate!}
                   // min="2024-05-24"
-                  defaultValue={parseDate(event?.eventTime)}
+                  value={parseDate(event?.eventTime! + 7000 * 60 * 60)}
                   onChange={(ev) => localEdit({ ...event, eventTime: ev.target.valueAsNumber })}
                   type="datetime-local"
                 />

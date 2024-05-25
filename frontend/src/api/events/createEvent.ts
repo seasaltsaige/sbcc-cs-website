@@ -6,9 +6,6 @@ export async function createEvent(event: FutureEvent, auth: string) {
 
   const { eventTime, images, location, postBody, title } = event;
 
-  console.log(event, "in request");
-
-
   if (images !== null && images !== undefined) {
     return await axios.post(`${URL}/events/post`, {
       eventTime,

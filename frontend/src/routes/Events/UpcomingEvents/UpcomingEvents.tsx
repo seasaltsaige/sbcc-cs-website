@@ -29,6 +29,7 @@ export function UpcomingEvents() {
   }
 
   const close = () => {
+    setEventObject(null);
     setPopupOpen(false);
   }
 
@@ -80,7 +81,6 @@ export function UpcomingEvents() {
     const auth = authHeader();
     if (isAuth()) {
       try {
-        console.log(auth, _id);
         await deleteEvent(_id, auth);
       } catch (err) {
         console.log(err);
@@ -98,7 +98,6 @@ export function UpcomingEvents() {
   useEffect(() => {
     (async () => {
       await fetchAllFutureEvents();
-      console.log(nextEvent);
     })();
   }, []);
 
@@ -125,14 +124,7 @@ export function UpcomingEvents() {
           nextEvent ?
             <div className="next-event-container">
               <EventContainer
-                title={nextEvent.title!}
-                images={nextEvent.images}
-                body={nextEvent.postBody!}
-                location={nextEvent.location!}
-                eventTime={nextEvent.eventTime!}
-                posted={nextEvent.postedTime!}
-                rsvpCount={nextEvent.rsvp?.length!}
-                _id={nextEvent._id!}
+                event={nextEvent}
                 rsvp={rsvp}
                 hasRSVP={checkRsvp}
                 deleteEv={delEvent}
@@ -147,16 +139,10 @@ export function UpcomingEvents() {
           futureEvents.length > 0 ?
             <div className="future-events-scroll">
               {
-                futureEvents.map((ev) => (
+                futureEvents.map((ev, i) => (
                   <EventContainer
-                    title={ev.title!}
-                    images={ev.images}
-                    body={ev.postBody!}
-                    location={ev.location!}
-                    eventTime={ev.eventTime!}
-                    posted={ev.postedTime!}
-                    rsvpCount={ev.rsvp?.length!}
-                    _id={ev._id!}
+                    key={i}
+                    event={ev}
                     rsvp={rsvp}
                     hasRSVP={checkRsvp}
                     deleteEv={delEvent}
