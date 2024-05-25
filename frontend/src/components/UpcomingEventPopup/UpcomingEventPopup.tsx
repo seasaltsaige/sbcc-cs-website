@@ -21,6 +21,7 @@ export function FutureEventPopup({
 }) {
   const isAuth = useIsAuthenticated();
   const { width } = useWindowDimensions();
+  const [error, setError] = useState("");
   const [fileName, setFileName] = useState("");
   const [minDate, __] = useState(null as null | string);
   const [event, setEvent] = useState(eventObject);
@@ -29,9 +30,54 @@ export function FutureEventPopup({
     setEvent(ev);
   }
 
+  const displayError = (text: string, ms: number) => {
+    setError(text);
+    setTimeout(() => {
+      setError("");
+    }, ms);
+  }
+
+  const verifySubmission = (): boolean => {
+    if (!event) {
+      displayError("No event information provided", 5000);
+      return false;
+    }
+
+    if (!event.title) {
+      displayError("No event title provided", 5000);
+      return false;
+    }
+
+    if (!event.eventTime) {
+      displayError("No event time provided", 5000);
+      return false;
+    }
+
+    if (!event.images || event.images.length < 1) {
+      displayError("No event preview images uploaded", 5000);
+      return false;
+    }
+
+    if (!event.location) {
+      displayError("No event location provided", 5000);
+      return false;
+    }
+
+    if (!event.postBody) {
+      displayError("No post body provided", 5000);
+      return false;
+    }
+    // Check parts of event object
+    return true;
+  }
+
   const closeModal = (updateObject: boolean) => {
-    if (updateObject)
-      saveEvent(event, type);
+    if (updateObject) {
+      const submit = verifySubmission();
+      if (submit)
+        saveEvent(event, type);
+      else return;
+    }
 
     setEvent(null);
     setFileName("");
@@ -67,8 +113,11 @@ export function FutureEventPopup({
               {type === "edit" ? "Edit" : "Create new"} Event
             </p>
 
+            <div className="event-error-container">
+              <p className="event-error-text">{error}</p>
+            </div>
             <div className="event-image-preview-container">
-              <div className="event-images-scroll" style={event?.images.length < 2 || !event || !event.images ? { width: "auto" } : {}}>
+              <div className="event-images-scroll" style={event && event.images && event?.images.length < 2 || !event || !event.images ? { width: "auto" } : {}}>
                 {
                   event?.images && event.images.length > 0 ?
                     event?.images?.map((image: any) => {

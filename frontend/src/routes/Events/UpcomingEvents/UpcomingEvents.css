@@ -37,9 +37,10 @@
 }
 
 .future-events-text {
-  width: 90%;
+  /* width: 90%; */
   font-size: max(min(4vw, 32px), 26px);
   margin: 0;
+  margin-top: 20px;
   font-weight: bold;
 }
 

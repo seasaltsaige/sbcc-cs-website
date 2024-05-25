@@ -144,7 +144,7 @@ export function UpcomingEvents() {
               <p className="future-events-text">Future Events</p>
 
               {futureEvents.length > 0 ?
-                <div className="future-events-scroll">
+                <div className="future-events-scroll" style={futureEvents.length === 1 ? { justifyContent: "center", maxWidth: "870px" } : {}}>
                   {
                     futureEvents.map((ev, i) => (
                       <EventContainer
