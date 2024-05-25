@@ -84,7 +84,9 @@ export function EventContainer({
       <div className="event-body-text">
         <p>{eventObject.postBody!}</p>
       </div>
-      <p className="event-posted-time">Posted on {`${new Date(eventObject.postedTime!).toDateString()} at ${new Date(eventObject.postedTime!).toLocaleTimeString()}`}<br /><i>{eventObject.rsvp?.length || ""} {eventObject.rsvp?.length === 0 ? "No one has rsvp'd yet..." : `${eventObject.rsvp?.length! > 1 ? "people are" : "person is"} going! `}</i></p>
+      <p className="event-posted-time">
+        Posted on {`${new Date(eventObject.postedTime!).toDateString()} at ${new Date(eventObject.postedTime!).toLocaleTimeString()}`}<br /><i>{eventObject.rsvp?.length || ""} {eventObject.rsvp?.length === 0 ? "No one has rsvp'd yet..." : `${eventObject.rsvp?.length! > 1 ? "people are" : "person is"} going! `}</i>
+      </p>
 
       <div className="event-buttons">
         <button disabled={alreadyRsvp} onClick={() => { setRsvpVisible(!rsvpPopupVisible); }} className="rsvp-button">RSVP</button>

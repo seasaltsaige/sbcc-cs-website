@@ -23,7 +23,7 @@ export function RSVPPopup({
         <input className="rsvp-name-input" type="text" onChange={(ev) => setRSVPName(ev.target.value)} />
         <div className="rsvp-buttons">
           <button className="rsvp-popup-button" onClick={() => submit()}>I'm going!</button>
-          <button className="rsvp-popup-button" onClick={() => close()}>Cancel</button>
+          <button className="rsvp-popup-button" onClick={() => close()}>Never mind</button>
         </div>
       </div>
       : <></>

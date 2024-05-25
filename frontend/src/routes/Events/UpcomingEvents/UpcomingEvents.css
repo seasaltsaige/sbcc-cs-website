@@ -73,7 +73,10 @@
   column-gap: 20px;
   padding: 13px;
   border-radius: 20px;
-  overflow-x: scroll;
+  overflow: auto;
+  height: 550px;
+  /* overflow-x: clip; */
+  overflow-y: visible;
   margin-bottom: 50px;
 }
 

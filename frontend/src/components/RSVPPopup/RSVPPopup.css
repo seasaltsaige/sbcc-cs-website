@@ -1,7 +1,8 @@
 .popup-rsvp-input {
   background-color: white;
+
   position: absolute;
-  top: 35px;
+  top: -105px;
   /* left: 50%; */
   padding: 5px 10px;
   border: 1px solid var(--sbcc-red);

@@ -129,23 +129,27 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
 
 // Delete a specific officer
 router.delete("/:_id", minAuth, async (req, res) => {
-  const _id = req.params["_id"];
+  const { _id } = req.params;
   if (!_id) {
     res.status(400);
     return res.json({ message: "Malformed parameter, no _id provided" });
   }
   try {
     const officer = await Officer.findOne({ _id });
-    const pathToImage = path.join(__dirname, "../public/officers", officer?.image!);
+    if (officer?.image !== null) {
+      const pathToImage = path.join(__dirname, "../public/officers", officer?.image!);
 
-    await Officer.findOneAndDelete({ _id });
-    if (fs.existsSync(pathToImage)) {
-      fs.rmSync(pathToImage);
+      if (fs.existsSync(pathToImage)) {
+        fs.rmSync(pathToImage);
+      }
     }
+
+    await Officer.findByIdAndDelete(_id);
 
     res.status(200);
     return res.json({ message: "Successfully deleted officer" });
   } catch (err) {
+    console.log(err);
     res.status(500);
     return res.json({ message: "Internal server error" });
   }

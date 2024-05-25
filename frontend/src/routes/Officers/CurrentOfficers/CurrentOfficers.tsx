@@ -61,7 +61,6 @@ export function CurrentOfficers() {
       }
     }
     // Patch
-    // TODO
     else {
       try {
         const updateRes = await updateOff(officer, auth);
