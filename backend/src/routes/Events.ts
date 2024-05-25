@@ -51,7 +51,7 @@ router.get("/upcoming", async (req, res) => {
 
 
 /** Middleware will be used for file uploading and storage on the backend */
-router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
+router.post("/upcoming/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
   // Files passed through form submission on frontend
   const images = (req.files as Express.Multer.File[]);
 
@@ -59,7 +59,6 @@ router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
   const postedTime = Date.now();
 
   try {
-
     const event = new UpcomingEvent({
       eventTime: eventTime,
       images: images.map(i => i.filename),
@@ -105,6 +104,44 @@ router.post("/post", minAuth, upcomingEventUpload.any(), async (req, res) => {
   return res.json({ message: "OK" });
 });
 
+router.patch("/upcoming/:_id", minAuth, upcomingEventUpload.any(), async (req, res) => {
+  const { _id } = req.params;
+  const { newEventParts } = req.body;
+
+  if (!newEventParts) {
+    // malformed
+  }
+
+  const images = (req.files as Express.Multer.File[]);
+
+  try {
+    const old = await UpcomingEvent.findById(_id);
+    if (!old) {
+      res.status(404);
+      return res.json({ message: "Model with id not found" });
+    }
+
+    await UpcomingEvent.findByIdAndUpdate(_id, { ...newEventParts, images: images.map(i => i.filename) });
+
+    // After successful update, delete old event images
+    for (let i = 0; i < old.images.length; i++) {
+      const image = old.images[i];
+      const pathToImage = path.join(__dirname, "../public/events/upcoming", image);
+      if (fs.existsSync(pathToImage)) {
+        fs.rmSync(pathToImage);
+      }
+    }
+
+    res.status(200);
+    return res.json({ message: "Successfully updated document" });
+
+  } catch (err) {
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
+
+});
+
 router.delete("/upcoming/:_id", minAuth, async (req, res) => {
   const { _id } = req.params;
   try {
@@ -115,7 +152,6 @@ router.delete("/upcoming/:_id", minAuth, async (req, res) => {
     for (let i = 0; i < images.length; i++) {
       const image = images[i]!;
       const pathToImage = path.join(__dirname, "../public/events/upcoming", image!);
-      console.log(pathToImage);
       if (fs.existsSync(pathToImage)) {
         fs.rmSync(pathToImage);
       }
@@ -149,7 +185,7 @@ router.delete("/upcoming/:_id", minAuth, async (req, res) => {
 });
 
 
-router.post("/rsvp/:_id", async (req, res) => {
+router.post("/upcoming/rsvp/:_id", async (req, res) => {
 
   const { _id } = req.params;
   const { name } = req.body;

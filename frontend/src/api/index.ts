@@ -10,5 +10,6 @@ export * from "./officers/updateOfficer";
 export * from "./events/createEvent";
 export * from "./events/getUpcomingEvents";
 export * from "./events/deleteEvent";
+export * from "./events/updateEvent";
 export * from "./events/rsvpToEvent";
 // Add as needed

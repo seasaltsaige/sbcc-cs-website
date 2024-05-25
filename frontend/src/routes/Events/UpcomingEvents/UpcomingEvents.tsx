@@ -8,7 +8,7 @@ import { Navbar, FutureEventPopup, EventContainer } from "../../../components";
 
 import { FutureEvent } from "../../../types/FutureEvent.type";
 
-import { createEvent, deleteEvent, getUpcomingEvents } from "../../../api/index";
+import { createEvent, deleteEvent, getUpcomingEvents, updateEvent } from "../../../api/index";
 
 export function UpcomingEvents() {
   // TODO: use cookies to check if user has rsvp'd for an event
@@ -59,7 +59,10 @@ export function UpcomingEvents() {
         }
         // TODO: handle errors (in most of these try cases lol)
       } else {
-        // TODO: Handle edit case for popup
+        const res = await updateEvent(event, auth);
+        if (res.status === 200) {
+          await fetchAllFutureEvents();
+        }
       }
     } catch (err) {
 
