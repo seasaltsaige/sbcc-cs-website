@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./AllCandidates.css";
 import { CandidateCotainer, CreateCandidatePopup, Navbar } from "../../../components";
 import { Candidate } from "../../../types/Candidate.type";
-import { createCandidate, updateCandidate, getAllCandidates } from "../../../api";
+import { createCandidate, updateCandidate, getAllCandidates, deleteCandidate } from "../../../api";
 import { useAuthHeader } from "react-auth-kit";
 
 // PROTECTED ROUTE
@@ -53,6 +53,18 @@ export function AllCandidates() {
     exit();
   }
 
+  const delCandidate = async (_id: string) => {
+    const auth = authHeader();
+    try {
+      const res = await deleteCandidate(_id, auth);
+      if (res.status === 200) {
+        await fetchAllCandidates();
+      }
+    } catch (err) {
+
+    }
+  }
+
 
   useEffect(() => {
     (async () => await fetchAllCandidates())();
@@ -66,24 +78,29 @@ export function AllCandidates() {
       <div className="all-candidates-container">
         <button className="create-candidate" onClick={() => { setType("new"); setCandidate(null); setPopupOpen(true); }}>Create Candidate</button>
         <div className="all-candidates">
-          {/* Should have sections for the types of candidates (president, vp, etc...) */}
-          {/* Probably should use map */}
           {
             ["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"].map((pos) => (
-              <div className={`${pos.replaceAll(/\s+/g, "").toLowerCase()}`}>
-                {
-                  allCandidates.filter(cand => cand.position === pos).map((cand, i) => (
-                    // Candidate container component this is temp
-                    <CandidateCotainer
-                      key={i}
-                      image={cand.image}
-                      name={cand.name}
-                      position={cand.position}
-                      statement={cand.statement}
-                    />
-                  ))
-                }
-              </div>
+              allCandidates.filter(cand => cand.position === pos).length > 0 ?
+                <div className={`${pos.replaceAll(/\s+/g, "").toLowerCase()} candidates-view`}>
+                  <p className="position-title">{pos}</p>
+                  <div className={`${pos.replaceAll(/\s+/g, "").toLowerCase()} candidate-scroll-container`}>
+                    {
+
+                      allCandidates.filter(cand => cand.position === pos).map((cand, i) => (
+                        // Candidate container component this is temp
+                        <CandidateCotainer
+                          key={i}
+                          candidate={cand}
+                          deleteCandidate={() => delCandidate(cand._id)}
+                          edit={() => { setCandidate(cand); setType("edit"); setPopupOpen(true); }}
+                          useAdmin={true}
+                        />
+                      ))
+
+                    }
+                  </div>
+                </div>
+                : <></>
             ))
           }
         </div>

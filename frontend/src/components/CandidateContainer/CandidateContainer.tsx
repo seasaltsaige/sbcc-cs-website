@@ -7,12 +7,12 @@ import "./CandidateContainer.css";
 
 const url = process.env.REACT_APP_URL!;
 
-export function CandidateCotainer(candidate: Candidate, useAdmin: boolean) {
+export function CandidateCotainer({ useAdmin, edit, deleteCandidate, candidate }: { candidate: Candidate, useAdmin: boolean, edit: () => void; deleteCandidate: () => void }) {
   const isAuth = useIsAuthenticated();
 
   return (
     <div className="candidate-container">
-      <img src={candidate.image ? `${url}/uploads/candidates/${candidate.image}` : "/default.png"} />
+      <img className="candidate-image" src={candidate.image ? `${url}/uploads/candidates/${candidate.image}` : "/default.png"} />
       <p className="candidate-name">{candidate.name}</p>
       <p className="candidate-statement-short">{candidate.statement}</p>
       <button className="read-statement-button">Read Statemet</button>
@@ -21,9 +21,11 @@ export function CandidateCotainer(candidate: Candidate, useAdmin: boolean) {
           <div className="admin-buttons">
             <button
               className="admin-button"
+              onClick={() => edit()}
             >Edit</button>
             <button
               className="admin-button"
+              onClick={() => deleteCandidate()}
             >Delete</button>
           </div>
           : <></>

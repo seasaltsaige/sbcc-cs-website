@@ -47,7 +47,7 @@ export function CreateCandidatePopup({
                 src={
                   candidateObject.image
                     ? (
-                      typeof candidateObject.image === "string" ? `${url}/uploads/officers/${candidateObject.image}`
+                      typeof candidateObject.image === "string" ? `${url}/uploads/candidates/${candidateObject.image}`
                         : URL.createObjectURL(candidateObject.image)
                     )
                     : "/default.png"}

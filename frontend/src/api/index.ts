@@ -26,6 +26,7 @@ export * from "./events/rsvpToEvent";
 
 export * from "./elections/createCandidate";
 export * from "./elections/updateCandidate";
+export * from "./elections/deleteCandidate";
 export * from "./elections/createElection";
 export * from "./elections/getAllCandidates";
 // Add as needed
