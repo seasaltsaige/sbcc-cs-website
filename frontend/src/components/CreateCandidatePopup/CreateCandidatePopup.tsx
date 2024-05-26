@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Dropdown from "react-dropdown";
 
 import "./CreateCandidatePopup.css";
 import { Candidate } from "../../types/Candidate.type";
@@ -24,6 +25,8 @@ export function CreateCandidatePopup({
 
   const editCandidate = (update: Partial<Candidate>) => {
     setCandidateObject((old) => ({ ...old, ...update }));
+
+    console.log(candidateObject);
   }
 
   useEffect(() => {
@@ -71,6 +74,40 @@ export function CreateCandidatePopup({
               </div>
             </div>
 
+            <div className="candidate-name-container">
+              <p className="candidate-name">Candidate Name</p>
+              <input
+                className="candidate-name-input"
+                type="text"
+                defaultValue={candidateObject.name || ""}
+                onChange={(ev) => editCandidate({ name: ev.target.value })}
+              />
+            </div>
+
+            <div className="candidate-statement-container">
+              <textarea
+                className="candidate-statement-input"
+                defaultValue={candidateObject.statement || ""}
+                onChange={(ev) => editCandidate({ statement: ev.target.value })}
+              />
+            </div>
+
+            <div>
+              <Dropdown
+                placeholder="Select a position"
+                className="officer-type-dropdown"
+                controlClassName="officer-type-dropdown"
+                value={candidateObject.position}
+                options={["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"]}
+                onChange={(ev) => editCandidate({ position: ev.value as any })}
+              />
+            </div>
+
+            {/* TODO: finish create/edit panel */}
+            {/*  Work on fetching all candidates */}
+            {/* Work on create event popup */}
+            {/* Work on fetching event */}
+            {/* Work on voting */}
 
 
 
