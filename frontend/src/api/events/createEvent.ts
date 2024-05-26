@@ -1,13 +1,13 @@
-import axios from "axios";
+import { axios } from "../";
 import { FutureEvent } from "../../types/FutureEvent.type";
-const URL = process.env.REACT_APP_URL;
+
 
 export async function createEvent(event: FutureEvent, auth: string) {
 
   const { eventTime, images, location, postBody, title } = event;
 
   if (images !== null && images !== undefined) {
-    return await axios.post(`${URL}/events/upcoming/post`, {
+    return await axios.post(`/events/upcoming/post`, {
       eventTime,
       images,
       location,
@@ -20,7 +20,7 @@ export async function createEvent(event: FutureEvent, auth: string) {
       },
     });
   } else {
-    return await axios.post(`${URL}/events/post`, {
+    return await axios.post(`/events/post`, {
       eventTime,
       location,
       postBody,

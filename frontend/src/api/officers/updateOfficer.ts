@@ -1,7 +1,6 @@
-import axios from "axios";
+import { axios } from "../";
 import { OfficerData } from "../../types/OfficerData.type";
 
-const URL = process.env.REACT_APP_URL;
 export async function updateOfficer(officer: OfficerData, auth: string) {
 
   const data = {
@@ -16,5 +15,12 @@ export async function updateOfficer(officer: OfficerData, auth: string) {
   if (typeof officer.image !== "string")
     data.image = officer.image as any;
 
-  return await axios.patch(`${URL}/officers/${officer._id}`, data, { headers: { Authorization: auth, "Content-Type": "multipart/form-data" } });
+  return await axios.patch(`/officers/${officer._id}`,
+    data,
+    {
+      headers: {
+        Authorization: auth,
+        "Content-Type": "multipart/form-data"
+      }
+    });
 }

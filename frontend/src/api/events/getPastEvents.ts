@@ -1,5 +1,5 @@
-import axios from "axios";
-const URL = process.env.REACT_APP_URL;
+import { axios } from "../";
+
 export async function getPastEvents() {
   return await axios.get("");
 }

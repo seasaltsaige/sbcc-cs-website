@@ -1,8 +1,7 @@
-import axios from "axios";
-const URL = process.env.REACT_APP_URL;
+import { axios } from "../";
 
 export async function deleteEvent(_id: string, auth: string) {
-  return await axios.delete(`${URL}/events/upcoming/${_id}`, {
+  return await axios.delete(`/events/upcoming/${_id}`, {
     headers: {
       Authorization: auth,
     },

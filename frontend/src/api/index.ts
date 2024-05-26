@@ -1,3 +1,12 @@
+import axios from "axios";
+axios.defaults.baseURL = process.env.REACT_APP_URL!;
+
+
+export {
+  axios,
+};
+
+
 export * from "./auth/checkAdmin";
 export * from "./auth/loginAdmin";
 export * from "./auth/registerAdmin";
@@ -16,6 +25,7 @@ export * from "./events/updateEvent";
 export * from "./events/rsvpToEvent";
 
 export * from "./elections/createCandidate";
+export * from "./elections/updateCandidate";
 export * from "./elections/createElection";
 export * from "./elections/getAllCandidates";
 // Add as needed
