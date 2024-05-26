@@ -82,6 +82,36 @@ router.post("/create", minAuth, candidateUpload.single("image"), async (req, res
 });
 
 router.patch("/:_id", minAuth, candidateUpload.single("image"), async (req, res) => {
+  const { _id } = req.params;
+  const { name, position, statement } = req.body;
+  const image = req.file;
+
+  const update: Partial<{
+    name: string,
+    position: string,
+    statement: string,
+    image: string,
+  }> = {};
+
+  if (name) update.name = name;
+  if (position) update.position = position;
+  if (statement) update.statement = statement;
+  if (image) update.image = image.filename;
+
+  try {
+    const old = await Candidate.findById(_id);
+
+    if (image && old?.image) {
+      const pathToFile = path.join(__dirname, "../public/candidates", old.image)
+      if (fs.existsSync(pathToFile))
+        fs.rmSync(pathToFile);
+    }
+
+    await Candidate.findByIdAndUpdate(_id, update);
+
+  } catch (err) {
+
+  }
 
 });
 
