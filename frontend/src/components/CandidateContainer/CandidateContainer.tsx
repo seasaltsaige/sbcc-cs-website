@@ -7,7 +7,7 @@ import "./CandidateContainer.css";
 
 const url = process.env.REACT_APP_URL!;
 
-export function CandidateCotainer({ useAdmin, edit, deleteCandidate, candidate }: { candidate: Candidate, useAdmin: boolean, edit: () => void; deleteCandidate: () => void }) {
+export function CandidateCotainer({ useAdmin, edit, deleteCandidate, candidate, openStatement }: { candidate: Candidate, useAdmin: boolean, edit: () => void; deleteCandidate: () => void; openStatement: (candidate: Candidate) => void; }) {
   const isAuth = useIsAuthenticated();
 
   return (
@@ -15,7 +15,7 @@ export function CandidateCotainer({ useAdmin, edit, deleteCandidate, candidate }
       <img className="candidate-image" src={candidate.image ? `${url}/uploads/candidates/${candidate.image}` : "/default.png"} />
       <p className="candidate-name">{candidate.name}</p>
       <p className="candidate-statement-short">{candidate.statement}</p>
-      <button className="read-statement-button">Read Statemet</button>
+      <button className="read-statement-button" onClick={() => openStatement(candidate)}>Read Statemet</button>
       {
         useAdmin && isAuth() ?
           <div className="admin-buttons">

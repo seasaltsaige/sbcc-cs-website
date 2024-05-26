@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "./AllCandidates.css";
-import { CandidateCotainer, CreateCandidatePopup, Navbar } from "../../../components";
+import { CandidateCotainer, CandidateStatementPopup, CreateCandidatePopup, Navbar } from "../../../components";
 import { Candidate } from "../../../types/Candidate.type";
 import { createCandidate, updateCandidate, getAllCandidates, deleteCandidate } from "../../../api";
 import { useAuthHeader } from "react-auth-kit";
@@ -15,6 +15,18 @@ export function AllCandidates() {
   const [popupOpen, setPopupOpen] = useState(false);
   const [type, setType] = useState("new" as "new" | "edit");
   const [candidate, setCandidate] = useState(null as null | Candidate);
+
+  const [statementCandidate, setStatementCandidate] = useState({} as Candidate);
+  const [statementVisible, setStatementVisible] = useState(false);
+
+  const closeStatement = () => {
+    setStatementCandidate({} as Candidate);
+    setStatementVisible(false);
+  }
+  const openStatement = (c: Candidate) => {
+    setStatementCandidate(c);
+    setStatementVisible(true);
+  }
 
   const [allCandidates, setAllCandidates] = useState([] as Array<Candidate>);
 
@@ -50,8 +62,6 @@ export function AllCandidates() {
     } catch (err) {
       console.log(err);
     }
-
-    console.log("AAAAAAAAAAAAA");
 
     exit();
   }
@@ -90,13 +100,14 @@ export function AllCandidates() {
                     {
 
                       allCandidates.filter(cand => cand.position === pos).map((cand, i) => (
-                        // Candidate container component this is temp
+
                         <CandidateCotainer
                           key={i}
                           candidate={cand}
                           deleteCandidate={() => delCandidate(cand._id)}
                           edit={() => { setCandidate(cand); setType("edit"); setPopupOpen(true); }}
                           useAdmin={true}
+                          openStatement={openStatement}
                         />
                       ))
 
@@ -115,6 +126,12 @@ export function AllCandidates() {
         save={saveCandidate}
         type={type}
         candidate={candidate}
+      />
+
+      <CandidateStatementPopup
+        candidate={statementCandidate}
+        close={closeStatement}
+        visible={statementVisible}
       />
     </>
   )
