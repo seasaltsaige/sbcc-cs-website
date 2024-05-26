@@ -58,7 +58,8 @@ router.post("/create", minAuth, candidateUpload.single("image"), async (req, res
     await candidate.save();
 
     const form = new FormData();
-
+    form.append('username', "SBCC CS Club Announcements");
+    form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
     form.append("content", `### New Officer Candidate Created\n# Name: ${name}\nPosition: ${position}\nStatement: ${statement}`);
     if (image) {
       const pathToFile = path.join(__dirname, "../public/candidates", image.filename);
