@@ -23,11 +23,9 @@ export function CreateCandidatePopup({
   const [candidateObject, setCandidateObject] = useState({} as Candidate);
   const [fileName, setFileName] = useState("");
 
-  const editCandidate = (update: Partial<Candidate>) => {
+  const editCandidate = (update: Partial<Candidate>) =>
     setCandidateObject((old) => ({ ...old, ...update }));
 
-    console.log(candidateObject);
-  }
 
   useEffect(() => {
     if (candidate)
@@ -112,7 +110,7 @@ export function CreateCandidatePopup({
 
 
             <div className="buttons">
-              <button className="modal-button" onClick={() => { setFileName(""); save(candidateObject); setCandidateObject({} as Candidate); }} >Save</button>
+              <button className="modal-button" onClick={() => { setFileName(""); save(candidateObject); setCandidateObject({} as Candidate); close(); }} >Save</button>
               <button className="modal-button" onClick={() => { setFileName(""); setCandidateObject({} as Candidate); close(); }}>Cancel</button>
             </div>
           </div>

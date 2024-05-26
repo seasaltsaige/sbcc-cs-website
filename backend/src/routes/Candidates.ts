@@ -26,6 +26,7 @@ router.get("/all", async (req, res) => {
         name: cand.name,
         position: cand.position,
         statement: cand.statement,
+        _id: cand._id,
         image: cand.image,
       })),
     });
@@ -109,14 +110,38 @@ router.patch("/:_id", minAuth, candidateUpload.single("image"), async (req, res)
 
     await Candidate.findByIdAndUpdate(_id, update);
 
-  } catch (err) {
+    res.status(200);
+    return res.json({ message: "Successfully updated candidate" });
 
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
   }
 
 });
 
 router.delete("/:_id", minAuth, async (req, res) => {
+  const { _id } = req.params;
+  try {
 
+    const old = await Candidate.findById(_id);
+    if (old?.image) {
+      const pathToFile = path.join(__dirname, "../public/candidates", old.image)
+      if (fs.existsSync(pathToFile))
+        fs.rmSync(pathToFile);
+    }
+
+    await Candidate.findByIdAndDelete(_id);
+
+    res.status(200);
+    return res.json({ message: "Successfully deleted candidate" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
 });
 
 

@@ -40,6 +40,7 @@ export function AllCandidates() {
           await fetchAllCandidates();
         }
       } else {
+        console.log(data, "edit")
         const updated = await updateCandidate(data, auth);
         if (updated.status === 200) {
           await fetchAllCandidates();
@@ -47,8 +48,10 @@ export function AllCandidates() {
         // Update existing candidate
       }
     } catch (err) {
-
+      console.log(err);
     }
+
+    console.log("AAAAAAAAAAAAA");
 
     exit();
   }
