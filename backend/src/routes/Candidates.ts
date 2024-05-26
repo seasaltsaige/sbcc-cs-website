@@ -16,6 +16,26 @@ const WEBHOOK_PROFILE_URL = process.env.WEBHOOK_PROFILE!;
 
 const router = Router();
 
+router.get("/all", async (req, res) => {
+  try {
+    const allCandidates = await Candidate.find();
+    res.status(200);
+    return res.json({
+      message: "OK",
+      candidates: allCandidates.map(cand => ({
+        name: cand.name,
+        position: cand.position,
+        statement: cand.statement,
+        image: cand.image,
+      })),
+    });
+  } catch (err) {
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
+
+});
+
 router.post("/create", minAuth, candidateUpload.single("image"), async (req, res) => {
 
   const { name, position, statement } = req.body;
