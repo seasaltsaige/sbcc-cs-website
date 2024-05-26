@@ -5,3 +5,5 @@ export * from "./OfficerPopup/OfficerPopup";
 export * from "./RSVPPopup/RSVPPopup";
 export * from "./CreateCandidatePopup/CreateCandidatePopup";
 export * from "./CreateElectionPopup/CreateElectionPopup";
+export * from "./CandidateContainer/CandidateContainer";
+export * from "./CandidateStatement/CandidateStatementPopup";

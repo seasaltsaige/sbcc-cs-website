@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "./AllCandidates.css";
-import { CreateCandidatePopup, Navbar } from "../../../components";
+import { CandidateCotainer, CreateCandidatePopup, Navbar } from "../../../components";
 import { Candidate } from "../../../types/Candidate.type";
 import { createCandidate, updateCandidate, getAllCandidates } from "../../../api";
 import { useAuthHeader } from "react-auth-kit";
@@ -72,9 +72,15 @@ export function AllCandidates() {
             ["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"].map((pos) => (
               <div className={`${pos.replaceAll(/\s+/g, "").toLowerCase()}`}>
                 {
-                  allCandidates.filter(cand => cand.position === pos).map(cand => (
+                  allCandidates.filter(cand => cand.position === pos).map((cand, i) => (
                     // Candidate container component this is temp
-                    <div className="candidate">{cand.name} {cand.statement} {cand.position}</div>
+                    <CandidateCotainer
+                      key={i}
+                      image={cand.image}
+                      name={cand.name}
+                      position={cand.position}
+                      statement={cand.statement}
+                    />
                   ))
                 }
               </div>
