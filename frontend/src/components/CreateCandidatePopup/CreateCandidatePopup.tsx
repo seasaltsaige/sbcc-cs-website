@@ -73,7 +73,7 @@ export function CreateCandidatePopup({
             </div>
 
             <div className="candidate-name-container">
-              <p className="candidate-name">Candidate Name</p>
+              <p className="candidate-name-text">Candidate Name</p>
               <input
                 className="candidate-name-input"
                 type="text"
@@ -83,6 +83,7 @@ export function CreateCandidatePopup({
             </div>
 
             <div className="candidate-statement-container">
+              <p className="candidate-statement-header-text">Statement (.md supported)</p>
               <textarea
                 className="candidate-statement-input"
                 defaultValue={candidateObject.statement || ""}
@@ -100,14 +101,6 @@ export function CreateCandidatePopup({
                 onChange={(ev) => editCandidate({ position: ev.value as any })}
               />
             </div>
-
-            {/* TODO: finish create/edit panel */}
-            {/*  Work on fetching all candidates */}
-            {/* Work on create event popup */}
-            {/* Work on fetching event */}
-            {/* Work on voting */}
-
-
 
             <div className="buttons">
               <button className="modal-button" onClick={() => { setFileName(""); save(candidateObject); setCandidateObject({} as Candidate); close(); }} >Save</button>

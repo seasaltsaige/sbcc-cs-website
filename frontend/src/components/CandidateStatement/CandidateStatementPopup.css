@@ -42,7 +42,7 @@
 .candidate-statement {
   height: 100%;
   width: 87.5%;
-  text-align: center;
+  /* text-align: center; */
   padding: 15px;
   background-color: #eeeeee;
   border-radius: 10px;

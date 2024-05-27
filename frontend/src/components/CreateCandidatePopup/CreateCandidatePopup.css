@@ -10,7 +10,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-y: scroll;
 }
 
 .candidate-modal {
@@ -27,6 +26,59 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 10px;
+}
+
+.candidate-header-text {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.candidate-name-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 5px;
+}
+
+.candidate-name-input {
+  width: 65%;
+  font-size: 15px;
+  text-align: center;
+}
+
+
+.candidate-statement-container {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.candidate-statement-header-text {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.candidate-statement-input {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+
+
+.candidate-name-text {
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+}
+
+.buttons {
+  margin-bottom: 15px;
 }
 
 /* TODO: Finish styling */
