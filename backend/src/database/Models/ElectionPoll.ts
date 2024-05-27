@@ -43,10 +43,10 @@ const ElectionPoll = new Schema({
 
   // Range of times to vote for polling
   voteTime: {
-    start: Date,
-    end: Date,
+    start: Number,
+    end: Number,
   },
-  postedOn: Date,
+  postedOn: Number,
 });
 
 export default model("electionpoll", ElectionPoll);

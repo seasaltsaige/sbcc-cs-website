@@ -36,7 +36,6 @@ export const candiateStorage = multer.diskStorage({
     cb(null, "src/public/candidates");
   },
   filename: (req, file, cb) => {
-    console.log(req);
     cb(null, `candidate-${Date.now()}-${Math.round(Math.random() * 1E9)}.${file.mimetype.split("/")[1]}`);
   }
 })
