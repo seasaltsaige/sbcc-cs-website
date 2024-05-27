@@ -1,4 +1,22 @@
 import { axios } from "../..";
-export async function createElection() {
+import { Election } from "../../../types/Election.type";
+export async function createElection(election: Election, auth: string) {
 
+  const data = {
+    presidents: election.presidents,
+    vicepresidents: election.vicepresidents,
+    projectmanagers: election.projectmanagers,
+    promoters: election.promoters,
+    secretarys: election.secretarys,
+    treasurers: election.treasurers,
+    startTime: election.voteTime.start,
+    endTime: election.voteTime.end,
+  }
+
+
+  return await axios.post("/elections/create", data, {
+    headers: {
+      Authorization: auth,
+    },
+  });
 }
