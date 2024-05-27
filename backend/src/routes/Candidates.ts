@@ -16,6 +16,8 @@ const WEBHOOK_PROFILE_URL = process.env.WEBHOOK_PROFILE!;
 
 const router = Router();
 
+// TODO: Add discord webhook integration for patch and delete
+
 router.get("/all", async (req, res) => {
   try {
     const allCandidates = await Candidate.find();
@@ -30,6 +32,37 @@ router.get("/all", async (req, res) => {
         image: cand.image,
       })),
     });
+  } catch (err) {
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
+
+});
+
+// Gets a specific candidate, used for the election polls
+router.get(":_id", async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+
+    const candidate = await Candidate.findById(_id);
+    if (!candidate) {
+      res.status(404);
+      return res.json({ message: `Candidate with id '${_id}' not found.` });
+    }
+
+    res.status(200);
+    return res.json({
+      message: "OK",
+      candidate: {
+        name: candidate.name,
+        image: candidate.image,
+        _id: candidate._id,
+        statement: candidate.statement,
+        position: candidate.position,
+      }
+    });
+
   } catch (err) {
     res.status(500);
     return res.json({ message: "Internal Server Error" });
@@ -60,7 +93,7 @@ router.post("/create", minAuth, candidateUpload.single("image"), async (req, res
 
     const form = new FormData();
     form.append('username', "SBCC CS Club Announcements");
-    form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
+    form.append('avatar_url', WEBHOOK_PROFILE_URL);
     form.append("content", `### New Officer Candidate Created\n# Name: ${name}\nPosition: ${position}\nStatement: ${statement}`);
     if (image) {
       const pathToFile = path.join(__dirname, "../public/candidates", image.filename);
