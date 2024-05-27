@@ -30,7 +30,7 @@ export function CreateElectionPopup({
 
           <div>
             <button onClick={() => save(electionObject)}>Save</button>
-            <button>Cancel</button>
+            <button onClick={() => close()}>Cancel</button>
           </div>
         </div>
       </div>

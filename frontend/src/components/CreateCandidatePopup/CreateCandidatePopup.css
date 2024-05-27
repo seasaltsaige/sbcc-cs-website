@@ -12,6 +12,8 @@
   justify-content: center;
 }
 
+
+
 .candidate-modal {
   background-color: white;
   z-index: inherit;
@@ -27,6 +29,20 @@
   flex-direction: column;
   align-items: center;
   row-gap: 10px;
+}
+
+@media screen and (max-height: 785px) {
+
+  .candidate-popup {
+    align-items: flex-start;
+    overflow-y: scroll !important;
+  }
+
+  .candidate-modal {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
 }
 
 .candidate-header-text {
@@ -80,5 +96,3 @@
 .buttons {
   margin-bottom: 15px;
 }
-
-/* TODO: Finish styling */
