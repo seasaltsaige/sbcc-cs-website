@@ -53,10 +53,20 @@
   justify-content: center;
 }
 
+
+@media screen and (max-width: 700px) {
+  .position-title {
+    text-align: center !important;
+    margin-left: 0 !important;
+    width: 100%;
+  }
+}
+
 .position-title {
   align-self: flex-start;
   font-size: 28px;
   font-weight: bold;
+  margin-left: 7vw;
   /* color: white; */
 }
 
