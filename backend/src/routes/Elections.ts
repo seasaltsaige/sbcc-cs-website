@@ -12,7 +12,35 @@ router.post("/vote", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  try {
+    const elections = await ElectionPoll.find();
+    if (elections.length === 0) {
+      res.status(404);
+      return res.json({ message: "No Election Polls exist." });
+    }
 
+    const election = elections[0];
+
+    res.status(200);
+    return res.json({
+      message: "OK",
+      election: {
+        postedOn: election.postedOn,
+        presidents: election.presidents,
+        vicepresidents: election.vicepresidents,
+        projectmanagers: election.projectmanagers,
+        secretarys: election.secretarys,
+        treasurers: election.treasurers,
+        promoters: election.promoters,
+        voteTime: election.voteTime,
+      }
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return res.json({ message: "Internal Server Error" });
+  }
 });
 
 router.post("/create", minAuth, async (req, res) => {
