@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 // A poll that organizes a vote
 // will contain references to all the candidates associated with the poll
-const VotingPoll = new Schema({
+const ElectionPoll = new Schema({
 
   presidents: [
     {
@@ -16,7 +16,7 @@ const VotingPoll = new Schema({
       candidate: { type: Schema.Types.ObjectId }
     }
   ],
-  projectmanager: [
+  projectmanagers: [
     {
       votes: { type: Number },
       candidate: { type: Schema.Types.ObjectId }
@@ -28,7 +28,7 @@ const VotingPoll = new Schema({
       candidate: { type: Schema.Types.ObjectId }
     }
   ],
-  tresurers: [
+  treasurers: [
     {
       votes: { type: Number },
       candidate: { type: Schema.Types.ObjectId }
@@ -49,4 +49,4 @@ const VotingPoll = new Schema({
   postedOn: Date,
 });
 
-export default model("votingpoll", VotingPoll);
+export default model("electionpoll", ElectionPoll);
