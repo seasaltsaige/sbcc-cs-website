@@ -24,9 +24,13 @@ export * from "./events/deleteEvent";
 export * from "./events/updateEvent";
 export * from "./events/rsvpToEvent";
 
-export * from "./elections/createCandidate";
-export * from "./elections/updateCandidate";
-export * from "./elections/deleteCandidate";
-export * from "./elections/createElection";
-export * from "./elections/getAllCandidates";
+export * from "./elections/candidates/createCandidate";
+export * from "./elections/candidates/updateCandidate";
+export * from "./elections/candidates/deleteCandidate";
+export * from "./elections/candidates/getAllCandidates";
+
+export * from "./elections/polls/createElection";
+export * from "./elections/polls/deleteElection";
+export * from "./elections/polls/getElection";
+export * from "./elections/polls/updateElectionn";
 // Add as needed

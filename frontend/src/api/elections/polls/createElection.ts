@@ -1,4 +1,4 @@
-import { axios } from "../";
+import { axios } from "../..";
 export async function createElection() {
 
 }

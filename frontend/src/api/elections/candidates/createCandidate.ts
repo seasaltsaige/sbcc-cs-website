@@ -1,5 +1,5 @@
-import { axios } from "../";
-import { Candidate } from "../../types/Candidate.type";
+import { axios } from "../../";
+import { Candidate } from "../../../types/Candidate.type";
 
 export async function createCandidate(candidate: Candidate, auth: string) {
 
