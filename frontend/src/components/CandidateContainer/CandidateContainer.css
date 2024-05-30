@@ -1,6 +1,7 @@
 .candidate-container {
   width: 405px;
   min-width: 405px;
+  padding: 20px 0 20px 0;
   background-color: white;
   height: 90%;
   display: flex;

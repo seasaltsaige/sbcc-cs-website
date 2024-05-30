@@ -11,8 +11,8 @@ export type Election = {
   treasurers: Array<ElectionCandidate>;
   promoters: Array<ElectionCandidate>;
   voteTime: {
-    start?: number;
-    end?: number;
+    start: number;
+    end: number;
   };
   postedOn: number;
 }
