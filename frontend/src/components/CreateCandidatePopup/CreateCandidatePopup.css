@@ -54,7 +54,7 @@
 
 .candidate-name-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column !important;
   align-items: center;
   row-gap: 5px;
 }

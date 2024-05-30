@@ -92,7 +92,7 @@ export function AllCandidates() {
         <button className="create-candidate" onClick={() => { setType("new"); setCandidate(null); setPopupOpen(true); }}>Create Candidate</button>
         <div className="all-candidates">
           {
-            ["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"].map((pos) => (
+            ["President", "Vice President", "Project Manager", "Secretary", "Treasurer", "Promoter"].map((pos) => (
               allCandidates.filter(cand => cand.position === pos).length > 0 ?
                 <div className={`${pos.replaceAll(/\s+/g, "").toLowerCase()} candidates-view`}>
                   <p className="position-title">{pos}</p>

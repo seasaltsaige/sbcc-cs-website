@@ -2,7 +2,7 @@ import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 
 import ElectionPoll from "../database/Models/ElectionPoll";
-import { Types } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 const router = Router();
 
@@ -57,6 +57,9 @@ router.post("/create", minAuth, async (req, res) => {
     endTime,
   } = req.body;
 
+  console.log(req.body);
+  console.log(presidents);
+
   if (
     (!presidents || !Array.isArray(presidents) || presidents.length < 1) ||
     (!vicepresidents || !Array.isArray(vicepresidents) || vicepresidents.length < 1) ||
@@ -83,27 +86,28 @@ router.post("/create", minAuth, async (req, res) => {
 
     const election = new ElectionPoll({
       postedOn: Date.now(),
-      presidents: presidents.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
-      vicepresidents: vicepresidents.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
-      projectmanagers: projectmanagers.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
-      secretarys: secretarys.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
-      treasurers: treasurers.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
-      promoters: promoters.map((_id: Types.ObjectId) => ({ votes: 0, candidate: _id })),
+      presidents: presidents,
+      vicepresidents: vicepresidents,
+      projectmanagers: projectmanagers,
+      secretarys: secretarys,
+      treasurers: treasurers,
+      promoters: promoters,
       voteTime: {
         start: parseInt(startTime),
         end: parseInt(endTime),
       },
     });
 
+    console.log(election);
     await election.save();
 
     res.status(200);
     return res.json({ message: "Successfully created election" });
 
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     res.status(500);
-    return res.json({ message: "Internal Server Error" });
+    return res.json({ message: "Internal Server Error", err: err });
   }
 
 

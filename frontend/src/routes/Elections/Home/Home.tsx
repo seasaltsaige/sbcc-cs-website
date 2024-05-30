@@ -18,8 +18,6 @@ export function ElectionsHome() {
   const [allCandidates, setAllCandidates] = useState([] as Array<Candidate>);
 
 
-  const [popupType, setPopupType] = useState("new" as "new" | "edit");
-
   const [elec, setElec] = useState(null as Election | null);
 
   const closePopup = () => {
@@ -33,7 +31,7 @@ export function ElectionsHome() {
       if (res.status === 200) {
         // console.log(res.data);
         setElec(res.data.election as Election);
-      }
+      } else setElec(null);
       // if (res) {}
     } catch (err) {
       console.log(err);
@@ -54,12 +52,11 @@ export function ElectionsHome() {
   const saveElection = async (election: Election) => {
     const auth = authHeader();
     try {
-      if (popupType === "new") {
-        const res = await createElection(election, auth);
-        // if (res.)
-      } else {
-
+      const res = await createElection(election, auth);
+      if (res.status === 200) {
+        await fetchElection();
       }
+
     } catch (err) {
       console.log(err);
     }
@@ -84,24 +81,23 @@ export function ElectionsHome() {
               <div className="admin-tools">
                 <button
                   className="create-election"
-                  onClick={() => { setElectionObject({} as Election); setPopupType("new"); setElectionsPopupVisible(true); }}
+                  disabled={elec !== null}
+                  onClick={() => { if (elec !== null) return; setElectionObject({} as Election); setElectionsPopupVisible(true); }}
                 >Create Election</button>
                 <button className="go-to-candidates" onClick={() => navigate("/elections/candidates")}>Go to Candidates</button>
               </div>
             ) : <></>
         }
         <div className="election-preview-container">
-
+          {elec?.presidents.map((pres) => allCandidates.find(c => c._id === pres.candidate)?.name + ", ")}
         </div>
       </div>
 
       <CreateElectionPopup
         visible={electionsPopupVisible}
         close={closePopup}
-        election={electionObject}
         allCandidates={allCandidates}
         save={saveElection}
-        type={popupType}
       />
     </>
   )

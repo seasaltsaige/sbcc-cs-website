@@ -97,7 +97,7 @@ export function CreateCandidatePopup({
                 className="officer-type-dropdown"
                 controlClassName="officer-type-dropdown"
                 value={candidateObject.position}
-                options={["President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"]}
+                options={["President", "Vice President", "Project Manager", "Secretary", "Treasurer", "Promoter"]}
                 onChange={(ev) => editCandidate({ position: ev.value as any })}
               />
             </div>

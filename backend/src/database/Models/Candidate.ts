@@ -5,7 +5,7 @@ const Candidate = new Schema({
   position: {
     type: String,
     enum: [
-      "President", "Vice President", "Project Manager", "Secretary", "Tresurer", "Promoter"
+      "President", "Vice President", "Project Manager", "Secretary", "Treasurer", "Promoter"
     ] as const,
   },
   statement: String,

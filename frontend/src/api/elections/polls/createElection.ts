@@ -13,6 +13,7 @@ export async function createElection(election: Election, auth: string) {
     endTime: election.voteTime.end,
   }
 
+  console.log(data);
 
   return await axios.post("/elections/create", data, {
     headers: {
