@@ -1,0 +1,79 @@
+.future-candidates-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 90vw;
+  padding: 20px;
+  border-radius: 20px;
+  row-gap: 20px;
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.outer-candidates-type-container {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+}
+
+.election-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+}
+
+.candidates-type-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1500px;
+  overflow-x: scroll;
+  padding: 20px 10px 20px 10px;
+  column-gap: 20px;
+}
+
+.position-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--sbcc-red);
+}
+
+.voting-not-available {
+  text-align: center;
+}
+
+
+.delete-election-button {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  border-radius: 100px;
+  color: white;
+  font-size: 16px;
+  padding: 3px 6px 3px 6px;
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.delete-election-button:hover {
+  background-color: #bb2a3d;
+  ;
+  border: 1px solid #bb2a3d;
+  ;
+}
+
+.delete-election-button:active {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  transform: translateX(-1px) translateY(1px);
+}
+
+@media screen and (max-width: 450px) {
+  .candidates-type-container {
+    padding: 20px 0 20px 0 !important;
+  }
+}

@@ -1,0 +1,109 @@
+.create-election-popup {
+  z-index: 1000000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: inherit;
+  height: max(100vh, 100%);
+  background-color: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-election-modal {
+  z-index: 1000000;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.25);
+  height: fit-content;
+  width: 75vw;
+  /* max-height: 900px; */
+  max-width: 700px;
+  min-width: 350px;
+  min-height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+
+.election-header {
+  font-size: 25px;
+  font-weight: bold;
+  color: var(--sbcc-red);
+  text-align: center;
+}
+
+.election-info-alert {
+  text-align: center;
+  font-weight: bold;
+}
+
+.candidate-position-type {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 90%;
+}
+
+.candidate-type-text {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.election-candidate-name-container {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: scroll;
+}
+
+.candidate-names {
+  padding: 7px;
+  background-color: #eee;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.times-container {
+  width: 75%;
+  min-width: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-bottom: 15px;
+}
+
+.date-input,
+.start-time-input,
+.end-time-input {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.times-date-input,
+.times-start-time-input,
+.times-end-time-input {
+  /* width: 200px; */
+  text-align: center;
+}
+
+.election-error-container {
+  z-index: 600000000;
+  position: fixed;
+  left: calc(50% - 100px);
+  top: calc(50% - 100px);
+  background-color: orange;
+  width: 200px;
+  height: 200px;
+}

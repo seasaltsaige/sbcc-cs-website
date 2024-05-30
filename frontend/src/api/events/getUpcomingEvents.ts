@@ -1,5 +1,5 @@
-import axios from "axios";
-const URL = process.env.REACT_APP_URL;
+import { axios } from "../";
+
 export async function getUpcomingEvents() {
-  return await axios.get(`${URL}/events/upcoming`);
+  return await axios.get(`/events/upcoming`);
 }

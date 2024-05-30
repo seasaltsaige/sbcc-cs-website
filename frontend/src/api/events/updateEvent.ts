@@ -1,11 +1,10 @@
-import axios from "axios";
+import { axios } from "../";
 import { FutureEvent } from "../../types/FutureEvent.type";
 
-const URL = process.env.REACT_APP_URL!;
 
 export async function updateEvent(event: FutureEvent, auth: string) {
   if (event.images.filter((i: any) => typeof i === "string").length > 0) {
-    return await axios.patch(`${URL}/events/upcoming/${event._id}`, {
+    return await axios.patch(`/events/upcoming/${event._id}`, {
       newEventParts: event,
       images: null,
     }, {
@@ -15,7 +14,7 @@ export async function updateEvent(event: FutureEvent, auth: string) {
       },
     });
   } else {
-    return await axios.patch(`${URL}/events/upcoming/${event._id}`, {
+    return await axios.patch(`/events/upcoming/${event._id}`, {
       newEventParts: event,
     }, {
       headers: {

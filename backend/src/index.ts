@@ -1,12 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
-import {
-  Auth,
-  Elections,
-  Events,
-  Officers
-} from "./routes/index";
+import { Auth, Candidates, Elections, Events, Officers } from "./routes/index";
 
 import parseMarkdownImages from "./functions/parseMarkdownImages";
 
@@ -28,5 +23,6 @@ app.use("/auth", Auth);
 app.use("/events", Events);
 app.use("/officers", Officers);
 app.use("/elections", Elections);
+app.use("/candidate", Candidates);
 
 app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));

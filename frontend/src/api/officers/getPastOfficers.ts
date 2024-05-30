@@ -1,7 +1,5 @@
-import axios from "axios";
-
-const URL = process.env.REACT_APP_URL;
+import { axios } from "../";
 
 export async function getPastOfficers(auth?: string) {
-  return await axios.get(`${URL}/officers/past`, { headers: { Authorization: auth } });
+  return await axios.get(`/officers/past`, { headers: { Authorization: auth } });
 }

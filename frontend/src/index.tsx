@@ -11,8 +11,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <AuthProvider
     children={<App />}
-    authName='_auth'
-    authType='cookie'
+    authName="_auth"
+    authType="cookie"
     cookieSecure={window.location.protocol === "https:"}
     cookieDomain={window.location.hostname}
   />
