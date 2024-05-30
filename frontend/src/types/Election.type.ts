@@ -15,4 +15,5 @@ export type Election = {
     end: number;
   };
   postedOn: number;
+  _id: string;
 }

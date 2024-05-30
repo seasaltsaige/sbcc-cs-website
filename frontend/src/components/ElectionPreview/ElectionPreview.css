@@ -17,6 +17,14 @@
   width: 95%;
 }
 
+.election-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+}
+
 .candidates-type-container {
   display: flex;
   flex-direction: row;
@@ -39,6 +47,30 @@
   text-align: center;
 }
 
+
+.delete-election-button {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  border-radius: 100px;
+  color: white;
+  font-size: 16px;
+  padding: 3px 6px 3px 6px;
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.delete-election-button:hover {
+  background-color: #bb2a3d;
+  ;
+  border: 1px solid #bb2a3d;
+  ;
+}
+
+.delete-election-button:active {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  transform: translateX(-1px) translateY(1px);
+}
 
 @media screen and (max-width: 450px) {
   .candidates-type-container {

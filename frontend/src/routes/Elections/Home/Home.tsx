@@ -91,10 +91,13 @@ export function ElectionsHome() {
         }
         {
           elec ?
-            <ElectionPreview
-              candidates={allCandidates}
-              election={elec}
-            />
+            <>
+              <ElectionPreview
+                candidates={allCandidates}
+                election={elec}
+                refreshHome={() => { setElec(null); fetchElection() }}
+              />
+            </>
             : <h1>No upcoming elections...</h1>
         }
       </div>

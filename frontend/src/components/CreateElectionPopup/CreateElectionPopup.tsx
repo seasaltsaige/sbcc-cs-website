@@ -115,7 +115,7 @@ export function CreateElectionPopup({
             <div className="start-time-input">
               <p>Start Time</p>
               <input
-                onChange={(ev) => editElection({ voteTime: { end: ev.target.valueAsNumber, start: electionObject?.voteTime?.start } })}
+                onChange={(ev) => editElection({ voteTime: { start: ev.target.valueAsNumber + 7000 * 60 * 60, end: electionObject?.voteTime?.end } })}
                 className="times-start-time-input"
                 type="datetime-local"
               />
@@ -123,7 +123,7 @@ export function CreateElectionPopup({
             <div className="end-time-input">
               <p>End Time</p>
               <input
-                onChange={(ev) => editElection({ voteTime: { start: ev.target.valueAsNumber, end: electionObject?.voteTime?.end } })}
+                onChange={(ev) => editElection({ voteTime: { end: ev.target.valueAsNumber + 7000 * 60 * 60, start: electionObject?.voteTime?.start } })}
                 className="times-end-time-input"
                 type="datetime-local"
               />

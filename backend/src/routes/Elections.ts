@@ -33,6 +33,7 @@ router.get("/", async (req, res) => {
         treasurers: election.treasurers,
         promoters: election.promoters,
         voteTime: election.voteTime,
+        _id: election._id,
       }
     });
 
@@ -113,12 +114,18 @@ router.post("/create", minAuth, async (req, res) => {
 
 });
 
-router.patch("/:_id", minAuth, async (req, res) => {
-
-});
-
 router.delete("/:_id", minAuth, async (req, res) => {
+  const { _id } = req.params;
 
+  try {
+    await ElectionPoll.findByIdAndDelete(_id);
+    res.status(200);
+    return res.json({ message: "OK" });
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    return res.json({ message: "Internal Server Error", err: err });
+  }
 });
 
 
