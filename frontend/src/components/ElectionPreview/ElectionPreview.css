@@ -61,9 +61,7 @@
 
 .delete-election-button:hover {
   background-color: #bb2a3d;
-  ;
   border: 1px solid #bb2a3d;
-  ;
 }
 
 .delete-election-button:active {
