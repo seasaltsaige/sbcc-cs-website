@@ -39,3 +39,11 @@
   border: 1px solid var(--sbcc-red);
   transform: translateX(-1px) translateY(1px);
 }
+
+.create-election:disabled {
+  background-color: lightgrey;
+  border: 1px solid lightgrey;
+  box-shadow: none;
+  cursor: default;
+  transform: none;
+}

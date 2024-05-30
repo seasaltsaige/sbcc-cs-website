@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import { CreateElectionPopup, Navbar } from "../../../components";
+import { CreateElectionPopup, ElectionPreview, Navbar } from "../../../components";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
 import { Election } from "../../../types/Election.type";
@@ -83,14 +83,20 @@ export function ElectionsHome() {
                   className="create-election"
                   disabled={elec !== null}
                   onClick={() => { if (elec !== null) return; setElectionObject({} as Election); setElectionsPopupVisible(true); }}
+                  title={elec !== null ? "Election has already been created" : ""}
                 >Create Election</button>
                 <button className="go-to-candidates" onClick={() => navigate("/elections/candidates")}>Go to Candidates</button>
               </div>
             ) : <></>
         }
-        <div className="election-preview-container">
-          {elec?.presidents.map((pres) => allCandidates.find(c => c._id === pres.candidate)?.name + ", ")}
-        </div>
+        {
+          elec ?
+            <ElectionPreview
+              candidates={allCandidates}
+              election={elec}
+            />
+            : <h1>No upcoming elections...</h1>
+        }
       </div>
 
       <CreateElectionPopup
