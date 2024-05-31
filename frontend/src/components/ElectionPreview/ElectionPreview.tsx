@@ -48,9 +48,9 @@ export function ElectionPreview({
     const secondsRemain = dur.seconds();
 
     // const endDaysRemain = dur.days();
-    const endHoursRemain = dur.hours();
-    const endMinutesRemain = dur.minutes();
-    const endSecondsRemain = dur.seconds();
+    const endHoursRemain = endDur.hours();
+    const endMinutesRemain = endDur.minutes();
+    const endSecondsRemain = endDur.seconds();
 
     const nowDate = new Date();
 
@@ -115,7 +115,7 @@ export function ElectionPreview({
               :
               <h3
                 className="voting-not-available"
-              >Voting for this election hasn't started yet!<br />Check back {timeTill}!<br />Polls start on {moment(election.voteTime.start).format("MM/DD/YY, h:mm A")}</h3>
+              >Voting for this election hasn't started yet!<br />Check back in {timeTill}!<br />Polls start on {moment(election.voteTime.start).format("MM/DD/YY, h:mm A")}</h3>
         }
 
         {
