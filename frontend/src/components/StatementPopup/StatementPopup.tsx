@@ -1,14 +1,13 @@
 import React from "react";
 import DOMPurify from "dompurify";
 
-
 import { compiler } from "markdown-to-jsx";
 
 import { Candidate } from "../../types/Candidate.type";
 
-import "./CandidateStatementPopup.css";
+import "./StatementPopup.css";
 
-export function CandidateStatementPopup({
+export function StatementPopup({
   candidate,
   visible,
   close
