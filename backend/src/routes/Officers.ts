@@ -56,7 +56,7 @@ router.get("/current", async (req, res) => {
 
 
   const currentDate = Date.now();
-
+  console.log(currentDate);
   const officerModels = await Officer.find();
   const officers = officerModels.map((v) => {
     return (
@@ -70,8 +70,7 @@ router.get("/current", async (req, res) => {
         _id: auth ? v._id : null,
       }
     )
-  }).filter((officer) => officer.startDate! <= currentDate && officer.endDate! >= currentDate) as TOfficer[];
-
+  }).filter((officer) => new Date(officer.startDate!) <= new Date(currentDate) && new Date(officer.endDate!) >= new Date(currentDate)) as TOfficer[];
   res.status(200);
   return res.json({
     officers: sortOfficers(officers),
@@ -113,7 +112,7 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
     form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
     if (image)
       form.append('file', fs.createReadStream(image.path));
-    form.append('content', `# New Officer Was Created\n\n**Name**: ${name}\n**Term Start**: ${new Date(startDate).toLocaleDateString()}\n**Term End**: ${new Date(endDate).toLocaleDateString()}\n**Officer Statement**: ${statement}\n**Position**: ${position}`);
+    form.append('content', `# New Officer Was Created\n\n**Name**: ${name}\n**Term Start**: ${new Date(parseInt(startDate)).toLocaleDateString()}\n**Term End**: ${new Date(parseInt(endDate)).toLocaleDateString()}\n**Officer Statement**: ${statement}\n**Position**: ${position}`);
 
     form.submit(process.env.DISCORD_WEBHOOK!);
 
