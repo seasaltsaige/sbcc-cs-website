@@ -50,8 +50,6 @@ export function OfficerPopup({
     else if (!officer.position) return createAlert("No Officer position provided", 5000);
     else if (!officer.statement) return createAlert("No Officer statement provided", 5000);
 
-    if (officer.statement.length > 300) return createAlert("Officer statement must be shorter than 300 characters", 5500);
-
     updateOfficer({ ...officer });
     clear();
     close();

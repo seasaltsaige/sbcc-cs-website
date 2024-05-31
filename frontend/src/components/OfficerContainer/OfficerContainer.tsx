@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./OfficerContainer.css";
 import { useIsAuthenticated } from "react-auth-kit";
 import { OfficerData } from "../../types/OfficerData.type";
+import DOMPurify from "dompurify";
+import { compiler } from "markdown-to-jsx";
 
 const URL = process.env.REACT_APP_URL;
 
@@ -10,10 +12,12 @@ export function OfficerContainer({
   officer,
   editOfficer,
   deleteOfficer,
+  openStatement,
 }: {
   officer: OfficerData;
   editOfficer: () => void;
   deleteOfficer: () => void;
+  openStatement: () => void;
 }) {
   const isAuth = useIsAuthenticated();
 
@@ -32,8 +36,14 @@ export function OfficerContainer({
       <p className="officer-name">{officer.name}</p>
       <p className="officer-tenure">{`${new Date(officer.startDate as unknown as number).toLocaleDateString()} to ${new Date(officer.endDate as unknown as number).toLocaleDateString()}`}</p>
       <div className="officer-statement-paragraph">
-        <p>{officer.statement}</p>
+        <p>{compiler(DOMPurify.sanitize(officer.statement!))}</p>
       </div>
+      <button
+        className="read-statement-button"
+        onClick={() => openStatement()}
+      >
+        Read Full Statement
+      </button>
       {
         isAuth()
           ? (
@@ -55,6 +65,5 @@ export function OfficerContainer({
           : <></>
       }
     </div>
-
   </>
 }

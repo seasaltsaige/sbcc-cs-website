@@ -134,7 +134,8 @@ export function ElectionPreview({
 
 
       <StatementPopup
-        candidate={viewCandidate}
+        name={viewCandidate.name || ""}
+        statement={viewCandidate.statement || ""}
         close={close}
         visible={statementOpen}
       />

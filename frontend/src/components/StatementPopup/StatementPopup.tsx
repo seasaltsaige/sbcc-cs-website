@@ -8,12 +8,14 @@ import { Candidate } from "../../types/Candidate.type";
 import "./StatementPopup.css";
 
 export function StatementPopup({
-  candidate,
+  name,
+  statement,
   visible,
   close
 }: {
-  candidate: Candidate,
-  visible: boolean,
+  name: string;
+  statement: string;
+  visible: boolean;
   close: () => void;
 }) {
   return (
@@ -21,10 +23,10 @@ export function StatementPopup({
       <div className="statement-popup">
         <div className="statement-modal">
           <p className="statement-header">
-            <i>{candidate.name}'s</i> statement
+            <i>{name}'s</i> statement
           </p>
           <div className="statement">
-            {compiler(DOMPurify.sanitize(candidate.statement))}
+            {compiler(DOMPurify.sanitize(statement))}
           </div>
           <button
             className="close-statement modal-button"

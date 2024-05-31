@@ -129,7 +129,8 @@ export function AllCandidates() {
       />
 
       <StatementPopup
-        candidate={statementCandidate}
+        name={statementCandidate.name || ""}
+        statement={statementCandidate.statement || ""}
         close={closeStatement}
         visible={statementVisible}
       />
