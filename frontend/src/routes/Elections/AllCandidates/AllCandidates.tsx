@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "./AllCandidates.css";
-import { CandidateCotainer, CandidateStatementPopup, CreateCandidatePopup, Navbar } from "../../../components";
+import { CandidateCotainer, StatementPopup, CreateCandidatePopup, Navbar } from "../../../components";
 import { Candidate } from "../../../types/Candidate.type";
 import { createCandidate, updateCandidate, getAllCandidates, deleteCandidate } from "../../../api";
 import { useAuthHeader } from "react-auth-kit";
@@ -128,8 +128,9 @@ export function AllCandidates() {
         candidate={candidate}
       />
 
-      <CandidateStatementPopup
-        candidate={statementCandidate}
+      <StatementPopup
+        name={statementCandidate.name || ""}
+        statement={statementCandidate.statement || ""}
         close={closeStatement}
         visible={statementVisible}
       />

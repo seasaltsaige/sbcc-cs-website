@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import "./CurrentOfficers.css";
 
-import { Navbar, OfficerPopup } from "../../../components";
+import { Navbar, OfficerContainer, OfficerPopup, StatementPopup } from "../../../components";
 import { OfficerData } from "../../../types/OfficerData.type";
 import { createOfficer, getCurrentOfficers, deleteOfficer, updateOfficer as updateOff } from "../../../api/index";
-
-const URL = process.env.REACT_APP_URL;
+import { Candidate } from "../../../types/Candidate.type";
 
 export function CurrentOfficers() {
 
   const [officersData, setOfficersData] = useState<OfficerData[]>([]);
+  const [statementOfficer, setStatementOfficer] = useState({} as Candidate);
+  const [statementVisible, setStatementVisible] = useState(false);
+
+
   const [error, setError] = useState("");
   const isAuth = useIsAuthenticated();
   const authHeader = useAuthHeader();
@@ -39,6 +42,7 @@ export function CurrentOfficers() {
     try {
       const fetchRes = await getCurrentOfficers(header);
       const data = fetchRes.data.officers as OfficerData[];
+      console.log(data);
       setOfficersData(data);
     } catch (err) {
       if (typeof err === "string")
@@ -46,6 +50,7 @@ export function CurrentOfficers() {
       else if (typeof err === "object")
         createAlert((err as any).response.data.message, 6000);
     }
+
   }
 
   const updateOfficer = async (officer: OfficerData) => {
@@ -54,6 +59,7 @@ export function CurrentOfficers() {
     if (type === "new") {
       try {
         const createRes = await createOfficer(officer, auth);
+        console.log(createRes);
         if (createRes.status === 200)
           await fetchOfficers();
       } catch (err) {
@@ -117,50 +123,17 @@ export function CurrentOfficers() {
             // TODO: refactor into component to use for past officers as well
             officersData.length > 0 ?
               officersData.map((officer, i) => (
-                <div key={i} className="officer-panel">
-                  <p className="officer-position">{officer.position}</p>
-                  <img
-                    className="officer-image"
-                    src={
-                      officer.image !== null
-                        ? `${URL}/uploads/officers/${officer.image}`
-                        : "/default.png"
-                    }
-                    alt="Officer Image"
-                  />
-                  <p className="officer-name">{officer.name}</p>
-                  <p className="officer-tenure">{`${new Date(officer.startDate as unknown as number).toLocaleDateString()} to ${new Date(officer.endDate as unknown as number).toLocaleDateString()}`}</p>
-                  <div className="officer-statement-paragraph">
-                    <p>{officer.statement}</p>
-                  </div>
-                  {
-                    isAuth()
-                      ? (
-                        <div className="admin-buttons">
-                          <button
-                            onClick={
-                              () => {
-                                setType("edit");
-                                setOpenOfficer(officer);
-                                setIsOpen(true);
-                              }}
-                            className="edit officer-admin-button"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={
-                              () => deleteOff(officer._id!)
-                            }
-                            className="delete officer-admin-button"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )
-                      : <></>
-                  }
-                </div>
+                <OfficerContainer
+                  deleteOfficer={() => deleteOff(officer._id!)}
+                  editOfficer={() => {
+                    setType("edit");
+                    setOpenOfficer(officer);
+                    setIsOpen(true);
+                  }}
+                  officer={officer}
+                  openStatement={() => { setStatementOfficer(officer as Candidate); setStatementVisible(true); }}
+                  key={i}
+                />
               ))
 
               : <h1>No officers to display</h1>
@@ -184,6 +157,14 @@ export function CurrentOfficers() {
         officerData={openOfficer}
         updateOfficer={updateOfficer}
         type={type}
+      />
+
+      <StatementPopup
+        name={statementOfficer.name || ""}
+        statement={statementOfficer.statement || ""}
+        close={() => { setStatementOfficer({} as Candidate); setStatementVisible(false); }}
+        visible={statementVisible}
+        key={"officer-statement"}
       />
     </>
   )

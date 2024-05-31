@@ -6,8 +6,7 @@ import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 import "./ElectionPreview.css";
 import { Election } from "../../types/Election.type";
 import { Candidate } from "../../types/Candidate.type";
-import { CandidateStatementPopup } from "../CandidateStatement/CandidateStatementPopup";
-import { CandidateCotainer } from "../CandidateContainer/CandidateContainer";
+import { StatementPopup, CandidateCotainer } from "../index";
 import { deleteElection } from "../../api";
 
 const PT_OFFSET_HOURS = 7 * 1000 * 60 * 60;
@@ -134,8 +133,9 @@ export function ElectionPreview({
 
 
 
-      <CandidateStatementPopup
-        candidate={viewCandidate}
+      <StatementPopup
+        name={viewCandidate.name || ""}
+        statement={viewCandidate.statement || ""}
         close={close}
         visible={statementOpen}
       />

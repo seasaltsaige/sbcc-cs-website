@@ -1,0 +1,88 @@
+.officer-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* row-gap: px; */
+  justify-content: space-evenly;
+  width: 327px;
+  min-width: 275px;
+  height: 91%;
+  max-height: 590px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: -3px 3px 10px rgba(0, 0, 0, 0.4);
+
+}
+
+.officer-position {
+  color: var(--sbcc-red);
+  font-weight: bolder;
+  font-size: 25px;
+
+}
+
+.officer-image {
+  object-fit: cover;
+  width: min(200px, max(20vh, 115px));
+  height: min(200px, max(20vh, 115px));
+  border-radius: 10px;
+}
+
+
+.officer-name {
+  font-weight: bold;
+}
+
+
+.officer-statement-paragraph {
+  background-color: #EEEEEE;
+  height: 90%;
+  width: 90%;
+  max-height: 175px;
+  min-width: 120px;
+  border-radius: 10px;
+  padding: 0 5px 0 5px;
+  overflow-y: scroll;
+  margin-bottom: 5px;
+  /* margin: 10px; */
+}
+
+.officer-statement-paragraph>p {
+  /* text-align: center; */
+  text-wrap: wrap;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+}
+
+
+.admin-buttons {
+  width: 75%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.officer-admin-button {
+  background-color: var(--sbcc-red);
+  border: 1px solid var(--sbcc-red);
+  color: white;
+  width: 80px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 100px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.officer-admin-button:hover {
+  background-color: #bb2a3d;
+}
+
+.officer-admin-button:active {
+  background-color: var(--sbcc-red);
+  transform: translateX(-1px) translateY(1px);
+}
