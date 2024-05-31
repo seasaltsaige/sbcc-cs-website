@@ -1,4 +1,4 @@
-.candidate-statement-popup {
+.statement-popup {
   z-index: 1000000;
   position: fixed;
   top: 0;
@@ -13,7 +13,7 @@
   overflow-y: scroll;
 }
 
-.candidate-statement-modal {
+.statement-modal {
   z-index: 1000000;
   background-color: white;
   border-radius: 20px;
@@ -33,22 +33,21 @@
 }
 
 
-.candidate-statement-header {
+.statement-header {
   font-size: 22px;
   font-weight: bold;
   text-align: center;
 }
 
-.candidate-statement {
+.statement {
   height: 100%;
   width: 87.5%;
-  /* text-align: center; */
   padding: 15px;
   background-color: #eeeeee;
   border-radius: 10px;
   overflow-y: scroll;
 }
 
-.close-candidate-statement {
+.close-statement {
   margin-bottom: 20px;
 }
