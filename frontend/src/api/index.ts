@@ -6,6 +6,8 @@ export {
   axios,
 };
 
+export * from "./ip";
+
 // Admin routes
 export * from "./auth/checkAdmin";
 export * from "./auth/loginAdmin";

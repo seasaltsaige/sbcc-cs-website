@@ -112,10 +112,9 @@ router.post("/create", minAuth, officerUpload.single("image"), async (req, res) 
     form.append('avatar_url', process.env.WEBHOOK_PROFILE!);
     if (image)
       form.append('file', fs.createReadStream(image.path));
-    form.append('content', `# New Officer Was Created\n\n**Name**: ${name}\n**Term Start**: ${new Date(parseInt(startDate)).toLocaleDateString()}\n**Term End**: ${new Date(parseInt(endDate)).toLocaleDateString()}\n**Officer Statement**: ${statement}\n**Position**: ${position}`);
+    form.append('content', `# New Officer Was Created\n\n**Name**: ${name}\n**Term Start**: ${new Date(parseInt(startDate)).toLocaleDateString()}\n**Term End**: ${new Date(parseInt(endDate)).toLocaleDateString()}\n**Officer Statement**: ${statement.replaceAll(/\r/g, "")}\n**Position**: ${position}`);
 
     form.submit(process.env.DISCORD_WEBHOOK!);
-
     res.status(200);
     return res.json({ message: `Successfully created officer: ${name}` });
   } catch (err) {

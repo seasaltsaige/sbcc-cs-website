@@ -3,7 +3,12 @@ import "dotenv/config";
 import cors from "cors";
 import { Auth, Candidates, Elections, Events, Officers } from "./routes/index";
 
-import parseMarkdownImages from "./functions/parseMarkdownImages";
+
+import { ElectionHelper } from "./helper/ElectionHelper";
+
+const codes = ElectionHelper.createCodes(5);
+console.log(codes, "local var");
+console.log(ElectionHelper.validCodes, "static var");
 
 // const tested = parseMarkdownImages("# This is a test for the ![Regex](./image.png)\n\nHere is a second one! ![something](else.png)");
 // console.log(tested);
