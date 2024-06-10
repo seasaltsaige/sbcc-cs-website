@@ -2,13 +2,26 @@ import { Router } from "express";
 import { minAuth } from "../middleware/auth";
 
 import ElectionPoll from "../database/Models/ElectionPoll";
-import { isValidObjectId, Types } from "mongoose";
+
+import { ElectionHelper } from "../helper/ElectionHelper";
 
 const router = Router();
 
 
 router.post("/vote", async (req, res) => {
+  const { voteCode } = req.body;
+  if (!voteCode) {
+    // Invalid vote
+  }
+});
 
+router.post("/vote/create/:num", minAuth, async (req, res) => {
+  const { num: numVotes } = req.params;
+  if (!numVotes) {
+    // Must have num votes
+  }
+
+  // Generate numVotes random codes (easy to remember) 4 digit? 2 digit alpha num?
 });
 
 router.get("/", async (req, res) => {

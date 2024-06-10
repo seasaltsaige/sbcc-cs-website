@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment, { min } from "moment";
+import moment, { min, now } from "moment";
 import { useNavigate } from "react-router-dom";
 import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
 
@@ -25,7 +25,7 @@ export function ElectionPreview({
   const authHeader = useAuthHeader();
   const navigate = useNavigate();
 
-  const [votingTime, setVotingTime] = useState(false);
+  const [votingTime, setVotingTime] = useState(false as boolean | undefined);
   const [viewCandidate, setViewCandidate] = useState({} as Candidate);
   const [timeTill, setTimeTill] = useState("");
   const [statementOpen, setStatementOpen] = useState(false);
@@ -34,20 +34,33 @@ export function ElectionPreview({
     setStatementOpen(false);
   }
 
-  function checkVoteTime(time: number) {
+  function checkVoteTime(startTime: number, endTime: number) {
 
-    const dur = moment.duration(moment(time).diff(moment()));
+    const dur = moment.duration(moment(startTime).diff(moment()));
+    const endDur = moment.duration(moment(endTime).diff(moment()));
 
-    const yearsRemain = dur.years();
-    const monthsRemain = dur.months();
+    // const yearsRemain = dur.years();
+    // const monthsRemain = dur.months();
     const daysRemain = dur.days();
     const hoursRemain = dur.hours();
     const minutesRemain = dur.minutes();
     const secondsRemain = dur.seconds();
 
-    if (new Date(time) < new Date())
-      setVotingTime(true);
-    else {
+    // const endDaysRemain = dur.days();
+    const endHoursRemain = endDur.hours();
+    const endMinutesRemain = endDur.minutes();
+    const endSecondsRemain = endDur.seconds();
+
+    const nowDate = new Date();
+
+    if (new Date(startTime) < nowDate) {
+      if (new Date(endTime) < nowDate) {
+        setVotingTime(undefined);
+      } else {
+        setVotingTime(true);
+        setTimeTill(`${endHoursRemain > 0 ? `${endHoursRemain} hour(s), ` : ""}${endMinutesRemain > 0 ? `${endMinutesRemain} minute(s), ` : ""}${endSecondsRemain} second(s)`);
+      }
+    } else {
       setVotingTime(false);
       setTimeTill(`${daysRemain > 0 ? `${daysRemain} day(s), ` : ""}${hoursRemain > 0 ? `${hoursRemain} hour(s), ` : ""}${minutesRemain > 0 ? `${minutesRemain} minute(s), ` : ""}${secondsRemain} second(s)`);
     }
@@ -68,10 +81,10 @@ export function ElectionPreview({
   useEffect(() => {
     // While user is on page, check if event has started
     const checkInterval = setInterval(() => {
-      checkVoteTime(election.voteTime.start)
+      checkVoteTime(election.voteTime.start, election.voteTime.end);
     }, 133);
 
-    checkVoteTime(election.voteTime.start);
+    checkVoteTime(election.voteTime.start, election.voteTime.end);
 
     return () => {
       clearInterval(checkInterval)
@@ -83,16 +96,25 @@ export function ElectionPreview({
       <div className="election-preview">
         {
           votingTime ?
-            <button
-              className="vote-now-button"
-              onClick={() => navigate("/elections/vote")}
-            >
-              Vote Now
-            </button>
-            :
-            <h3
-              className="voting-not-available"
-            >Voting for this election hasn't started yet!<br />Check back {timeTill}!<br />Polls start on {moment(election.voteTime.start).format("MM/DD/YY, h:mm A")}</h3>
+            <>
+              <h3>Elections ending in {timeTill}! Vote now!</h3>
+              <button
+                className="vote-now-button"
+                onClick={() => navigate("/elections/vote")}
+              >
+                Vote Now
+              </button>
+            </> : votingTime === undefined ?
+              <button
+                className="vote-now-button"
+                onClick={() => navigate("/elections/vote")}
+              >
+                View results
+              </button>
+              :
+              <h3
+                className="voting-not-available"
+              >Voting for this election hasn't started yet!<br />Check back in {timeTill}!<br />Polls start on {moment(election.voteTime.start).format("MM/DD/YY, h:mm A")}</h3>
         }
 
         {

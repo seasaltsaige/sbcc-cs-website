@@ -48,7 +48,8 @@
 }
 
 
-.delete-election-button {
+.delete-election-button,
+.vote-now-button {
   background-color: var(--sbcc-red);
   border: 1px solid var(--sbcc-red);
   border-radius: 100px;
@@ -59,14 +60,19 @@
   cursor: pointer;
 }
 
-.delete-election-button:hover {
-  background-color: #bb2a3d;
-  ;
-  border: 1px solid #bb2a3d;
-  ;
+.vote-now-button {
+  font-size: 20px;
+  margin-top: 10px;
 }
 
-.delete-election-button:active {
+.delete-election-button:hover,
+.vote-now-button:hover {
+  background-color: #bb2a3d;
+  border: 1px solid #bb2a3d;
+}
+
+.delete-election-button:active,
+.vote-now-button:active {
   background-color: var(--sbcc-red);
   border: 1px solid var(--sbcc-red);
   transform: translateX(-1px) translateY(1px);

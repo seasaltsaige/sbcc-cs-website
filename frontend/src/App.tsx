@@ -17,7 +17,7 @@ function App() {
         <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/events/past" element={<PastEvents />} />
         <Route path="/elections" element={<ElectionsHome />} />
-        <Route path="/elections/vote/:_id" element={<Vote />} />
+        <Route path="/elections/vote" element={<Vote />} />
         <Route path="/elections/candidates" element={
           <RequireAuth loginPath="/elections">
             <AllCandidates />
