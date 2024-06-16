@@ -38,4 +38,5 @@ export * from "./elections/candidates/getAllCandidates";
 export * from "./elections/polls/createElection";
 export * from "./elections/polls/deleteElection";
 export * from "./elections/polls/getElection";
+export * from "./elections/polls/vote";
 // Add as needed

@@ -71,6 +71,11 @@ export function ElectionsHome() {
     })();
   }, []);
 
+
+  // TODO: Refactor to a single page.
+  // Before voting begins, the buttons just wont show up,
+  // but once it starts, the user can vote for people
+
   return (
     <>
       <Navbar />

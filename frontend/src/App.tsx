@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { About, CurrentOfficers, ElectionsHome, Home, PastEvents, PastOfficers, UpcomingEvents, Vote, Login, AllCandidates } from "./routes";
+import { About, CurrentOfficers, ElectionsHome, Home, PastEvents, PastOfficers, UpcomingEvents, Login, AllCandidates } from "./routes";
 import { RequireAuth } from 'react-auth-kit';
 
 
@@ -17,7 +17,6 @@ function App() {
         <Route path="/events/upcoming" element={<UpcomingEvents />} />
         <Route path="/events/past" element={<PastEvents />} />
         <Route path="/elections" element={<ElectionsHome />} />
-        <Route path="/elections/vote" element={<Vote />} />
         <Route path="/elections/candidates" element={
           <RequireAuth loginPath="/elections">
             <AllCandidates />

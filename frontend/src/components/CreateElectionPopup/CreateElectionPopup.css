@@ -30,6 +30,20 @@
   padding: 10px;
 }
 
+@media screen and (max-height: 850px) {
+
+  .create-election-popup {
+    align-items: flex-start;
+    overflow-y: scroll !important;
+  }
+
+  .create-election-modal {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+}
+
 
 .election-header {
   font-size: 25px;

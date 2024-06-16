@@ -1,6 +1,5 @@
 export * from "./Elections/Home/Home";
 export * from "./About/About";
-export * from "./Elections/Vote/Vote";
 export * from "./Elections/AllCandidates/AllCandidates";
 export * from "./Home/Home";
 export * from "./Officers/CurrentOfficers/CurrentOfficers";
