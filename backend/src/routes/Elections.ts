@@ -9,19 +9,9 @@ const router = Router();
 
 
 router.post("/vote", async (req, res) => {
-  const { voteCode } = req.body;
-  if (!voteCode) {
-    // Invalid vote
-  }
-});
-
-router.post("/vote/create/:num", minAuth, async (req, res) => {
-  const { num: numVotes } = req.params;
-  if (!numVotes) {
-    // Must have num votes
-  }
-
-  // Generate numVotes random codes (easy to remember) 4 digit? 2 digit alpha num?
+  const { voteBody, ip } = req.body;
+  console.log(ip);
+  console.log(voteBody);
 });
 
 router.get("/", async (req, res) => {
